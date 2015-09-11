@@ -1,0 +1,12 @@
+<resources>
+    // Activities.
+    <string name="privacy_browser">Privacy Browser</string>
+
+    // Menu.
+    <string name="back">Back</string>
+    <string name="forward">Forward</string>
+
+    // Layout.
+    <string name="go_button">Go</string>
+
+</resources>
