@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 
 import java.net.URL;
@@ -29,6 +30,9 @@ public class Webview extends ActionBarActivity {
 
         final EditText urlTextBox = (EditText) findViewById(R.id.urlTextBox);
         mainWebView = (WebView) findViewById(R.id.mainWebView);
+
+        // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
+        mainWebView.setWebViewClient(new WebViewClient());
 
         // Allow pinch to zoom.
         mainWebView.getSettings().setBuiltInZoomControls(true);
