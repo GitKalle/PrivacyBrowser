@@ -13,7 +13,7 @@
 
         <EditText
             android:id="@+id/urlTextBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="textUri"
             android:imeOptions="actionGo"
@@ -28,11 +28,29 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <WebView
-        android:id="@+id/mainWebView"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/topBarLayout"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+        tools:context=".MainActivity"
+        android:id="@+id/relativeLayout">
+
+        <WebView
+            android:id="@+id/mainWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="7dp"
+            android:max="100"
+            android:progressTint="#FF29A8FF"
+            android:progressBackgroundTint="#FFFFFFFF"
+            android:visibility="gone" />
+    </FrameLayout>
+
 </RelativeLayout>

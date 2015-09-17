@@ -3,24 +3,27 @@ package com.stoutner.privacybrowser;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import java.net.URL;
 
 
-public class Webview extends ActionBarActivity {
+public class Webview extends AppCompatActivity {
 
     static String formattedUrlString;
     static WebView mainWebView;
+    static ProgressBar progressBar;
     static final String homepage = "https://www.duckduckgo.com";
 
     @Override
@@ -30,9 +33,22 @@ public class Webview extends ActionBarActivity {
 
         final EditText urlTextBox = (EditText) findViewById(R.id.urlTextBox);
         mainWebView = (WebView) findViewById(R.id.mainWebView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
         mainWebView.setWebViewClient(new WebViewClient());
+
+        // Update the progress bar when a page is loading.
+        mainWebView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                if (progress < 100) {
+                    progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                }
+                progressBar.setProgress(progress);
+            }
+        });
 
         // Allow pinch to zoom.
         mainWebView.getSettings().setBuiltInZoomControls(true);
