@@ -36,10 +36,11 @@ public class Webview extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
-        // Save the URL to urlTextBox before loading mainWebView.
+        // Save the URL to formattedUrlString and update urlTextBox before loading mainWebView.
         mainWebView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                urlTextBox.setText(url);
+                formattedUrlString=url;
+                urlTextBox.setText(formattedUrlString);
                 mainWebView.loadUrl(url);
                 return true;
             }
