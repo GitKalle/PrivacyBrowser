@@ -48,12 +48,12 @@ public class Webview extends AppCompatActivity {
         // Update the progress bar when a page is loading.
         mainWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
+                progressBar.setProgress(progress);
                 if (progress < 100) {
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
                     progressBar.setVisibility(View.GONE);
                 }
-                progressBar.setProgress(progress);
             }
         });
 
