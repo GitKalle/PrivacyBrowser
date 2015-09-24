@@ -22,7 +22,7 @@
         <Button
             android:id="@+id/goButton"
             android:text="@string/go_button"
-            android:onClick="loadUrl"
+            android:onClick="loadUrlFromTextBox"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

@@ -36,7 +36,14 @@ public class Webview extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
-        mainWebView.setWebViewClient(new WebViewClient());
+        // Save the URL to urlTextBox before loading mainWebView.
+        mainWebView.setWebViewClient(new WebViewClient() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                urlTextBox.setText(url);
+                mainWebView.loadUrl(url);
+                return true;
+            }
+        });
 
         // Update the progress bar when a page is loading.
         mainWebView.setWebChromeClient(new WebChromeClient() {
@@ -96,7 +103,7 @@ public class Webview extends AppCompatActivity {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Load the URL into the mainWebView and consume the event.
-                    loadUrl(mainWebView);
+                    loadUrlFromTextBox(mainWebView);
                     return true;
                 }
                 // Do not consume the event.
@@ -141,7 +148,7 @@ public class Webview extends AppCompatActivity {
         }
     }
 
-    public void loadUrl(View view) {
+    public void loadUrlFromTextBox(View view) {
         // Get the text from urlTextInput and convert it to a string.
         final EditText urlTextBox = (EditText) findViewById(R.id.urlTextBox);
         final String unformattedUrlString = urlTextBox.getText().toString();
@@ -165,24 +172,6 @@ public class Webview extends AppCompatActivity {
             default:
                 formattedUrlString = "http://" + unformattedUrlString;
         }
-
-        /*
-        // Parse the unformattedURLString into a Uri.
-
-        final Uri uriData = Uri.parse(unformattedUrlString);
-
-        // Convert the Uri to a URL, chicking for any problems with the formatting.
-        URL urlData = null;
-
-        try {
-            urlData = new URL(uriData.getScheme(), uriData.getHost(), uriData.getPath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //  Convert urlData to a string, which is reqauired by loadUrl method.
-        formattedUrlString = urlData.toString();
-        */
 
         final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
 
