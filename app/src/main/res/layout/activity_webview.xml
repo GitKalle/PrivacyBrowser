@@ -28,6 +28,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    // FrameLayout lets the ProgressBar float on top of the WebView.
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,6 +43,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true" />
 
+        // android:max changes the maximum ProgressBar value from 10000 to 100 to match progress percentage.
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"

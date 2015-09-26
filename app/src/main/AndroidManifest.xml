@@ -10,6 +10,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/privacy_browser"
         android:theme="@style/AppTheme" >
+
+        // configChanges orientation and screenSize makes the app not reload when the orientation changes.
+        // windowSoftInputMode stateAlwaysHidden hides the keyboard when the app starts.
         <activity
             android:name=".Webview"
             android:configChanges="orientation|screenSize"
@@ -19,6 +22,8 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            // android.intent.action.VIEW with the schemes enables processing of web intents.
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
