@@ -74,18 +74,9 @@ public class Webview extends AppCompatActivity {
         final Intent intent = getIntent();
 
         if (intent.getData() != null) {
-            // Get the intent data.
+            // Get the intent data and convert it to a string.
             final Uri intentUriData = intent.getData();
-
-            // Try to parse the intent data and store it in urlData.
-            URL urlData = null;
-            try {
-                urlData = new URL(intentUriData.getScheme(), intentUriData.getHost(), intentUriData.getPath());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            Webview.formattedUrlString = urlData.toString();
+            Webview.formattedUrlString = intentUriData.toString();
         }
 
         // If formattedUrlString is null assign the homepage to it.
