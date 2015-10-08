@@ -16,9 +16,6 @@ import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import java.net.URL;
-
-
 public class Webview extends AppCompatActivity {
 
     static String formattedUrlString;
@@ -117,8 +114,11 @@ public class Webview extends AppCompatActivity {
         int menuItemId = menuItem.getItemId();
         final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
 
-        // Use the menu items to go forward or back.
+        // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
+            case R.id.home:
+                mainWebView.loadUrl(homepage);
+                break;
             case R.id.back:
                 mainWebView.goBack();
                 break;

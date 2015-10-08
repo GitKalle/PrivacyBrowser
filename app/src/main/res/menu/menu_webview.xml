@@ -4,16 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Webview">
 
+    <item
+        android:id="@+id/home"
+        android:title="@string/home"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/back"
         android:title="@string/back"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/forward"
         android:title="@string/forward"
-        android:orderInCategory="200"
+        android:orderInCategory="300"
         app:showAsAction="ifRoom" />
 </menu>

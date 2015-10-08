@@ -3,6 +3,7 @@
     <string name="privacy_browser">Privacy Browser</string>
 
     // Menu.
+    <string name="home">Home</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
 

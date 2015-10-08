@@ -11,6 +11,7 @@
         android:orientation="horizontal"
         android:id="@+id/topBarLayout">
 
+        // android:inputType="textUri" sets the keyboard to have a go arrow.
         <EditText
             android:id="@+id/urlTextBox"
             android:layout_width="0dp"
