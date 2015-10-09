@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 
 public class Webview extends AppCompatActivity {
 
@@ -38,7 +43,7 @@ public class Webview extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 formattedUrlString=url;
                 urlTextBox.setText(formattedUrlString);
-                mainWebView.loadUrl(url);
+                mainWebView.loadUrl(formattedUrlString);
                 return true;
             }
         });
@@ -92,7 +97,11 @@ public class Webview extends AppCompatActivity {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Load the URL into the mainWebView and consume the event.
-                    loadUrlFromTextBox(mainWebView);
+                    try {
+                        loadUrlFromTextBox(mainWebView);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     return true;
                 }
                 // Do not consume the event.
@@ -140,34 +149,51 @@ public class Webview extends AppCompatActivity {
         }
     }
 
-    public void loadUrlFromTextBox(View view) {
+    public void loadUrlFromTextBox(View view) throws UnsupportedEncodingException {
         // Get the text from urlTextInput and convert it to a string.
         final EditText urlTextBox = (EditText) findViewById(R.id.urlTextBox);
-        final String unformattedUrlString = urlTextBox.getText().toString();
+        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
+        String unformattedUrlString = urlTextBox.getText().toString();
+        URL unformattedUrl = null;
+        Uri.Builder formattedUri = new Uri.Builder();
+        String scheme;
 
-        // Don't do anything unless unformattedUrlString is at least 6 characters long.
-        if (unformattedUrlString.length() < 6) { return; }
+        // Check to see if unformattedUrlString is a valid URL.  Otherwise, convert it into a Duck Duck Go search.
+        if (Patterns.WEB_URL.matcher(unformattedUrlString).matches()) {
 
-        // Add correct protocol formatting to the beginning of the URL if needed.
-        final String firstSixCharacters = unformattedUrlString.substring(0, 6);
+            // Add http:// at the beginning if it is missing.  Otherwise the app will segfault.
+            if (!unformattedUrlString.startsWith("http")) {
+                unformattedUrlString = "http://" + unformattedUrlString;
+            }
 
-        switch (firstSixCharacters) {
-            case "http:/":
-                formattedUrlString = unformattedUrlString;
-                break;
-            case "https:":
-                formattedUrlString = unformattedUrlString;
-                break;
-            case "ftp://":
-                formattedUrlString = unformattedUrlString;
-                break;
-            default:
-                formattedUrlString = "http://" + unformattedUrlString;
+            // Convert unformattedUrlString to a URL, then to a URI, and then back to a string, which sanitizes the input and adds in any missing components.
+            try {
+                unformattedUrl = new URL(unformattedUrlString);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            if (unformattedUrl.getProtocol() != null) {
+                scheme = unformattedUrl.getProtocol();
+            } else {
+                scheme = "http";
+            }
+
+            final String authority = unformattedUrl.getAuthority();
+            final String path = unformattedUrl.getPath();
+            final String query = unformattedUrl.getQuery();
+            final String fragment = unformattedUrl.getRef();
+
+            formattedUri.scheme(scheme).authority(authority).path(path).query(query).fragment(fragment);
+            formattedUrlString = formattedUri.build().toString();
+
+        } else {
+            // Sanitize the search input.
+            final String encodedUrlString = URLEncoder.encode(unformattedUrlString, "UTF-8");
+            formattedUrlString = "https://duckduckgo.com/?q=" + encodedUrlString;
         }
 
-        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
-
-        // Place the URL text back in the address bar and load the website.
+        // Place formattedUrlString back in the address bar and load the website.
         urlTextBox.setText(formattedUrlString);
         mainWebView.loadUrl(formattedUrlString);
 
