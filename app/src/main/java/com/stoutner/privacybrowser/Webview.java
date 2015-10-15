@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -26,6 +28,7 @@ public class Webview extends AppCompatActivity {
     static String formattedUrlString;
     static WebView mainWebView;
     static ProgressBar progressBar;
+    static SwipeRefreshLayout swipeToRefresh;
     static final String homepage = "https://www.duckduckgo.com";
 
     @Override
@@ -34,14 +37,36 @@ public class Webview extends AppCompatActivity {
         setContentView(R.layout.activity_webview);
 
         final EditText urlTextBox = (EditText) findViewById(R.id.urlTextBox);
+        swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayoutContainer);
         mainWebView = (WebView) findViewById(R.id.mainWebView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        // Implement swipe down to refresh.
+        swipeToRefresh.setColorSchemeColors(0xFF0097FF);
+        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mainWebView.loadUrl(formattedUrlString);
+            }
+        });
+
+        // Only enable swipeToRefresh if is mainWebView is scrolled to the top.
+        mainWebView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                if (mainWebView.getScrollY() == 0) {
+                    swipeToRefresh.setEnabled(true);
+                } else {
+                    swipeToRefresh.setEnabled(false);
+                }
+            }
+        });
 
         // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
         // Save the URL to formattedUrlString and update urlTextBox before loading mainWebView.
         mainWebView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                formattedUrlString=url;
+                formattedUrlString = url;
                 urlTextBox.setText(formattedUrlString);
                 mainWebView.loadUrl(formattedUrlString);
                 return true;
@@ -56,6 +81,8 @@ public class Webview extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
                     progressBar.setVisibility(View.GONE);
+                    // Stop the refreshing indicator if it is running.
+                    swipeToRefresh.setRefreshing(false);
                 }
             }
         });

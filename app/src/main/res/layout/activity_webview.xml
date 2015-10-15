@@ -1,58 +1,71 @@
-<RelativeLayout
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshLayoutContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Webview" >
+    android:layout_height="match_parent">
+    // SwipeRefreshLayout allows the user to swipe down to refresh.
 
-    // FrameLayout lets the ProgressBar float on top of the LinearLayout.
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/relativeLayoutContainer"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/topFrameLayout">
+        android:layout_height="match_parent"
+        tools:context=".Webview" >
 
-        <LinearLayout
+        // FrameLayout lets the ProgressBar float on top of the LinearLayout.
+        <FrameLayout
+            android:id="@+id/addressBarFrameLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/topBarLayout">
+            android:layout_height="wrap_content">
 
-            // android:inputType="textUri" sets the keyboard to have a go arrow.
-            <EditText
-                android:id="@+id/urlTextBox"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/addressBarLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textUri"
-                android:imeOptions="actionGo"
-                android:layout_weight="1"/>
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/goButton"
-                android:text="@string/go_button"
-                android:onClick="loadUrlFromTextBox"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                // android:inputType="textUri" sets the keyboard to have a go arrow.
+                <EditText
+                    android:id="@+id/urlTextBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:imeOptions="actionGo"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/goButton"
+                    android:text="@string/go_button"
+                    android:onClick="loadUrlFromTextBox"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
 
-        // android:max changes the maximum ProgressBar value from 10000 to 100 to match progress percentage.
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="7dp"
-            android:layout_gravity="bottom"
-            android:max="100"
-            android:progressTint="#FF29A8FF"
-            android:progressBackgroundTint="#FFFFFFFF"
-            android:visibility="gone" />
-    </FrameLayout>
+            // android:max changes the maximum ProgressBar value from 10000 to 100 to match progress percentage.
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="7dp"
+                android:layout_gravity="bottom"
+                android:max="100"
+                android:progressTint="#FF0097FF"
+                android:progressBackgroundTint="#FFFFFFFF"
+                android:visibility="gone" />
+        </FrameLayout>
 
-    <WebView
-        android:id="@+id/mainWebView"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/topFrameLayout"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
-</RelativeLayout>
+
+        <WebView
+            android:id="@+id/mainWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/addressBarFrameLayout"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+    </RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>
