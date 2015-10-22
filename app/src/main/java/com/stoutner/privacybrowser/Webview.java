@@ -154,7 +154,6 @@ public class Webview extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int menuItemId = menuItem.getItemId();
-        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
 
         // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
@@ -163,6 +162,7 @@ public class Webview extends AppCompatActivity {
                 urlTextBox.setText(formattedUrlString);
                 mainWebView.loadUrl(formattedUrlString);
                 break;
+
             case R.id.back:
                 mainWebView.goBack();
 
@@ -170,6 +170,7 @@ public class Webview extends AppCompatActivity {
                 formattedUrlString = mainWebView.getOriginalUrl();
                 urlTextBox.setText(formattedUrlString);
                 break;
+
             case R.id.forward:
                 mainWebView.goForward();
 
