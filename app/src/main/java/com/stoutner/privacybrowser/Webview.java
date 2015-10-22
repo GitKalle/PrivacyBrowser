@@ -29,6 +29,7 @@ public class Webview extends AppCompatActivity {
     static WebView mainWebView;
     static ProgressBar progressBar;
     static SwipeRefreshLayout swipeToRefresh;
+    static EditText urlTextBox;
     static final String homepage = "https://www.duckduckgo.com";
 
     @Override
@@ -36,7 +37,7 @@ public class Webview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
-        final EditText urlTextBox = (EditText) findViewById(R.id.urlTextBox);
+        urlTextBox = (EditText) findViewById(R.id.urlTextBox);
         swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayoutContainer);
         mainWebView = (WebView) findViewById(R.id.mainWebView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -81,8 +82,13 @@ public class Webview extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
                     progressBar.setVisibility(View.GONE);
+
                     // Stop the refreshing indicator if it is running.
                     swipeToRefresh.setRefreshing(false);
+
+                    // Update the URL in urlTextBox.  It is necessary to do this after the page finishes loading to get the final URL, which can change during load.
+                    formattedUrlString = mainWebView.getUrl();
+                    urlTextBox.setText(formattedUrlString);
                 }
             }
         });
@@ -153,13 +159,23 @@ public class Webview extends AppCompatActivity {
         // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
             case R.id.home:
-                mainWebView.loadUrl(homepage);
+                formattedUrlString = homepage;
+                urlTextBox.setText(formattedUrlString);
+                mainWebView.loadUrl(formattedUrlString);
                 break;
             case R.id.back:
                 mainWebView.goBack();
+
+                // Update the URL in urlTextBox with the URL we are intending to load.  Because this can be altered during load, the final URL is loaded after the progress bar reaches 100%
+                formattedUrlString = mainWebView.getOriginalUrl();
+                urlTextBox.setText(formattedUrlString);
                 break;
             case R.id.forward:
                 mainWebView.goForward();
+
+                // Update the URL in urlTextBox with the URL we are intending to load.  Because this can be altered during load, the final URL is loaded after the progress bar reaches 100%
+                formattedUrlString = mainWebView.getOriginalUrl();
+                urlTextBox.setText(formattedUrlString);
                 break;
         }
 
@@ -171,6 +187,10 @@ public class Webview extends AppCompatActivity {
     public void onBackPressed() {
         if (mainWebView.canGoBack()) {
             mainWebView.goBack();
+
+            // Update the URL in urlTextBox with the URL we are intending to load.  Because this can be altered during load, the final URL is loaded after the progress bar reaches 100%
+            formattedUrlString = mainWebView.getOriginalUrl();
+            urlTextBox.setText(formattedUrlString);
         } else {
             super.onBackPressed();
         }
