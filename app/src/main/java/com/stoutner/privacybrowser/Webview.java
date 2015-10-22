@@ -198,8 +198,6 @@ public class Webview extends AppCompatActivity {
 
     public void loadUrlFromTextBox(View view) throws UnsupportedEncodingException {
         // Get the text from urlTextInput and convert it to a string.
-        final EditText urlTextBox = (EditText) findViewById(R.id.urlTextBox);
-        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
         String unformattedUrlString = urlTextBox.getText().toString();
         URL unformattedUrl = null;
         Uri.Builder formattedUri = new Uri.Builder();
