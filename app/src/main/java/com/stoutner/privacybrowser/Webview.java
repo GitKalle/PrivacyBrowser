@@ -2,9 +2,13 @@ package com.stoutner.privacybrowser;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.KeyEvent;
@@ -41,6 +45,12 @@ public class Webview extends AppCompatActivity {
         swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayoutContainer);
         mainWebView = (WebView) findViewById(R.id.mainWebView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            // actionBar.setHideOnContentScrollEnabled(true);
+        }
 
         // Implement swipe down to refresh.
         swipeToRefresh.setColorSchemeColors(0xFF0097FF);
@@ -89,6 +99,11 @@ public class Webview extends AppCompatActivity {
                     // Update the URL in urlTextBox.  It is necessary to do this after the page finishes loading to get the final URL, which can change during load.
                     formattedUrlString = mainWebView.getUrl();
                     urlTextBox.setText(formattedUrlString);
+
+                    // Set the favorite icon
+                    Bitmap favoriteIconBitmap = mainWebView.getFavicon();
+                    Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), favoriteIconBitmap);
+                    // TODO Display the favorite icon.
                 }
             }
         });
