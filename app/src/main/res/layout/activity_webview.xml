@@ -19,13 +19,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- android:inputType="textUri" sets the keyboard to have a go arrow. -->
-            <EditText
-                android:id="@+id/urlTextBox"
+            <LinearLayout
+                android:id="@+id/addressBarLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textUri"
-                android:imeOptions="actionGo" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/favoriteIcon"
+                    android:src="@drawable/ic_home_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+                <!-- android:inputType="textUri" sets the keyboard to have a go arrow. -->
+                <!-- android:layout_weight="1" makes urlTextBox take up all the remaining space. -->
+                <EditText
+                    android:id="@+id/urlTextBox"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:imeOptions="actionGo" />
+            </LinearLayout>
 
             <!-- android:max changes the maximum ProgressBar value from 10000 to 100 to match progress percentage. -->
             <ProgressBar
@@ -39,7 +55,6 @@
                 android:progressBackgroundTint="#FFFFFFFF"
                 android:visibility="gone" />
         </FrameLayout>
-
 
         <WebView
             android:id="@+id/mainWebView"

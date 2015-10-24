@@ -13,11 +13,10 @@
 
         <!-- configChanges orientation and screenSize makes the app not reload when the orientation changes. -->
         <!-- windowSoftInputMode stateAlwaysHidden hides the keyboard when the app starts. -->
-        <!-- Setting the label as null removes it from the action bar. -->
         <activity
             android:name=".Webview"
             android:configChanges="orientation|screenSize"
-            android:label=""
+            android:label="@string/privacy_browser"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

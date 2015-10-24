@@ -17,10 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.ClientCertRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -34,6 +36,7 @@ public class Webview extends AppCompatActivity {
     static ProgressBar progressBar;
     static SwipeRefreshLayout swipeToRefresh;
     static EditText urlTextBox;
+    static ImageView favoriteIcon;
     static final String homepage = "https://www.duckduckgo.com";
 
     @Override
@@ -45,7 +48,9 @@ public class Webview extends AppCompatActivity {
         swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayoutContainer);
         mainWebView = (WebView) findViewById(R.id.mainWebView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        favoriteIcon = (ImageView) findViewById(R.id.favoriteIcon);
 
+        // Remove the title from the action bar.
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
@@ -73,19 +78,30 @@ public class Webview extends AppCompatActivity {
             }
         });
 
-        // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
-        // Save the URL to formattedUrlString and update urlTextBox before loading mainWebView.
         mainWebView.setWebViewClient(new WebViewClient() {
+
+            // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
+            // Save the URL to formattedUrlString and update urlTextBox before loading mainWebView.
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 formattedUrlString = url;
                 urlTextBox.setText(formattedUrlString);
                 mainWebView.loadUrl(formattedUrlString);
                 return true;
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // Update the URL in urlTextBox.  It is necessary to do this after the page finishes loading to get the final URL, which can change during load.
+                formattedUrlString = mainWebView.getUrl();
+                urlTextBox.setText(formattedUrlString);
+            }
         });
 
-        // Update the progress bar when a page is loading.
         mainWebView.setWebChromeClient(new WebChromeClient() {
+
+            // Update the progress bar when a page is loading.
+            @Override
             public void onProgressChanged(WebView view, int progress) {
                 progressBar.setProgress(progress);
                 if (progress < 100) {
@@ -95,16 +111,34 @@ public class Webview extends AppCompatActivity {
 
                     // Stop the refreshing indicator if it is running.
                     swipeToRefresh.setRefreshing(false);
-
-                    // Update the URL in urlTextBox.  It is necessary to do this after the page finishes loading to get the final URL, which can change during load.
-                    formattedUrlString = mainWebView.getUrl();
-                    urlTextBox.setText(formattedUrlString);
-
-                    // Set the favorite icon
-                    Bitmap favoriteIconBitmap = mainWebView.getFavicon();
-                    Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), favoriteIconBitmap);
-                    // TODO Display the favorite icon.
                 }
+            }
+
+            // Set the favorite icon if it changes.
+            @Override
+            public void onReceivedIcon(WebView view, Bitmap icon) {
+                favoriteIcon.setImageBitmap(icon);
+            }
+        });
+
+        // Set the "go" button on the keyboard to load the URL.
+        urlTextBox.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                // If the event is a key-down event on the "enter" button, load the URL.
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Load the URL into the mainWebView and consume the event.
+                    try {
+                        loadUrlFromTextBox(mainWebView);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    // If the enter key was pressed, consume the event.
+                    return true;
+                }
+                // If any other key was pressed, do not consume the event.
+                return false;
             }
         });
 
@@ -137,26 +171,6 @@ public class Webview extends AppCompatActivity {
         // Place the formattedUrlString in the address bar and load the website.
         urlTextBox.setText(formattedUrlString);
         mainWebView.loadUrl(formattedUrlString);
-
-        // Set the "go" button on the keyboard to load the URL.
-        urlTextBox.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Load the URL into the mainWebView and consume the event.
-                    try {
-                        loadUrlFromTextBox(mainWebView);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    return true;
-                }
-                // Do not consume the event.
-                return false;
-            }
-        });
-
     }
 
     @Override
