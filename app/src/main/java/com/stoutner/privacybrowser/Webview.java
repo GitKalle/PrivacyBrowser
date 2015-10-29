@@ -63,7 +63,7 @@ public class Webview extends AppCompatActivity {
             urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
             progressBar = (ProgressBar) actionBar.getCustomView().findViewById(R.id.progressBar);
 
-            //actionBar.setHideOnContentScrollEnabled(true);
+            // TODO actionBar.setHideOnContentScrollEnabled(true);
         }
 
         // Implement swipe down to refresh.
