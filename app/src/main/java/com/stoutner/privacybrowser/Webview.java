@@ -3,8 +3,6 @@ package com.stoutner.privacybrowser;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.ClientCertRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -121,7 +118,7 @@ public class Webview extends AppCompatActivity {
             // Set the favorite icon when it changes.
             @Override
             public void onReceivedIcon(WebView view, Bitmap icon) {
-                favoriteIcon.setImageBitmap(icon);
+                favoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
             }
         });
 
