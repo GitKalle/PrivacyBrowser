@@ -1,5 +1,6 @@
 package com.stoutner.privacybrowser;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,6 +36,9 @@ public class Webview extends AppCompatActivity {
     static EditText urlTextBox;
     static ImageView favoriteIcon;
     static final String homepage = "https://www.duckduckgo.com";
+
+    // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
+    @SuppressLint("SetJavaScriptEnabled")
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
