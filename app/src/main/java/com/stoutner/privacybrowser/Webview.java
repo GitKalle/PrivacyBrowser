@@ -84,16 +84,20 @@ public class Webview extends AppCompatActivity {
             // Save the URL to formattedUrlString and update urlTextBox before loading mainWebView.
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                formattedUrlString = url;
-                urlTextBox.setText(formattedUrlString);
-                mainWebView.loadUrl(formattedUrlString);
+                mainWebView.loadUrl(url);
                 return true;
             }
 
+            // Update the URL in urlTextBox when the page starts to load.
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                urlTextBox.setText(url);
+            }
+
+            // Update formattedUrlString and urlTextBox.  It is necessary to do this after the page finishes loading because the final URL can change during load.
             @Override
             public void onPageFinished(WebView view, String url) {
-                // Update the URL in urlTextBox.  It is necessary to do this after the page finishes loading to get the final URL, which can change during load.
-                formattedUrlString = mainWebView.getUrl();
+                formattedUrlString = url;
                 urlTextBox.setText(formattedUrlString);
             }
         });
@@ -114,7 +118,7 @@ public class Webview extends AppCompatActivity {
                 }
             }
 
-            // Set the favorite icon if it changes.
+            // Set the favorite icon when it changes.
             @Override
             public void onReceivedIcon(WebView view, Bitmap icon) {
                 favoriteIcon.setImageBitmap(icon);
@@ -160,7 +164,7 @@ public class Webview extends AppCompatActivity {
         if (intent.getData() != null) {
             // Get the intent data and convert it to a string.
             final Uri intentUriData = intent.getData();
-            Webview.formattedUrlString = intentUriData.toString();
+            formattedUrlString = intentUriData.toString();
         }
 
         // If formattedUrlString is null assign the homepage to it.
@@ -168,8 +172,7 @@ public class Webview extends AppCompatActivity {
             formattedUrlString = homepage;
         }
 
-        // Place the formattedUrlString in the address bar and load the website.
-        urlTextBox.setText(formattedUrlString);
+        // Load the initial website.
         mainWebView.loadUrl(formattedUrlString);
     }
 
@@ -187,25 +190,15 @@ public class Webview extends AppCompatActivity {
         // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
             case R.id.home:
-                formattedUrlString = homepage;
-                urlTextBox.setText(formattedUrlString);
-                mainWebView.loadUrl(formattedUrlString);
+                mainWebView.loadUrl(homepage);
                 break;
 
             case R.id.back:
                 mainWebView.goBack();
-
-                // Update the URL in urlTextBox with the URL we are intending to load.  Because this can be altered during load, the final URL is loaded after the progress bar reaches 100%
-                formattedUrlString = mainWebView.getOriginalUrl();
-                urlTextBox.setText(formattedUrlString);
                 break;
 
             case R.id.forward:
                 mainWebView.goForward();
-
-                // Update the URL in urlTextBox with the URL we are intending to load.  Because this can be altered during load, the final URL is loaded after the progress bar reaches 100%
-                formattedUrlString = mainWebView.getOriginalUrl();
-                urlTextBox.setText(formattedUrlString);
                 break;
         }
 
@@ -217,10 +210,6 @@ public class Webview extends AppCompatActivity {
     public void onBackPressed() {
         if (mainWebView.canGoBack()) {
             mainWebView.goBack();
-
-            // Update the URL in urlTextBox with the URL we are intending to load.  Because this can be altered during load, the final URL is loaded after the progress bar reaches 100%
-            formattedUrlString = mainWebView.getOriginalUrl();
-            urlTextBox.setText(formattedUrlString);
         } else {
             super.onBackPressed();
         }
@@ -269,7 +258,6 @@ public class Webview extends AppCompatActivity {
         }
 
         // Place formattedUrlString back in the address bar and load the website.
-        urlTextBox.setText(formattedUrlString);
         mainWebView.loadUrl(formattedUrlString);
 
         // Hides the keyboard so we can see the webpage.
