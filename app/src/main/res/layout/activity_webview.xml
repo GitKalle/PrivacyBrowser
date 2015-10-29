@@ -1,69 +1,15 @@
+<!-- SwipeRefreshLayout allows the user to swipe down to refresh. -->
 <android.support.v4.widget.SwipeRefreshLayout
     android:id="@+id/swipeRefreshLayoutContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!-- SwipeRefreshLayout allows the user to swipe down to refresh. -->
 
-    <RelativeLayout
-        android:id="@+id/relativeLayoutContainer"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <WebView
+        android:id="@+id/mainWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Webview" >
-
-        <!-- FrameLayout lets the ProgressBar float on top of urlTextBox. -->
-        <FrameLayout
-            android:id="@+id/addressBarFrameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/addressBarLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/favoriteIcon"
-                    android:src="@drawable/ic_language_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-
-                <!-- android:inputType="textUri" sets the keyboard to have a go arrow. -->
-                <!-- android:layout_weight="1" makes urlTextBox take up all the remaining space. -->
-                <EditText
-                    android:id="@+id/urlTextBox"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:inputType="textUri"
-                    android:imeOptions="actionGo" />
-            </LinearLayout>
-
-            <!-- android:max changes the maximum ProgressBar value from 10000 to 100 to match progress percentage. -->
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="7dp"
-                android:layout_gravity="bottom"
-                android:max="100"
-                android:progressTint="#FF0097FF"
-                android:progressBackgroundTint="#FFFFFFFF"
-                android:visibility="gone" />
-        </FrameLayout>
-
-        <WebView
-            android:id="@+id/mainWebView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/addressBarFrameLayout"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
-
-    </RelativeLayout>
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
 </android.support.v4.widget.SwipeRefreshLayout>

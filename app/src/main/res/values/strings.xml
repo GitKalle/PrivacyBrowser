@@ -1,13 +1,13 @@
 <resources>
-    // Activities.
+    <!-- Activities. -->
     <string name="privacy_browser">Privacy Browser</string>
 
-    // Menu.
+    <!-- Custom App Bar. -->
+    <string name="favorite_icon">Favorite Icon</string>
+
+    <!-- Menu. -->
     <string name="home">Home</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
-
-    // Layout.
-    <string name="go_button">Go</string>
 
 </resources>

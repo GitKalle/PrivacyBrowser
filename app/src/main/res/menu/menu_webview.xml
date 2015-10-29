@@ -9,19 +9,19 @@
         android:title="@string/home"
         android:orderInCategory="100"
         android:icon="@drawable/ic_home_black_24dp"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/back"
         android:title="@string/back"
         android:orderInCategory="200"
         android:icon="@drawable/ic_back"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/forward"
         android:title="@string/forward"
         android:orderInCategory="300"
         android:icon="@drawable/ic_forward"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 </menu>

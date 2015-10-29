@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -45,17 +46,24 @@ public class Webview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
-        urlTextBox = (EditText) findViewById(R.id.urlTextBox);
         swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayoutContainer);
         mainWebView = (WebView) findViewById(R.id.mainWebView);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        favoriteIcon = (ImageView) findViewById(R.id.favoriteIcon);
 
-        // Remove the title from the action bar.
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            // Remove the title from the action bar.
             actionBar.setDisplayShowTitleEnabled(false);
-            // actionBar.setHideOnContentScrollEnabled(true);
+
+            // Add the custom app_bar layout, which shows the favoriteIcon, urlTextBar, and progressBar.
+            actionBar.setCustomView(R.layout.app_bar);
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+            // Initialize the variables for favoriteIcon, urlTextBox, and progressBar
+            favoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
+            urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+            progressBar = (ProgressBar) actionBar.getCustomView().findViewById(R.id.progressBar);
+
+            //actionBar.setHideOnContentScrollEnabled(true);
         }
 
         // Implement swipe down to refresh.
