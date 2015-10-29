@@ -217,7 +217,6 @@ public class Webview extends AppCompatActivity {
         String unformattedUrlString = urlTextBox.getText().toString();
         URL unformattedUrl = null;
         Uri.Builder formattedUri = new Uri.Builder();
-        String scheme;
 
         // Check to see if unformattedUrlString is a valid URL.  Otherwise, convert it into a Duck Duck Go search.
         if (Patterns.WEB_URL.matcher(unformattedUrlString).matches()) {
@@ -234,16 +233,12 @@ public class Webview extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if (unformattedUrl.getProtocol() != null) {
-                scheme = unformattedUrl.getProtocol();
-            } else {
-                scheme = "http";
-            }
-
-            final String authority = unformattedUrl.getAuthority();
-            final String path = unformattedUrl.getPath();
-            final String query = unformattedUrl.getQuery();
-            final String fragment = unformattedUrl.getRef();
+            // The ternary operator (? :) makes sure that unformattedUrl.get() does not cause a null pointer exception.
+            final String scheme = unformattedUrl != null ? unformattedUrl.getProtocol() : null;
+            final String authority = unformattedUrl != null ? unformattedUrl.getAuthority() : null;
+            final String path = unformattedUrl != null ? unformattedUrl.getPath() : null;
+            final String query = unformattedUrl != null ? unformattedUrl.getQuery() : null;
+            final String fragment = unformattedUrl != null ? unformattedUrl.getRef() : null;
 
             formattedUri.scheme(scheme).authority(authority).path(path).query(query).fragment(fragment);
             formattedUrlString = formattedUri.build().toString();
@@ -254,7 +249,6 @@ public class Webview extends AppCompatActivity {
             formattedUrlString = "https://duckduckgo.com/?q=" + encodedUrlString;
         }
 
-        // Place formattedUrlString back in the address bar and load the website.
         mainWebView.loadUrl(formattedUrlString);
 
         // Hides the keyboard so we can see the webpage.
