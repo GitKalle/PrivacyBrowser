@@ -1,15 +1,18 @@
-<!-- SwipeRefreshLayout allows the user to swipe down to refresh. -->
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/swipeRefreshLayoutContainer"
+<!-- nextedScrollingEnabled is required to enable scrolling of the actionBar. -->
+<ScrollView
+    android:id="@+id/scrollView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:nestedScrollingEnabled="true" >
 
-    <WebView
-        android:id="@+id/mainWebView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        <!-- layout_marginTop is required to force the top of the website below the overlayed actionBar. -->
+        <WebView
+            android:id="@+id/mainWebView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_marginTop="?attr/actionBarSize"/>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+</ScrollView>

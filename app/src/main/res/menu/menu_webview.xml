@@ -12,6 +12,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/refresh"
+        android:title="@string/refresh"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/back"
         android:title="@string/back"
         android:orderInCategory="200"

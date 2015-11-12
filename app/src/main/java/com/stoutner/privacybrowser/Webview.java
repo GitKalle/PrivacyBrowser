@@ -6,16 +6,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -33,10 +31,9 @@ public class Webview extends AppCompatActivity {
     static String formattedUrlString;
     static WebView mainWebView;
     static ProgressBar progressBar;
-    static SwipeRefreshLayout swipeToRefresh;
     static EditText urlTextBox;
     static ImageView favoriteIcon;
-    static final String homepage = "https://www.duckduckgo.com";
+    static final String homepage = "https://www.google.com/";
 
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
     @SuppressLint("SetJavaScriptEnabled")
@@ -44,9 +41,12 @@ public class Webview extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // FEATURE_ACTION_BAR_OVERLAY is required to scroll the actionBar.
+        supportRequestWindowFeature(AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR_OVERLAY);
+
         setContentView(R.layout.activity_webview);
 
-        swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayoutContainer);
         mainWebView = (WebView) findViewById(R.id.mainWebView);
 
         final ActionBar actionBar = getSupportActionBar();
@@ -63,29 +63,9 @@ public class Webview extends AppCompatActivity {
             urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
             progressBar = (ProgressBar) actionBar.getCustomView().findViewById(R.id.progressBar);
 
-            // TODO actionBar.setHideOnContentScrollEnabled(true);
+            // Scroll the actionBar.
+            actionBar.setHideOnContentScrollEnabled(true);
         }
-
-        // Implement swipe down to refresh.
-        swipeToRefresh.setColorSchemeColors(0xFF0097FF);
-        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mainWebView.loadUrl(formattedUrlString);
-            }
-        });
-
-        // Only enable swipeToRefresh if is mainWebView is scrolled to the top.
-        mainWebView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                if (mainWebView.getScrollY() == 0) {
-                    swipeToRefresh.setEnabled(true);
-                } else {
-                    swipeToRefresh.setEnabled(false);
-                }
-            }
-        });
 
         mainWebView.setWebViewClient(new WebViewClient() {
 
@@ -121,9 +101,6 @@ public class Webview extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
                     progressBar.setVisibility(View.GONE);
-
-                    // Stop the refreshing indicator if it is running.
-                    swipeToRefresh.setRefreshing(false);
                 }
             }
 
@@ -200,6 +177,10 @@ public class Webview extends AppCompatActivity {
         switch (menuItemId) {
             case R.id.home:
                 mainWebView.loadUrl(homepage);
+                break;
+
+            case R.id.refresh:
+                mainWebView.loadUrl(formattedUrlString);
                 break;
 
             case R.id.back:
