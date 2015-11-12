@@ -1,18 +1,14 @@
-<!-- nextedScrollingEnabled is required to enable scrolling of the actionBar. -->
-<ScrollView
-    android:id="@+id/scrollView"
+<RelativeLayout
+    android:id="@+id/relativeLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:nestedScrollingEnabled="true" >
+    android:layout_height="match_parent">
 
-        <!-- layout_marginTop is required to force the top of the website below the overlayed actionBar. -->
         <WebView
             android:id="@+id/mainWebView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_marginTop="?attr/actionBarSize"/>
+            android:focusableInTouchMode="true" />
 
-</ScrollView>
+</RelativeLayout>

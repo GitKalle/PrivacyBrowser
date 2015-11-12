@@ -33,7 +33,7 @@ public class Webview extends AppCompatActivity {
     static ProgressBar progressBar;
     static EditText urlTextBox;
     static ImageView favoriteIcon;
-    static final String homepage = "https://www.google.com/";
+    static final String homepage = "https://www.duckduckgo.com/";
 
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
     @SuppressLint("SetJavaScriptEnabled")
@@ -41,10 +41,6 @@ public class Webview extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // FEATURE_ACTION_BAR_OVERLAY is required to scroll the actionBar.
-        supportRequestWindowFeature(AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR_OVERLAY);
-
         setContentView(R.layout.activity_webview);
 
         mainWebView = (WebView) findViewById(R.id.mainWebView);
@@ -62,9 +58,6 @@ public class Webview extends AppCompatActivity {
             favoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
             urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
             progressBar = (ProgressBar) actionBar.getCustomView().findViewById(R.id.progressBar);
-
-            // Scroll the actionBar.
-            actionBar.setHideOnContentScrollEnabled(true);
         }
 
         mainWebView.setWebViewClient(new WebViewClient() {
