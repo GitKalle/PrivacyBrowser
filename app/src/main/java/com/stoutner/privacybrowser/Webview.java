@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -31,12 +32,8 @@ import java.net.URLEncoder;
 
 public class Webview extends AppCompatActivity {
 
-    static String formattedUrlString;
-    static WebView mainWebView;
-    static ProgressBar progressBar;
-    static EditText urlTextBox;
-    static ImageView favoriteIcon;
-    static final String homepage = "https://www.duckduckgo.com/";
+    private String formattedUrlString;
+    private String homepage = "https://www.duckduckgo.com/";
 
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
     @SuppressLint("SetJavaScriptEnabled")
@@ -46,7 +43,7 @@ public class Webview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
-        mainWebView = (WebView) findViewById(R.id.mainWebView);
+        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
 
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -57,14 +54,29 @@ public class Webview extends AppCompatActivity {
             actionBar.setCustomView(R.layout.app_bar);
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
-            // Initialize the variables for favoriteIcon, urlTextBox, and progressBar
-            favoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
-            urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
-            progressBar = (ProgressBar) actionBar.getCustomView().findViewById(R.id.progressBar);
+            // Set the "go" button on the keyboard to load the URL in urlTextBox.
+            EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+            urlTextBox.setOnKeyListener(new View.OnKeyListener() {
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // If the event is a key-down event on the "enter" button, load the URL.
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        // Load the URL into the mainWebView and consume the event.
+                        try {
+                            loadUrlFromTextBox();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        // If the enter key was pressed, consume the event.
+                        return true;
+                    }
+                    // If any other key was pressed, do not consume the event.
+                    return false;
+                }
+            });
         }
 
         mainWebView.setWebViewClient(new WebViewClient() {
-
             // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
             // Save the URL to formattedUrlString and update urlTextBox before loading mainWebView.
             @Override
@@ -76,63 +88,58 @@ public class Webview extends AppCompatActivity {
             // Update the URL in urlTextBox when the page starts to load.
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                urlTextBox.setText(url);
+                if (actionBar != null) {
+                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+                    urlTextBox.setText(url);
+                }
             }
 
             // Update formattedUrlString and urlTextBox.  It is necessary to do this after the page finishes loading because the final URL can change during load.
             @Override
             public void onPageFinished(WebView view, String url) {
                 formattedUrlString = url;
-                urlTextBox.setText(formattedUrlString);
+
+                if (actionBar != null) {
+                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+                    urlTextBox.setText(formattedUrlString);
+                }
             }
         });
 
         mainWebView.setWebChromeClient(new WebChromeClient() {
-
             // Update the progress bar when a page is loading.
             @Override
             public void onProgressChanged(WebView view, int progress) {
-                progressBar.setProgress(progress);
-                if (progress < 100) {
-                    progressBar.setVisibility(View.VISIBLE);
-                } else {
-                    progressBar.setVisibility(View.GONE);
+                // Make sure that actionBar is not null.
+                if (actionBar != null) {
+                    ProgressBar progressBar = (ProgressBar) actionBar.getCustomView().findViewById(R.id.progressBar);
+                    progressBar.setProgress(progress);
+                    if (progress < 100) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                    }
                 }
             }
 
             // Set the favorite icon when it changes.
             @Override
             public void onReceivedIcon(WebView view, Bitmap icon) {
-                favoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
-            }
-        });
-
-        // Set the "go" button on the keyboard to load the URL.
-        urlTextBox.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                // If the event is a key-down event on the "enter" button, load the URL.
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Load the URL into the mainWebView and consume the event.
-                    try {
-                        loadUrlFromTextBox(mainWebView);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    // If the enter key was pressed, consume the event.
-                    return true;
+                // Make sure that actionBar is not null.
+                if (actionBar != null) {
+                    ImageView favoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
+                    favoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
                 }
-                // If any other key was pressed, do not consume the event.
-                return false;
             }
         });
 
         // Allow pinch to zoom.
         mainWebView.getSettings().setBuiltInZoomControls(true);
 
-        // Hide zoom controls.
-        mainWebView.getSettings().setDisplayZoomControls(false);
+        // Hide zoom controls API is 11 or greater.
+        if (Build.VERSION.SDK_INT >= 11) {
+            mainWebView.getSettings().setDisplayZoomControls(false);
+        }
 
         // Enable JavaScript.
         mainWebView.getSettings().setJavaScriptEnabled(true);
@@ -171,6 +178,8 @@ public class Webview extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int menuItemId = menuItem.getItemId();
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ActionBar actionBar = getSupportActionBar();
+        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
 
         // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
@@ -191,25 +200,37 @@ public class Webview extends AppCompatActivity {
                 break;
 
             case R.id.copyURL:
-                clipboard.setPrimaryClip(ClipData.newPlainText("URL", urlTextBox.getText()));
+                // Make sure that actionBar is not null.
+                if (actionBar != null) {
+                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+                    clipboard.setPrimaryClip(ClipData.newPlainText("URL", urlTextBox.getText()));
+                }
                 break;
 
             case R.id.pasteURL:
-                ClipData.Item clipboardData = clipboard.getPrimaryClip().getItemAt(0);
-                urlTextBox.setText(clipboardData.coerceToText(this));
-                try {
-                    loadUrlFromTextBox(mainWebView);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                // Make sure that actionBar is not null.
+                if (actionBar != null) {
+                    ClipData.Item clipboardData = clipboard.getPrimaryClip().getItemAt(0);
+                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+                    urlTextBox.setText(clipboardData.coerceToText(this));
+                    try {
+                        loadUrlFromTextBox();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
 
             case R.id.shareURL:
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
-                shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent, "Share URL"));
+                // Make sure that actionBar is not null.
+                if (actionBar != null) {
+                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
+                    shareIntent.setType("text/plain");
+                    startActivity(Intent.createChooser(shareIntent, "Share URL"));
+                }
                 break;
         }
 
@@ -219,6 +240,8 @@ public class Webview extends AppCompatActivity {
     // Override onBackPressed so that if mainWebView can go back it does when the system back button is pressed.
     @Override
     public void onBackPressed() {
+        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
+
         if (mainWebView.canGoBack()) {
             mainWebView.goBack();
         } else {
@@ -226,47 +249,54 @@ public class Webview extends AppCompatActivity {
         }
     }
 
-    public void loadUrlFromTextBox(View view) throws UnsupportedEncodingException {
-        // Get the text from urlTextInput and convert it to a string.
-        String unformattedUrlString = urlTextBox.getText().toString();
-        URL unformattedUrl = null;
-        Uri.Builder formattedUri = new Uri.Builder();
+    public void loadUrlFromTextBox() throws UnsupportedEncodingException {
+        // Make sure that actionBar is not null.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
+            EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
 
-        // Check to see if unformattedUrlString is a valid URL.  Otherwise, convert it into a Duck Duck Go search.
-        if (Patterns.WEB_URL.matcher(unformattedUrlString).matches()) {
+            // Get the text from urlTextInput and convert it to a string.
+            String unformattedUrlString = urlTextBox.getText().toString();
+            URL unformattedUrl = null;
+            Uri.Builder formattedUri = new Uri.Builder();
 
-            // Add http:// at the beginning if it is missing.  Otherwise the app will segfault.
-            if (!unformattedUrlString.startsWith("http")) {
-                unformattedUrlString = "http://" + unformattedUrlString;
+            // Check to see if unformattedUrlString is a valid URL.  Otherwise, convert it into a Duck Duck Go search.
+            if (Patterns.WEB_URL.matcher(unformattedUrlString).matches()) {
+
+                // Add http:// at the beginning if it is missing.  Otherwise the app will segfault.
+                if (!unformattedUrlString.startsWith("http")) {
+                    unformattedUrlString = "http://" + unformattedUrlString;
+                }
+
+                // Convert unformattedUrlString to a URL, then to a URI, and then back to a string, which sanitizes the input and adds in any missing components.
+                try {
+                    unformattedUrl = new URL(unformattedUrlString);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+                // The ternary operator (? :) makes sure that a null pointer exception is not thrown, which would happen if .get was called on a null value.
+                final String scheme = unformattedUrl != null ? unformattedUrl.getProtocol() : null;
+                final String authority = unformattedUrl != null ? unformattedUrl.getAuthority() : null;
+                final String path = unformattedUrl != null ? unformattedUrl.getPath() : null;
+                final String query = unformattedUrl != null ? unformattedUrl.getQuery() : null;
+                final String fragment = unformattedUrl != null ? unformattedUrl.getRef() : null;
+
+                formattedUri.scheme(scheme).authority(authority).path(path).query(query).fragment(fragment);
+                formattedUrlString = formattedUri.build().toString();
+
+            } else {
+                // Sanitize the search input and convert it to a DuckDuckGo search.
+                final String encodedUrlString = URLEncoder.encode(unformattedUrlString, "UTF-8");
+                formattedUrlString = "https://duckduckgo.com/?q=" + encodedUrlString;
             }
 
-            // Convert unformattedUrlString to a URL, then to a URI, and then back to a string, which sanitizes the input and adds in any missing components.
-            try {
-                unformattedUrl = new URL(unformattedUrlString);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            mainWebView.loadUrl(formattedUrlString);
 
-            // The ternary operator (? :) makes sure that a null pointer exception is not thrown, which would happen if .get was called on a null value.
-            final String scheme = unformattedUrl != null ? unformattedUrl.getProtocol() : null;
-            final String authority = unformattedUrl != null ? unformattedUrl.getAuthority() : null;
-            final String path = unformattedUrl != null ? unformattedUrl.getPath() : null;
-            final String query = unformattedUrl != null ? unformattedUrl.getQuery() : null;
-            final String fragment = unformattedUrl != null ? unformattedUrl.getRef() : null;
-
-            formattedUri.scheme(scheme).authority(authority).path(path).query(query).fragment(fragment);
-            formattedUrlString = formattedUri.build().toString();
-
-        } else {
-            // Sanitize the search input.
-            final String encodedUrlString = URLEncoder.encode(unformattedUrlString, "UTF-8");
-            formattedUrlString = "https://duckduckgo.com/?q=" + encodedUrlString;
+            // Hides the keyboard so we can see the webpage.
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(mainWebView.getWindowToken(), 0);
         }
-
-        mainWebView.loadUrl(formattedUrlString);
-
-        // Hides the keyboard so we can see the webpage.
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(mainWebView.getWindowToken(), 0);
     }
 }
