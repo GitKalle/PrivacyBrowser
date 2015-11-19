@@ -10,5 +10,7 @@
     <string name="refresh">Refresh</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
-
+    <string name="copyURL">Copy URL</string>
+    <string name="pasteURL">Paste URL</string>
+    <string name="shareURL">Share URL</string>
 </resources>

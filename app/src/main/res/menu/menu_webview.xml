@@ -30,4 +30,26 @@
         android:orderInCategory="300"
         android:icon="@drawable/ic_forward"
         app:showAsAction="never" />
+
+    <!-- tools:targetApi="11" is required because copy and paste was not available on earlier version of Android. -->
+    <item
+        android:id="@+id/copyURL"
+        android:title="@string/copyURL"
+        android:orderInCategory="400"
+        tools:targetApi="11"
+        app:showAsAction="never" />
+
+    <!-- tools:targetApi="11" is required because copy and paste was not available on earlier version of Android. -->
+    <item
+        android:id="@+id/pasteURL"
+        android:title="@string/pasteURL"
+        android:orderInCategory="500"
+        tools:targetApi="11"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/shareURL"
+        android:title="@string/shareURL"
+        android:orderInCategory="600"
+        app:showAsAction="never" />
 </menu>

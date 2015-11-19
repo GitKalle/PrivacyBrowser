@@ -1,14 +1,17 @@
 package com.stoutner.privacybrowser;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -162,9 +165,12 @@ public class Webview extends AppCompatActivity {
         return true;
     }
 
+    // @TargetApi(11) turns off the errors regarding copy and paste, which are removied from view in menu_webview.xml for lower version of Android.
     @Override
+    @TargetApi(11)
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int menuItemId = menuItem.getItemId();
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
         // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
@@ -182,6 +188,28 @@ public class Webview extends AppCompatActivity {
 
             case R.id.forward:
                 mainWebView.goForward();
+                break;
+
+            case R.id.copyURL:
+                clipboard.setPrimaryClip(ClipData.newPlainText("URL", urlTextBox.getText()));
+                break;
+
+            case R.id.pasteURL:
+                ClipData.Item clipboardData = clipboard.getPrimaryClip().getItemAt(0);
+                urlTextBox.setText(clipboardData.coerceToText(this));
+                try {
+                    loadUrlFromTextBox(mainWebView);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case R.id.shareURL:
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Share URL"));
                 break;
         }
 
@@ -219,7 +247,7 @@ public class Webview extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            // The ternary operator (? :) makes sure that unformattedUrl.get() does not cause a null pointer exception.
+            // The ternary operator (? :) makes sure that a null pointer exception is not thrown, which would happen if .get was called on a null value.
             final String scheme = unformattedUrl != null ? unformattedUrl.getProtocol() : null;
             final String authority = unformattedUrl != null ? unformattedUrl.getAuthority() : null;
             final String path = unformattedUrl != null ? unformattedUrl.getPath() : null;
