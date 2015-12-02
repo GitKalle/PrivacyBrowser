@@ -7,27 +7,27 @@
     <item
         android:id="@+id/home"
         android:title="@string/home"
-        android:orderInCategory="100"
+        android:orderInCategory="10"
         android:icon="@drawable/ic_home_black_24dp"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/refresh"
         android:title="@string/refresh"
-        android:orderInCategory="200"
+        android:orderInCategory="20"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/back"
         android:title="@string/back"
-        android:orderInCategory="200"
+        android:orderInCategory="30"
         android:icon="@drawable/ic_back"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/forward"
         android:title="@string/forward"
-        android:orderInCategory="300"
+        android:orderInCategory="40"
         android:icon="@drawable/ic_forward"
         app:showAsAction="never" />
 
@@ -35,7 +35,7 @@
     <item
         android:id="@+id/copyURL"
         android:title="@string/copyURL"
-        android:orderInCategory="400"
+        android:orderInCategory="50"
         tools:targetApi="11"
         app:showAsAction="never" />
 
@@ -43,13 +43,19 @@
     <item
         android:id="@+id/pasteURL"
         android:title="@string/pasteURL"
-        android:orderInCategory="500"
+        android:orderInCategory="60"
         tools:targetApi="11"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/shareURL"
         android:title="@string/shareURL"
-        android:orderInCategory="600"
+        android:orderInCategory="70"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/downloads"
+        android:title="@string/downloads"
+        android:orderInCategory="80"
         app:showAsAction="never" />
 </menu>

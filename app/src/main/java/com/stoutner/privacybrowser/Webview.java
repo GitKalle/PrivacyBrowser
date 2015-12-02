@@ -1,16 +1,22 @@
 package com.stoutner.privacybrowser;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
@@ -19,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -29,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -90,7 +98,7 @@ public class Webview extends AppCompatActivity {
             }
 
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                Toast.makeText(mainWebViewActivity, "Error loading " + request + "   Error: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mainWebViewActivity, "Error loading " + request + "   Error: " + error, Toast.LENGTH_LONG).show();
             }
 
             // Update the URL in urlTextBox when the page starts to load.
@@ -138,6 +146,26 @@ public class Webview extends AppCompatActivity {
                     ImageView favoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
                     favoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
                 }
+            }
+        });
+
+        mainWebView.setDownloadListener(new DownloadListener() {
+            // Launch the Android download manager when a link leads to a download.
+            @Override
+            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+                DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                DownloadManager.Request requestUri = new DownloadManager.Request(Uri.parse(url));
+
+                // Add the URL as the description for the download.
+                requestUri.setDescription(url);
+
+                // Show the download notification after the download is completed if the API is 11 or greater.
+                if (Build.VERSION.SDK_INT >= 11) {
+                    requestUri.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                }
+
+                downloadManager.enqueue(requestUri);
+                Toast.makeText(mainWebViewActivity, "Download started", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -240,6 +268,15 @@ public class Webview extends AppCompatActivity {
                     startActivity(Intent.createChooser(shareIntent, "Share URL"));
                 }
                 break;
+
+            case R.id.downloads:
+                // Launch the system Download Manager.
+                Intent downloadManangerIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
+
+                // Launch as a new task so that Download Manager and Privacy Browser show as separate windows in the recent tasks list.
+                downloadManangerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                startActivity(downloadManangerIntent);
         }
 
         return super.onOptionsItemSelected(menuItem);

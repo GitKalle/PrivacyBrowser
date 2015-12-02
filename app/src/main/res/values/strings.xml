@@ -13,4 +13,5 @@
     <string name="copyURL">Copy URL</string>
     <string name="pasteURL">Paste URL</string>
     <string name="shareURL">Share URL</string>
+    <string name="downloads">Downloads</string>
 </resources>

@@ -3,9 +3,6 @@
     package="com.stoutner.privacybrowser" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE are required to download files. -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="false"
@@ -14,8 +11,8 @@
         android:label="@string/privacy_browser"
         android:theme="@style/AppTheme" >
 
-        <!-- configChanges orientation and screenSize makes the app not reload when the orientation changes. -->
-        <!-- windowSoftInputMode stateAlwaysHidden hides the keyboard when the app starts. -->
+        <!-- android:configChanges="orientation|screenSize" makes the app not reload when the orientation changes. -->
+        <!-- android:windowSoftInputMode="stateAlwaysHidden" hides the keyboard when the app starts. -->
         <activity
             android:name=".Webview"
             android:configChanges="orientation|screenSize"
@@ -26,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- android.intent.action.VIEW with the schemes enables processing of web intents. -->
+            <!-- android.intent.action.VIEW with the two schemes enables processing of web intents. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
