@@ -20,11 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,6 +48,7 @@ public class Webview extends AppCompatActivity {
         setContentView(R.layout.activity_webview);
 
         final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
+        final Activity mainWebViewActivity = this;
 
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -77,12 +82,15 @@ public class Webview extends AppCompatActivity {
         }
 
         mainWebView.setWebViewClient(new WebViewClient() {
-            // setWebViewClient makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
-            // Save the URL to formattedUrlString and update urlTextBox before loading mainWebView.
+            // shouldOverrideUrlLoading makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 mainWebView.loadUrl(url);
                 return true;
+            }
+
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                Toast.makeText(mainWebViewActivity, "Error loading " + request + "   Error: " + error, Toast.LENGTH_SHORT).show();
             }
 
             // Update the URL in urlTextBox when the page starts to load.
@@ -136,7 +144,7 @@ public class Webview extends AppCompatActivity {
         // Allow pinch to zoom.
         mainWebView.getSettings().setBuiltInZoomControls(true);
 
-        // Hide zoom controls API is 11 or greater.
+        // Hide zoom controls if the API is 11 or greater.
         if (Build.VERSION.SDK_INT >= 11) {
             mainWebView.getSettings().setDisplayZoomControls(false);
         }
@@ -172,7 +180,7 @@ public class Webview extends AppCompatActivity {
         return true;
     }
 
-    // @TargetApi(11) turns off the errors regarding copy and paste, which are removied from view in menu_webview.xml for lower version of Android.
+    // @TargetApi(11) turns off the errors regarding copy and paste, which are removed from view in menu_webview.xml for lower version of Android.
     @Override
     @TargetApi(11)
     public boolean onOptionsItemSelected(MenuItem menuItem) {

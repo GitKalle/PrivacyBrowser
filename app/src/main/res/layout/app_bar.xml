@@ -5,7 +5,7 @@
     android:id="@+id/addressBarFrameLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/addressBarLinearLayout"
@@ -34,11 +34,12 @@
     </LinearLayout>
 
     <!-- android:max changes the maximum ProgressBar value from 10000 to 100 to match progress percentage. -->
+    <!-- android:layout_height="2dp" works best for API 23 "Marshmallow", but "3dp" is required for visibility on API <= 22. -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="7dp"
+        android:layout_height="3dp"
         android:layout_gravity="bottom"
         android:max="100"
         android:progressTint="#FF0097FF"

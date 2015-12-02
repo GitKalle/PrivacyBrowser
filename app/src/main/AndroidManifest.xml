@@ -3,6 +3,9 @@
     package="com.stoutner.privacybrowser" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE are required to download files. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="false"
