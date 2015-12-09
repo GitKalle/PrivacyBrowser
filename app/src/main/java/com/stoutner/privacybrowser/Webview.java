@@ -27,8 +27,10 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -49,6 +51,8 @@ public class Webview extends AppCompatActivity {
         setContentView(R.layout.activity_webview);
 
         final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
+        final FrameLayout fullScreenVideoFrameLayout = (FrameLayout) findViewById(R.id.fullScreenVideoFrameLayout);
+        final RelativeLayout rootRelativeLayout = (RelativeLayout) findViewById(R.id.rootRelativeLayout);
         final Activity mainWebViewActivity = this;
 
         final ActionBar actionBar = getSupportActionBar();
@@ -139,6 +143,47 @@ public class Webview extends AppCompatActivity {
                     ImageView favoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
                     favoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
                 }
+            }
+
+            // Enter full screen video
+            @Override
+            public void onShowCustomView(View view, CustomViewCallback callback) {
+                getSupportActionBar().hide();
+
+                fullScreenVideoFrameLayout.addView(view);
+                fullScreenVideoFrameLayout.setVisibility(View.VISIBLE);
+
+                mainWebView.setVisibility(View.GONE);
+
+                /* SYSTEM_UI_FLAG_HIDE_NAVIGATION hides the navigation bars on the bottom or right of the screen.
+                ** SYSTEM_UI_FLAG_FULLSCREEN hides the status bar across the top of the screen.
+                ** SYSTEM_UI_FLAG_IMMERSIVE_STICKY makes the navigation and status bars ghosted overlays and automatically rehides them.
+                */
+
+                // Set the one flag supported by API >= 14.
+                if (Build.VERSION.SDK_INT >= 14) {
+                    view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                }
+
+                // Set the two flags that are supported by API >= 16.
+                if (Build.VERSION.SDK_INT >= 16) {
+                    view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
+                }
+
+                // Set all three flags that are supported by API >= 19.
+                if (Build.VERSION.SDK_INT >= 19) {
+                    view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                }
+            }
+
+            // Exit full screen video
+            public void onHideCustomView() {
+                getSupportActionBar().show();
+
+                mainWebView.setVisibility(View.VISIBLE);
+
+                fullScreenVideoFrameLayout.removeAllViews();
+                fullScreenVideoFrameLayout.setVisibility(View.GONE);
             }
         });
 
