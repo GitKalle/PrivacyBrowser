@@ -12,8 +12,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -30,14 +32,15 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class Webview extends AppCompatActivity {
+public class Webview extends AppCompatActivity implements CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
+    // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
+    public static Bitmap favoriteIcon;
 
     private String formattedUrlString;
     private String homepage = "https://www.duckduckgo.com/";
@@ -52,7 +55,6 @@ public class Webview extends AppCompatActivity {
 
         final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
         final FrameLayout fullScreenVideoFrameLayout = (FrameLayout) findViewById(R.id.fullScreenVideoFrameLayout);
-        final RelativeLayout rootRelativeLayout = (RelativeLayout) findViewById(R.id.rootRelativeLayout);
         final Activity mainWebViewActivity = this;
 
         final ActionBar actionBar = getSupportActionBar();
@@ -69,8 +71,7 @@ public class Webview extends AppCompatActivity {
             urlTextBox.setOnKeyListener(new View.OnKeyListener() {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     // If the event is a key-down event on the "enter" button, load the URL.
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         // Load the URL into the mainWebView and consume the event.
                         try {
                             loadUrlFromTextBox();
@@ -79,9 +80,10 @@ public class Webview extends AppCompatActivity {
                         }
                         // If the enter key was pressed, consume the event.
                         return true;
+                    } else {
+                        // If any other key was pressed, do not consume the event.
+                        return false;
                     }
-                    // If any other key was pressed, do not consume the event.
-                    return false;
                 }
             });
         }
@@ -138,10 +140,13 @@ public class Webview extends AppCompatActivity {
             // Set the favorite icon when it changes.
             @Override
             public void onReceivedIcon(WebView view, Bitmap icon) {
-                // Make sure that actionBar is not null.
+                // Save a copy of the favorite icon for use if a shortcut is added to the home screen.
+                favoriteIcon = icon;
+
+                // Place the favorite icon in the actionBar if it is not null.
                 if (actionBar != null) {
-                    ImageView favoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
-                    favoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
+                    ImageView imageViewFavoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
+                    imageViewFavoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
                 }
             }
 
@@ -307,6 +312,14 @@ public class Webview extends AppCompatActivity {
                 }
                 break;
 
+            case R.id.addToHomescreen:
+                // Show the CreateHomeScreenShortcut AlertDialog and name this instance createShortcut.
+                AppCompatDialogFragment shortcutDialog = new CreateHomeScreenShortcut();
+                shortcutDialog.show(getSupportFragmentManager(), "createShortcut");
+
+                //Everything else will be handled by CreateHomeScreenShortcut and the associated listeners below.
+                break;
+
             case R.id.downloads:
                 // Launch the system Download Manager.
                 Intent downloadManangerIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
@@ -315,9 +328,34 @@ public class Webview extends AppCompatActivity {
                 downloadManangerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(downloadManangerIntent);
+                break;
         }
 
         return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public void onCreateHomeScreenShortcutCancel(DialogFragment dialog) {
+        // Do nothing because the user selected "Cancel".
+    }
+
+    @Override
+    public void onCreateHomeScreenShortcutCreate(DialogFragment dialog) {
+        // Get shortcutNameEditText from the alert dialog.
+        EditText shortcutNameEditText = (EditText) dialog.getDialog().findViewById(R.id.shortcutNameEditText);
+
+        // Create the bookmark shortcut based on formattedUrlString.
+        Intent bookmarkShortcut = new Intent();
+        bookmarkShortcut.setAction(Intent.ACTION_VIEW);
+        bookmarkShortcut.setData(Uri.parse(formattedUrlString));
+
+        // Place the bookmark shortcut on the home screen.
+        Intent placeBookmarkShortcut = new Intent();
+        placeBookmarkShortcut.putExtra("android.intent.extra.shortcut.INTENT", bookmarkShortcut);
+        placeBookmarkShortcut.putExtra("android.intent.extra.shortcut.NAME", shortcutNameEditText.getText().toString());
+        placeBookmarkShortcut.putExtra("android.intent.extra.shortcut.ICON", favoriteIcon);
+        placeBookmarkShortcut.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        sendBroadcast(placeBookmarkShortcut);
     }
 
     // Override onBackPressed so that if mainWebView can go back it does when the system back button is pressed.

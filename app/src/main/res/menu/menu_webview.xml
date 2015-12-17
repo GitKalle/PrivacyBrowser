@@ -34,7 +34,7 @@
     <!-- tools:targetApi="11" is required because copy and paste was not available on earlier version of Android. -->
     <item
         android:id="@+id/copyURL"
-        android:title="@string/copyURL"
+        android:title="@string/copy_URL"
         android:orderInCategory="50"
         tools:targetApi="11"
         app:showAsAction="never" />
@@ -42,20 +42,26 @@
     <!-- tools:targetApi="11" is required because copy and paste was not available on earlier version of Android. -->
     <item
         android:id="@+id/pasteURL"
-        android:title="@string/pasteURL"
+        android:title="@string/paste_URL"
         android:orderInCategory="60"
         tools:targetApi="11"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/shareURL"
-        android:title="@string/shareURL"
+        android:title="@string/share_URL"
         android:orderInCategory="70"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/addToHomescreen"
+        android:title="@string/add_to_home_screen"
+        android:orderInCategory="80"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/downloads"
         android:title="@string/downloads"
-        android:orderInCategory="80"
+        android:orderInCategory="90"
         app:showAsAction="never" />
 </menu>
