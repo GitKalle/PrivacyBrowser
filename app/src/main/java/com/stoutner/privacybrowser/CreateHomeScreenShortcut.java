@@ -1,5 +1,20 @@
 /**
- * Copyright Soren Stoutner 2015.
+ * Copyright 2015 Soren Stoutner
+ *
+ * This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
+ *
+ * Privacy Browser is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Privacy Browser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.stoutner.privacybrowser;
@@ -44,13 +59,12 @@ public class CreateHomeScreenShortcut extends AppCompatDialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        LayoutInflater customDialogInflater = getActivity().getLayoutInflater();
-
         // Create a drawable version of the favorite icon.
         Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), Webview.favoriteIcon);
 
-        // Setup dialogBuilder.
+        // Use AlertDialog.Builder to create the AlertDialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        LayoutInflater customDialogInflater = getActivity().getLayoutInflater();
         alertDialogBuilder.setTitle(R.string.shortcut_name);
         alertDialogBuilder.setIcon(favoriteIconDrawable);
         alertDialogBuilder.setView(customDialogInflater.inflate(R.layout.create_home_screen_shortcut_dialog, null));
@@ -67,7 +81,7 @@ public class CreateHomeScreenShortcut extends AppCompatDialogFragment {
             }
         });
 
-        // Assign the resulting built dialog to an AlertDialog.
+        // Assign the alertDialogBuilder to an AlertDialog.
         final AlertDialog alertDialog = alertDialogBuilder.create();
 
         // Show the keyboard when the dialog is displayed on the screen.

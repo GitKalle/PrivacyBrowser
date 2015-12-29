@@ -1,3 +1,21 @@
+<!--
+  Copyright 2015 Soren Stoutner
+
+  This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
+
+  Privacy Browser is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Privacy Browser is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
 <resources>
     <!-- Activities. -->
     <string name="privacy_browser">Privacy Browser</string>
@@ -15,9 +33,14 @@
     <string name="share_URL">Share URL</string>
     <string name="add_to_home_screen">Add to Home Screen</string>
     <string name="downloads">Downloads</string>
+    <string name="about">About</string>
 
     <!-- Create Home Screen Shorcut Alert Dialog. -->
     <string name="shortcut_name">Shortcut name</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+
+    <!-- About Dialog. -->
+    <string name="about_privacy_browser">About Privacy Browser</string>
+    <string name="dismiss">Dismiss</string>
 </resources>
