@@ -115,9 +115,11 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                 return true;
             }
 
+            /* These errors do not provide any useful information and clutter the screen.
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                Toast.makeText(mainWebViewActivity, "Error loading " + request + "   Error: " + error, Toast.LENGTH_LONG).show();
+                Toast.makeText(mainWebViewActivity, "Error loading " + request + "   Error: " + error, Toast.LENGTH_SHORT).show();
             }
+            */
 
             // Update the URL in urlTextBox when the page starts to load.
             @Override
