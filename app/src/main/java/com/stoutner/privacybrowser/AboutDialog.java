@@ -37,7 +37,7 @@ public class AboutDialog extends AppCompatDialogFragment {
         aboutDialogWebView.loadUrl("file:///android_asset/about_text.html");
 
         // Use AlertDialog.Builder to create the AlertDialog
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle(R.string.about_privacy_browser);
         alertDialogBuilder.setView(aboutDialogWebView);
         alertDialogBuilder.setPositiveButton(R.string.dismiss, new DialogInterface.OnClickListener() {

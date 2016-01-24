@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Soren Stoutner <soren@stoutner.com>.
+ * Copyright 2015-2016 Soren Stoutner <soren@stoutner.com>.
  *
  * This file is part of Privacy Browser.
  *
@@ -43,8 +43,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -61,8 +59,16 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
     // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
     public static Bitmap favoriteIcon;
 
+    // mainWebView is used in onCreate and onOptionsItemSelected.
+    private WebView mainWebView;
+    // formattedUrlString is used in onCreate, onOptionsItemSelected, onCreateHomeScreenShortcutCreate, and loadUrlFromTextBox.
     private String formattedUrlString;
+    // homepage is used in onCreate and onOptionsItemSelected.
     private String homepage = "https://www.duckduckgo.com/";
+    // enableJavaScript is used onCreate and onOptionsItemSelected.
+    private boolean enableJavaScript;
+    // actionBar is used in onCreate and onOptionsItemSelected.
+    private ActionBar actionBar;
 
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
     @SuppressLint("SetJavaScriptEnabled")
@@ -72,11 +78,12 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
-        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
         final FrameLayout fullScreenVideoFrameLayout = (FrameLayout) findViewById(R.id.fullScreenVideoFrameLayout);
         final Activity mainWebViewActivity = this;
 
-        final ActionBar actionBar = getSupportActionBar();
+        mainWebView = (WebView) findViewById(R.id.mainWebView);
+        actionBar = getSupportActionBar();
+
         if (actionBar != null) {
             // Remove the title from the action bar.
             actionBar.setDisplayShowTitleEnabled(false);
@@ -174,7 +181,9 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
             // Enter full screen video
             @Override
             public void onShowCustomView(View view, CustomViewCallback callback) {
-                getSupportActionBar().hide();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().hide();
+                }
 
                 fullScreenVideoFrameLayout.addView(view);
                 fullScreenVideoFrameLayout.setVisibility(View.VISIBLE);
@@ -204,7 +213,9 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
 
             // Exit full screen video
             public void onHideCustomView() {
-                getSupportActionBar().show();
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().show();
+                }
 
                 mainWebView.setVisibility(View.VISIBLE);
 
@@ -213,6 +224,7 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
             }
         });
 
+        // Allow the downloading of files.
         mainWebView.setDownloadListener(new DownloadListener() {
             // Launch the Android download manager when a link leads to a download.
             @Override
@@ -241,8 +253,13 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
             mainWebView.getSettings().setDisplayZoomControls(false);
         }
 
-        // Enable JavaScript.
-        mainWebView.getSettings().setJavaScriptEnabled(true);
+        // Set JavaScript initial status.
+        enableJavaScript = true;
+        if (enableJavaScript) {
+            mainWebView.getSettings().setJavaScriptEnabled(true);
+        } else {
+            mainWebView.getSettings().setJavaScriptEnabled(false);
+        }
 
         // Enable DOM Storage.
         mainWebView.getSettings().setDomStorageEnabled(true);
@@ -269,35 +286,58 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_webview, menu);
+        MenuItem toggleJavaScriptMenuItem = menu.findItem(R.id.toggleJavaScript);
+
+        // Set the JavaScript menu item checkbox initial status.
+        if (enableJavaScript) {
+            toggleJavaScriptMenuItem.setChecked(true);
+        } else {
+            toggleJavaScriptMenuItem.setChecked(false);
+        }
+
         return true;
     }
 
-    // @TargetApi(11) turns off the errors regarding copy and paste, which are removed from view in menu_webview.xml for lower version of Android.
     @Override
+    // @TargetApi(11) turns off the errors regarding copy and paste, which are removed from view in menu_webview.xml for lower version of Android.
     @TargetApi(11)
+    // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
+    @SuppressLint("SetJavaScriptEnabled")
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int menuItemId = menuItem.getItemId();
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ActionBar actionBar = getSupportActionBar();
-        final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
 
         // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
+            case R.id.toggleJavaScript:
+                if (enableJavaScript) {
+                    enableJavaScript = false;
+                    menuItem.setChecked(false);
+                    mainWebView.getSettings().setJavaScriptEnabled(false);
+                    mainWebView.loadUrl(formattedUrlString);
+                } else {
+                    enableJavaScript = true;
+                    menuItem.setChecked(true);
+                    mainWebView.getSettings().setJavaScriptEnabled(true);
+                    mainWebView.loadUrl(formattedUrlString);
+                }
+                return true;
+
             case R.id.home:
                 mainWebView.loadUrl(homepage);
-                break;
+                return true;
 
             case R.id.refresh:
                 mainWebView.loadUrl(formattedUrlString);
-                break;
+                return true;
 
             case R.id.back:
                 mainWebView.goBack();
-                break;
+                return true;
 
             case R.id.forward:
                 mainWebView.goForward();
-                break;
+                return true;
 
             case R.id.copyURL:
                 // Make sure that actionBar is not null.
@@ -305,7 +345,7 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                     EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
                     clipboard.setPrimaryClip(ClipData.newPlainText("URL", urlTextBox.getText()));
                 }
-                break;
+                return true;
 
             case R.id.pasteURL:
                 // Make sure that actionBar is not null.
@@ -319,7 +359,7 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                         e.printStackTrace();
                     }
                 }
-                break;
+                return true;
 
             case R.id.shareURL:
                 // Make sure that actionBar is not null.
@@ -331,7 +371,7 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                     shareIntent.setType("text/plain");
                     startActivity(Intent.createChooser(shareIntent, "Share URL"));
                 }
-                break;
+                return true;
 
             case R.id.addToHomescreen:
                 // Show the CreateHomeScreenShortcut AlertDialog and name this instance createShortcut.
@@ -339,7 +379,7 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                 shortcutDialog.show(getSupportFragmentManager(), "createShortcut");
 
                 //Everything else will be handled by CreateHomeScreenShortcut and the associated listeners below.
-                break;
+                return true;
 
             case R.id.downloads:
                 // Launch the system Download Manager.
@@ -349,17 +389,17 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                 downloadManangerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(downloadManangerIntent);
-                break;
+                return true;
 
             case R.id.about:
                 // Show the AboutDialog AlertDialog and name this instance aboutDialog.
                 AppCompatDialogFragment aboutDialog = new AboutDialog();
                 aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
+                return true;
 
-                break;
+            default:
+                return super.onOptionsItemSelected(menuItem);
         }
-
-        return super.onOptionsItemSelected(menuItem);
     }
 
     @Override

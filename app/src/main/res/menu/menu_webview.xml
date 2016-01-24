@@ -23,29 +23,36 @@
     tools:context=".Webview">
 
     <item
+        android:id="@+id/toggleJavaScript"
+        android:title="@string/javaScript"
+        android:orderInCategory="1"
+        android:checkable="true"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/home"
         android:title="@string/home"
-        android:orderInCategory="10"
+        android:orderInCategory="2"
         android:icon="@drawable/ic_home_black_24dp"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/refresh"
         android:title="@string/refresh"
-        android:orderInCategory="20"
+        android:orderInCategory="3"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/back"
         android:title="@string/back"
-        android:orderInCategory="30"
+        android:orderInCategory="4"
         android:icon="@drawable/ic_back"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/forward"
         android:title="@string/forward"
-        android:orderInCategory="40"
+        android:orderInCategory="5"
         android:icon="@drawable/ic_forward"
         app:showAsAction="never" />
 
@@ -53,7 +60,7 @@
     <item
         android:id="@+id/copyURL"
         android:title="@string/copy_URL"
-        android:orderInCategory="50"
+        android:orderInCategory="6"
         tools:targetApi="11"
         app:showAsAction="never" />
 
@@ -61,31 +68,31 @@
     <item
         android:id="@+id/pasteURL"
         android:title="@string/paste_URL"
-        android:orderInCategory="60"
+        android:orderInCategory="7"
         tools:targetApi="11"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/shareURL"
         android:title="@string/share_URL"
-        android:orderInCategory="70"
+        android:orderInCategory="8"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/addToHomescreen"
         android:title="@string/add_to_home_screen"
-        android:orderInCategory="80"
+        android:orderInCategory="9"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/downloads"
         android:title="@string/downloads"
-        android:orderInCategory="90"
+        android:orderInCategory="10"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/about"
         android:title="@string/about"
-        android:orderInCategory="100"
+        android:orderInCategory="11"
         app:showAsAction="never" />
 </menu>
