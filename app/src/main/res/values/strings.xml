@@ -27,6 +27,8 @@
     <string name="javaScript">JavaScript</string>
     <string name="domStorage">DOM Storage</string>
     <string name="saveFormData">Save Form Data</string>
+    <string name="cookies">Cookies</string>
+    <string name="clearCookies">Clear Cookies</string>
     <string name="home">Home</string>
     <string name="refresh">Refresh</string>
     <string name="back">Back</string>

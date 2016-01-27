@@ -47,6 +47,19 @@
         -->
 
     <item
+        android:id="@+id/toggleCookies"
+        android:title="@string/cookies"
+        android:orderInCategory="4"
+        android:checkable="true"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/clearCookies"
+        android:title="@string/clearCookies"
+        android:orderInCategory="5"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/home"
         android:title="@string/home"
         android:orderInCategory="10"

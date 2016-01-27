@@ -41,6 +41,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -74,6 +75,11 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
     // enableSaveFormData is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
     private boolean enableSaveFormData;
     */
+
+    // cookieManager is used in onCreate and onOptionsItemSelected.
+    private CookieManager cookieManager;
+    //enableCookies is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
+    private boolean enableCookies;
 
     // actionBar is used in onCreate and onOptionsItemSelected.
     private ActionBar actionBar;
@@ -275,6 +281,11 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         mainWebView.getSettings().setSaveFormData(enableSaveFormData);
         */
 
+        // Set Cookies initial status.
+        cookieManager = CookieManager.getInstance();
+        enableCookies = true;
+        cookieManager.setAcceptCookie(enableCookies);
+
         // Get the intent information that started the app.
         final Intent intent = getIntent();
 
@@ -297,19 +308,40 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_webview, menu);
-        MenuItem toggleJavaScriptMenuItem = menu.findItem(R.id.toggleJavaScript);
-        MenuItem toggleDomStorageMenuItem = menu.findItem(R.id.toggleDomStorage);
+
+        // Get MenuItems for checkable menu items.
+        MenuItem toggleJavaScript = menu.findItem(R.id.toggleJavaScript);
+        MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
         /* toggleSaveFormData does nothing until database storage is implemented.
-        MenuItem toggleSaveFormDataMenuItem = menu.findItem(R.id.toggleSaveFormData);
+        MenuItem toggleSaveFormData = menu.findItem(R.id.toggleSaveFormData);
         */
+        MenuItem toggleCookies = menu.findItem(R.id.toggleCookies);
+        MenuItem clearCookies = menu.findItem(R.id.clearCookies);
 
         // Set the initial status of the menu item checkboxes.
-        toggleJavaScriptMenuItem.setChecked(enableJavaScript);
-        toggleDomStorageMenuItem.setChecked(enableDomStorage);
+        toggleJavaScript.setChecked(enableJavaScript);
+        toggleDomStorage.setChecked(enableDomStorage);
         /* toggleSaveFormData does nothing until database storage is implemented.
-        toggleSaveFormDataMenuItem.setChecked(enableSaveFormData);
+        toggleSaveFormData.setChecked(enableSaveFormData);
         */
+        toggleCookies.setChecked(enableCookies);
 
+        // Disable Clear Cookies if there are none.
+        clearCookies.setEnabled(cookieManager.hasCookies());
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Enable Clear Cookies if there are any.
+        MenuItem clearCookies = menu.findItem(R.id.clearCookies);
+        clearCookies.setEnabled(cookieManager.hasCookies());
+
+        // Run all the other default commands.
+        super.onPrepareOptionsMenu(menu);
+
+        // Return true displays the menu.
         return true;
     }
 
@@ -367,6 +399,29 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                 }
                 return true;
             */
+
+            case R.id.toggleCookies:
+                if (enableCookies) {
+                    enableCookies = false;
+                    menuItem.setChecked(false);
+                    cookieManager.setAcceptCookie(false);
+                    mainWebView.reload();
+                } else {
+                    enableCookies = true;
+                    menuItem.setChecked(true);
+                    cookieManager.setAcceptCookie(true);
+                    mainWebView.reload();
+                }
+                return true;
+
+            case R.id.clearCookies:
+                if (Build.VERSION.SDK_INT < 21) {
+                    cookieManager.removeAllCookie();
+                } else {
+                    cookieManager.removeAllCookies(null);
+                }
+                Toast.makeText(getApplicationContext(), "Cookies deleted", Toast.LENGTH_SHORT).show();
+                return true;
 
             case R.id.home:
                 mainWebView.loadUrl(homepage);
