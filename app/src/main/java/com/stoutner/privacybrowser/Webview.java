@@ -65,8 +65,10 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
     private String formattedUrlString;
     // homepage is used in onCreate and onOptionsItemSelected.
     private String homepage = "https://www.duckduckgo.com/";
-    // enableJavaScript is used onCreate and onOptionsItemSelected.
+    // enableJavaScript is used in onCreate and onOptionsItemSelected.
     private boolean enableJavaScript;
+    // enableDomStorage is used in onCreate and onOptionsItemSelected.
+    private boolean enableDomStorage;
     // actionBar is used in onCreate and onOptionsItemSelected.
     private ActionBar actionBar;
 
@@ -255,14 +257,11 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
 
         // Set JavaScript initial status.
         enableJavaScript = true;
-        if (enableJavaScript) {
-            mainWebView.getSettings().setJavaScriptEnabled(true);
-        } else {
-            mainWebView.getSettings().setJavaScriptEnabled(false);
-        }
+        mainWebView.getSettings().setJavaScriptEnabled(enableJavaScript);
 
-        // Enable DOM Storage.
-        mainWebView.getSettings().setDomStorageEnabled(true);
+        // Set DOM Storage initial status.
+        enableDomStorage = true;
+        mainWebView.getSettings().setDomStorageEnabled(enableDomStorage);
 
         // Get the intent information that started the app.
         final Intent intent = getIntent();
@@ -287,13 +286,13 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_webview, menu);
         MenuItem toggleJavaScriptMenuItem = menu.findItem(R.id.toggleJavaScript);
+        MenuItem toggleDomStorageMenuItem = menu.findItem(R.id.toggleDomStorage);
 
         // Set the JavaScript menu item checkbox initial status.
-        if (enableJavaScript) {
-            toggleJavaScriptMenuItem.setChecked(true);
-        } else {
-            toggleJavaScriptMenuItem.setChecked(false);
-        }
+        toggleJavaScriptMenuItem.setChecked(enableJavaScript);
+
+        // Set the DOM Storage menu item checkbox initial status.
+        toggleDomStorageMenuItem.setChecked(enableDomStorage);
 
         return true;
     }
@@ -319,6 +318,20 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                     enableJavaScript = true;
                     menuItem.setChecked(true);
                     mainWebView.getSettings().setJavaScriptEnabled(true);
+                    mainWebView.loadUrl(formattedUrlString);
+                }
+                return true;
+
+            case R.id.toggleDomStorage:
+                if (enableDomStorage) {
+                    enableDomStorage = false;
+                    menuItem.setChecked(false);
+                    mainWebView.getSettings().setDomStorageEnabled(false);
+                    mainWebView.loadUrl(formattedUrlString);
+                } else {
+                    enableDomStorage = true;
+                    menuItem.setChecked(true);
+                    mainWebView.getSettings().setDomStorageEnabled(true);
                     mainWebView.loadUrl(formattedUrlString);
                 }
                 return true;

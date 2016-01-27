@@ -1,5 +1,5 @@
 <!--
-  Copyright 2015 Soren Stoutner <soren@stoutner.com>.
+  Copyright 2015-2016 Soren Stoutner <soren@stoutner.com>.
 
   This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
 
@@ -26,6 +26,14 @@
         android:id="@+id/toggleJavaScript"
         android:title="@string/javaScript"
         android:orderInCategory="1"
+        android:checkable="true"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/toggleDomStorage"
+        android:title="@string/domStorage"
+        android:orderInCategory="2"
         android:checkable="true"
         app:showAsAction="never" />
 
