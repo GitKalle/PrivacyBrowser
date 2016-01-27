@@ -37,30 +37,39 @@
         android:checkable="true"
         app:showAsAction="never" />
 
+    <!-- toggleSaveFormData does nothing until database storage is implemented
+    <item
+        android:id="@+id/toggleSaveFormData"
+        android:title="@string/saveFormData"
+        android:orderInCategory="3"
+        android:checkable="true"
+        app:showAsAction="never" />
+        -->
+
     <item
         android:id="@+id/home"
         android:title="@string/home"
-        android:orderInCategory="2"
+        android:orderInCategory="10"
         android:icon="@drawable/ic_home_black_24dp"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/refresh"
         android:title="@string/refresh"
-        android:orderInCategory="3"
+        android:orderInCategory="20"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/back"
         android:title="@string/back"
-        android:orderInCategory="4"
+        android:orderInCategory="30"
         android:icon="@drawable/ic_back"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/forward"
         android:title="@string/forward"
-        android:orderInCategory="5"
+        android:orderInCategory="40"
         android:icon="@drawable/ic_forward"
         app:showAsAction="never" />
 
@@ -68,7 +77,7 @@
     <item
         android:id="@+id/copyURL"
         android:title="@string/copy_URL"
-        android:orderInCategory="6"
+        android:orderInCategory="50"
         tools:targetApi="11"
         app:showAsAction="never" />
 
@@ -76,31 +85,31 @@
     <item
         android:id="@+id/pasteURL"
         android:title="@string/paste_URL"
-        android:orderInCategory="7"
+        android:orderInCategory="60"
         tools:targetApi="11"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/shareURL"
         android:title="@string/share_URL"
-        android:orderInCategory="8"
+        android:orderInCategory="70"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/addToHomescreen"
         android:title="@string/add_to_home_screen"
-        android:orderInCategory="9"
+        android:orderInCategory="80"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/downloads"
         android:title="@string/downloads"
-        android:orderInCategory="10"
+        android:orderInCategory="90"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/about"
         android:title="@string/about"
-        android:orderInCategory="11"
+        android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>

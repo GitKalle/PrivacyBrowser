@@ -65,10 +65,16 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
     private String formattedUrlString;
     // homepage is used in onCreate and onOptionsItemSelected.
     private String homepage = "https://www.duckduckgo.com/";
-    // enableJavaScript is used in onCreate and onOptionsItemSelected.
+    // enableJavaScript is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
     private boolean enableJavaScript;
-    // enableDomStorage is used in onCreate and onOptionsItemSelected.
+    // enableDomStorage is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
     private boolean enableDomStorage;
+
+    /*  enableSaveFormData does nothing until database storage is implemented.
+    // enableSaveFormData is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
+    private boolean enableSaveFormData;
+    */
+
     // actionBar is used in onCreate and onOptionsItemSelected.
     private ActionBar actionBar;
 
@@ -263,6 +269,12 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         enableDomStorage = true;
         mainWebView.getSettings().setDomStorageEnabled(enableDomStorage);
 
+        /* Save Form Data does nothing until database storage is implemented.
+        // Set Save Form Data initial status.
+        enableSaveFormData = true;
+        mainWebView.getSettings().setSaveFormData(enableSaveFormData);
+        */
+
         // Get the intent information that started the app.
         final Intent intent = getIntent();
 
@@ -287,12 +299,16 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         getMenuInflater().inflate(R.menu.menu_webview, menu);
         MenuItem toggleJavaScriptMenuItem = menu.findItem(R.id.toggleJavaScript);
         MenuItem toggleDomStorageMenuItem = menu.findItem(R.id.toggleDomStorage);
+        /* toggleSaveFormData does nothing until database storage is implemented.
+        MenuItem toggleSaveFormDataMenuItem = menu.findItem(R.id.toggleSaveFormData);
+        */
 
-        // Set the JavaScript menu item checkbox initial status.
+        // Set the initial status of the menu item checkboxes.
         toggleJavaScriptMenuItem.setChecked(enableJavaScript);
-
-        // Set the DOM Storage menu item checkbox initial status.
         toggleDomStorageMenuItem.setChecked(enableDomStorage);
+        /* toggleSaveFormData does nothing until database storage is implemented.
+        toggleSaveFormDataMenuItem.setChecked(enableSaveFormData);
+        */
 
         return true;
     }
@@ -313,12 +329,12 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                     enableJavaScript = false;
                     menuItem.setChecked(false);
                     mainWebView.getSettings().setJavaScriptEnabled(false);
-                    mainWebView.loadUrl(formattedUrlString);
+                    mainWebView.reload();
                 } else {
                     enableJavaScript = true;
                     menuItem.setChecked(true);
                     mainWebView.getSettings().setJavaScriptEnabled(true);
-                    mainWebView.loadUrl(formattedUrlString);
+                    mainWebView.reload();
                 }
                 return true;
 
@@ -327,21 +343,37 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                     enableDomStorage = false;
                     menuItem.setChecked(false);
                     mainWebView.getSettings().setDomStorageEnabled(false);
-                    mainWebView.loadUrl(formattedUrlString);
+                    mainWebView.reload();
                 } else {
                     enableDomStorage = true;
                     menuItem.setChecked(true);
                     mainWebView.getSettings().setDomStorageEnabled(true);
-                    mainWebView.loadUrl(formattedUrlString);
+                    mainWebView.reload();
                 }
                 return true;
+
+            /* toggleSaveFormData does nothing until database storage is implemented.
+            case R.id.toggleSaveFormData:
+                if (enableSaveFormData) {
+                    enableSaveFormData = false;
+                    menuItem.setChecked(false);
+                    mainWebView.getSettings().setSaveFormData(false);
+                    mainWebView.reload();
+                } else {
+                    enableSaveFormData = true;
+                    menuItem.setChecked(true);
+                    mainWebView.getSettings().setSaveFormData(true);
+                    mainWebView.reload();
+                }
+                return true;
+            */
 
             case R.id.home:
                 mainWebView.loadUrl(homepage);
                 return true;
 
             case R.id.refresh:
-                mainWebView.loadUrl(formattedUrlString);
+                mainWebView.reload();
                 return true;
 
             case R.id.back:
