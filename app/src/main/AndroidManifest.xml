@@ -34,11 +34,14 @@
         android:theme="@style/AppTheme" >
 
         <!-- android:configChanges="orientation|screenSize" makes the app not reload when the orientation changes. -->
-        <!-- android:windowSoftInputMode="stateAlwaysHidden" hides the keyboard when the app starts. -->
+        <!-- android:launchMode="singleTask" makes the app launch in a new task instead of inside the task of the program that sends it an intent.
+            It also makes it reuse an existing Privacy Browser activity if available instead of launching a new one. -->
         <activity
             android:name=".Webview"
             android:configChanges="orientation|screenSize"
-            android:label="@string/privacy_browser" >
+            android:label="@string/privacy_browser"
+            android:launchMode="singleTask">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

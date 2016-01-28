@@ -44,6 +44,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
+import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -78,16 +79,15 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
 
     // cookieManager is used in onCreate and onOptionsItemSelected.
     private CookieManager cookieManager;
-    //enableCookies is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
+    // enableCookies is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
     private boolean enableCookies;
 
     // actionBar is used in onCreate and onOptionsItemSelected.
     private ActionBar actionBar;
 
+    @Override
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
     @SuppressLint("SetJavaScriptEnabled")
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
@@ -268,11 +268,11 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         }
 
         // Set JavaScript initial status.
-        enableJavaScript = true;
+        enableJavaScript = false;
         mainWebView.getSettings().setJavaScriptEnabled(enableJavaScript);
 
         // Set DOM Storage initial status.
-        enableDomStorage = true;
+        enableDomStorage = false;
         mainWebView.getSettings().setDomStorageEnabled(enableDomStorage);
 
         /* Save Form Data does nothing until database storage is implemented.
@@ -282,8 +282,8 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         */
 
         // Set Cookies initial status.
+        enableCookies = false;
         cookieManager = CookieManager.getInstance();
-        enableCookies = true;
         cookieManager.setAcceptCookie(enableCookies);
 
         // Get the intent information that started the app.
@@ -305,6 +305,21 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        // Sets the new intent as the activity intent, so that any future getIntent() picks up this one.
+        setIntent(intent);
+
+        if (intent.getData() != null) {
+            // Get the intent data and convert it to a string.
+            final Uri intentUriData = intent.getData();
+            formattedUrlString = intentUriData.toString();
+        }
+
+        // Load the website.
+        mainWebView.loadUrl(formattedUrlString);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_webview, menu);
@@ -316,7 +331,6 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         MenuItem toggleSaveFormData = menu.findItem(R.id.toggleSaveFormData);
         */
         MenuItem toggleCookies = menu.findItem(R.id.toggleCookies);
-        MenuItem clearCookies = menu.findItem(R.id.clearCookies);
 
         // Set the initial status of the menu item checkboxes.
         toggleJavaScript.setChecked(enableJavaScript);
@@ -421,6 +435,12 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                 }
                 return true;
 
+            case R.id.clearDomStorage:
+                WebStorage webStorage = WebStorage.getInstance();
+                webStorage.deleteAllData();
+                Toast.makeText(getApplicationContext(), "DOM storage deleted", Toast.LENGTH_SHORT).show();
+                return true;
+
             case R.id.clearCookies:
                 if (Build.VERSION.SDK_INT < 21) {
                     cookieManager.removeAllCookie();
@@ -502,6 +522,25 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                 // Show the AboutDialog AlertDialog and name this instance aboutDialog.
                 AppCompatDialogFragment aboutDialog = new AboutDialog();
                 aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
+                return true;
+
+            case R.id.exit:
+                // Clear DOM storage.
+                WebStorage domStorage = WebStorage.getInstance();
+                domStorage.deleteAllData();
+
+                // Clear cookies.
+                if (Build.VERSION.SDK_INT < 21) {
+                    cookieManager.removeAllCookie();
+                } else {
+                    cookieManager.removeAllCookies(null);
+                }
+
+                // Destroy the internal state of the webview.
+                mainWebView.destroy();
+
+                // Close Privacy Browser.
+                finish();
                 return true;
 
             default:

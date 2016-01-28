@@ -28,6 +28,7 @@
     <string name="domStorage">DOM Storage</string>
     <string name="saveFormData">Save Form Data</string>
     <string name="cookies">Cookies</string>
+    <string name="clearDomStorage">Clear DOM Storage</string>
     <string name="clearCookies">Clear Cookies</string>
     <string name="home">Home</string>
     <string name="refresh">Refresh</string>
@@ -39,6 +40,7 @@
     <string name="add_to_home_screen">Add to Home Screen</string>
     <string name="downloads">Downloads</string>
     <string name="about">About</string>
+    <string name="exit">Exit</string>
 
     <!-- Create Home Screen Shorcut Alert Dialog. -->
     <string name="shortcut_name">Shortcut name</string>

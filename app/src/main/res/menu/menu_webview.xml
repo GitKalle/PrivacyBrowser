@@ -54,9 +54,15 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/clearDomStorage"
+        android:title="@string/clearDomStorage"
+        android:orderInCategory="5"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/clearCookies"
         android:title="@string/clearCookies"
-        android:orderInCategory="5"
+        android:orderInCategory="6"
         app:showAsAction="never" />
 
     <item
@@ -124,5 +130,11 @@
         android:id="@+id/about"
         android:title="@string/about"
         android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/exit"
+        android:title="@string/exit"
+        android:orderInCategory="110"
         app:showAsAction="never" />
 </menu>
