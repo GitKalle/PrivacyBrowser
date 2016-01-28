@@ -326,9 +326,6 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         */
         toggleCookies.setChecked(enableCookies);
 
-        // Disable Clear Cookies if there are none.
-        clearCookies.setEnabled(cookieManager.hasCookies());
-
         return true;
     }
 
@@ -338,10 +335,18 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         MenuItem clearCookies = menu.findItem(R.id.clearCookies);
         clearCookies.setEnabled(cookieManager.hasCookies());
 
+        // Enable Back if canGoBack().
+        MenuItem back = menu.findItem(R.id.back);
+        back.setEnabled(mainWebView.canGoBack());
+
+        // Enable forward if canGoForward().
+        MenuItem forward = menu.findItem(R.id.forward);
+        forward.setEnabled(mainWebView.canGoForward());
+
         // Run all the other default commands.
         super.onPrepareOptionsMenu(menu);
 
-        // Return true displays the menu.
+        // return true displays the menu.
         return true;
     }
 
@@ -350,6 +355,8 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
     @TargetApi(11)
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
     @SuppressLint("SetJavaScriptEnabled")
+    // removeAllCookies is deprecated, but it is required for API < 21.
+    @SuppressWarnings("deprecation")
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int menuItemId = menuItem.getItemId();
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
