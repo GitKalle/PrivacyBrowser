@@ -60,30 +60,30 @@ import java.net.URLEncoder;
 public class MainWebView extends AppCompatActivity implements CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
     // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
     public static Bitmap favoriteIcon;
-    // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate and onOptionsItemSelected.
+    // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
     public static WebView mainWebView;
 
-    // formattedUrlString is used in onCreate, onOptionsItemSelected, onCreateHomeScreenShortcutCreate, and loadUrlFromTextBox.
+    // formattedUrlString is used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
     private String formattedUrlString;
-    // homepage is used in onCreate and onOptionsItemSelected.
+    // homepage is used in onCreate() and onOptionsItemSelected().
     private String homepage = "https://www.duckduckgo.com/";
-    // enableJavaScript is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
-    private boolean enableJavaScript;
-    // enableDomStorage is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
-    private boolean enableDomStorage;
+    // javaScriptEnabled is used in onCreate(), onCreateOptionsMenu(), onOptionsItemSelected(), and loadUrlFromTextBox().
+    private boolean javaScriptEnabled;
+    // domStorageEnabled is used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
+    private boolean domStorageEnabled;
 
-    /*  enableSaveFormData does nothing until database storage is implemented.
-    // enableSaveFormData is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
-    private boolean enableSaveFormData;
+    /* saveFormDataEnabled does nothing until database storage is implemented.
+    // saveFormDataEnabled is used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
+    private boolean saveFormDataEnabled;
     */
 
-    // cookieManager is used in onCreate and onOptionsItemSelected.
+    // cookieManager is used in onCreate() and onOptionsItemSelected().
     private CookieManager cookieManager;
-    // enableCookies is used in onCreate, onCreateOptionsMenu, and onOptionsItemSelected.
-    private boolean enableCookies;
+    // cookiesEnabled is used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
+    private boolean cookiesEnabled;
 
-    // actionBar is used in onCreate and onOptionsItemSelected.
-    private ActionBar actionBar;
+    // urlTextBox is used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
+    private EditText urlTextBox;
 
     @Override
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
@@ -94,9 +94,9 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
 
         final FrameLayout fullScreenVideoFrameLayout = (FrameLayout) findViewById(R.id.fullScreenVideoFrameLayout);
         final Activity mainWebViewActivity = this;
+        final ActionBar actionBar = getSupportActionBar();
 
         mainWebView = (WebView) findViewById(R.id.mainWebView);
-        actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             // Remove the title from the action bar.
@@ -107,7 +107,7 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
             // Set the "go" button on the keyboard to load the URL in urlTextBox.
-            EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+            urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
             urlTextBox.setOnKeyListener(new View.OnKeyListener() {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     // If the event is a key-down event on the "enter" button, load the URL.
@@ -145,21 +145,14 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
             // Update the URL in urlTextBox when the page starts to load.
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                if (actionBar != null) {
-                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
-                    urlTextBox.setText(url);
-                }
+                urlTextBox.setText(url);
             }
 
             // Update formattedUrlString and urlTextBox.  It is necessary to do this after the page finishes loading because the final URL can change during load.
             @Override
             public void onPageFinished(WebView view, String url) {
                 formattedUrlString = url;
-
-                if (actionBar != null) {
-                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
-                    urlTextBox.setText(formattedUrlString);
-                }
+                urlTextBox.setText(formattedUrlString);
             }
         });
 
@@ -195,8 +188,8 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
             // Enter full screen video
             @Override
             public void onShowCustomView(View view, CustomViewCallback callback) {
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().hide();
+                if (actionBar != null) {
+                    actionBar.hide();
                 }
 
                 fullScreenVideoFrameLayout.addView(view);
@@ -227,8 +220,8 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
 
             // Exit full screen video
             public void onHideCustomView() {
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().show();
+                if (actionBar != null) {
+                    actionBar.show();
                 }
 
                 mainWebView.setVisibility(View.VISIBLE);
@@ -268,23 +261,23 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
         }
 
         // Set JavaScript initial status.
-        enableJavaScript = false;
-        mainWebView.getSettings().setJavaScriptEnabled(enableJavaScript);
+        javaScriptEnabled = false;
+        mainWebView.getSettings().setJavaScriptEnabled(javaScriptEnabled);
 
         // Set DOM Storage initial status.
-        enableDomStorage = false;
-        mainWebView.getSettings().setDomStorageEnabled(enableDomStorage);
+        domStorageEnabled = false;
+        mainWebView.getSettings().setDomStorageEnabled(domStorageEnabled);
 
         /* Save Form Data does nothing until database storage is implemented.
         // Set Save Form Data initial status.
-        enableSaveFormData = true;
-        mainWebView.getSettings().setSaveFormData(enableSaveFormData);
+        saveFormDataEnabled = true;
+        mainWebView.getSettings().setSaveFormData(saveFormDataEnabled);
         */
 
         // Set Cookies initial status.
-        enableCookies = false;
+        cookiesEnabled = false;
         cookieManager = CookieManager.getInstance();
-        cookieManager.setAcceptCookie(enableCookies);
+        cookieManager.setAcceptCookie(cookiesEnabled);
 
         // Get the intent information that started the app.
         final Intent intent = getIntent();
@@ -333,18 +326,18 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
         MenuItem toggleCookies = menu.findItem(R.id.toggleCookies);
 
         // Set the initial icon for toggleJavaScript
-        if (enableJavaScript) {
+        if (javaScriptEnabled) {
             toggleJavaScript.setIcon(R.drawable.javascript_on);
         } else {
             toggleJavaScript.setIcon(R.drawable.javascript_off);
         }
 
         // Set the initial status of the menu item checkboxes.
-        toggleDomStorage.setChecked(enableDomStorage);
+        toggleDomStorage.setChecked(domStorageEnabled);
         /* toggleSaveFormData does nothing until database storage is implemented.
-        toggleSaveFormData.setChecked(enableSaveFormData);
+        toggleSaveFormData.setChecked(saveFormDataEnabled);
         */
-        toggleCookies.setChecked(enableCookies);
+        toggleCookies.setChecked(cookiesEnabled);
 
         return true;
     }
@@ -384,14 +377,14 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
         // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
             case R.id.toggleJavaScript:
-                if (enableJavaScript) {
-                    enableJavaScript = false;
+                if (javaScriptEnabled) {
+                    javaScriptEnabled = false;
                     menuItem.setIcon(R.drawable.javascript_off);
                     mainWebView.getSettings().setJavaScriptEnabled(false);
                     mainWebView.reload();
                     Toast.makeText(getApplicationContext(), "JavaScript Disabled", Toast.LENGTH_SHORT).show();
                 } else {
-                    enableJavaScript = true;
+                    javaScriptEnabled = true;
                     menuItem.setIcon(R.drawable.javascript_on);
                     mainWebView.getSettings().setJavaScriptEnabled(true);
                     mainWebView.reload();
@@ -400,13 +393,13 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                 return true;
 
             case R.id.toggleDomStorage:
-                if (enableDomStorage) {
-                    enableDomStorage = false;
+                if (domStorageEnabled) {
+                    domStorageEnabled = false;
                     menuItem.setChecked(false);
                     mainWebView.getSettings().setDomStorageEnabled(false);
                     mainWebView.reload();
                 } else {
-                    enableDomStorage = true;
+                    domStorageEnabled = true;
                     menuItem.setChecked(true);
                     mainWebView.getSettings().setDomStorageEnabled(true);
                     mainWebView.reload();
@@ -415,13 +408,13 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
 
             /* toggleSaveFormData does nothing until database storage is implemented.
             case R.id.toggleSaveFormData:
-                if (enableSaveFormData) {
-                    enableSaveFormData = false;
+                if (saveFormDataEnabled) {
+                    saveFormDataEnabled = false;
                     menuItem.setChecked(false);
                     mainWebView.getSettings().setSaveFormData(false);
                     mainWebView.reload();
                 } else {
-                    enableSaveFormData = true;
+                    saveFormDataEnabled = true;
                     menuItem.setChecked(true);
                     mainWebView.getSettings().setSaveFormData(true);
                     mainWebView.reload();
@@ -430,13 +423,13 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
             */
 
             case R.id.toggleCookies:
-                if (enableCookies) {
-                    enableCookies = false;
+                if (cookiesEnabled) {
+                    cookiesEnabled = false;
                     menuItem.setChecked(false);
                     cookieManager.setAcceptCookie(false);
                     mainWebView.reload();
                 } else {
-                    enableCookies = true;
+                    cookiesEnabled = true;
                     menuItem.setChecked(true);
                     cookieManager.setAcceptCookie(true);
                     mainWebView.reload();
@@ -475,37 +468,25 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                 return true;
 
             case R.id.copyURL:
-                // Make sure that actionBar is not null.
-                if (actionBar != null) {
-                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
-                    clipboard.setPrimaryClip(ClipData.newPlainText("URL", urlTextBox.getText()));
-                }
+                clipboard.setPrimaryClip(ClipData.newPlainText("URL", urlTextBox.getText()));
                 return true;
 
             case R.id.pasteURL:
-                // Make sure that actionBar is not null.
-                if (actionBar != null) {
-                    ClipData.Item clipboardData = clipboard.getPrimaryClip().getItemAt(0);
-                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
-                    urlTextBox.setText(clipboardData.coerceToText(this));
+                ClipData.Item clipboardData = clipboard.getPrimaryClip().getItemAt(0);
+                urlTextBox.setText(clipboardData.coerceToText(this));
                     try {
                         loadUrlFromTextBox();
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                }
                 return true;
 
             case R.id.shareURL:
-                // Make sure that actionBar is not null.
-                if (actionBar != null) {
-                    EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
-                    shareIntent.setType("text/plain");
-                    startActivity(Intent.createChooser(shareIntent, "Share URL"));
-                }
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Share URL"));
                 return true;
 
             case R.id.addToHomescreen:
@@ -593,53 +574,50 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
     }
 
     public void loadUrlFromTextBox() throws UnsupportedEncodingException {
-        // Make sure that actionBar is not null.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
-            EditText urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+        // Get the text from urlTextBox and convert it to a string.
+        String unformattedUrlString = urlTextBox.getText().toString();
+        URL unformattedUrl = null;
+        Uri.Builder formattedUri = new Uri.Builder();
 
-            // Get the text from urlTextInput and convert it to a string.
-            String unformattedUrlString = urlTextBox.getText().toString();
-            URL unformattedUrl = null;
-            Uri.Builder formattedUri = new Uri.Builder();
-
-            // Check to see if unformattedUrlString is a valid URL.  Otherwise, convert it into a Duck Duck Go search.
-            if (Patterns.WEB_URL.matcher(unformattedUrlString).matches()) {
-
-                // Add http:// at the beginning if it is missing.  Otherwise the app will segfault.
-                if (!unformattedUrlString.startsWith("http")) {
-                    unformattedUrlString = "http://" + unformattedUrlString;
-                }
-
-                // Convert unformattedUrlString to a URL, then to a URI, and then back to a string, which sanitizes the input and adds in any missing components.
-                try {
-                    unformattedUrl = new URL(unformattedUrlString);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-
-                // The ternary operator (? :) makes sure that a null pointer exception is not thrown, which would happen if .get was called on a null value.
-                final String scheme = unformattedUrl != null ? unformattedUrl.getProtocol() : null;
-                final String authority = unformattedUrl != null ? unformattedUrl.getAuthority() : null;
-                final String path = unformattedUrl != null ? unformattedUrl.getPath() : null;
-                final String query = unformattedUrl != null ? unformattedUrl.getQuery() : null;
-                final String fragment = unformattedUrl != null ? unformattedUrl.getRef() : null;
-
-                formattedUri.scheme(scheme).authority(authority).path(path).query(query).fragment(fragment);
-                formattedUrlString = formattedUri.build().toString();
-
-            } else {
-                // Sanitize the search input and convert it to a DuckDuckGo search.
-                final String encodedUrlString = URLEncoder.encode(unformattedUrlString, "UTF-8");
-                formattedUrlString = "https://duckduckgo.com/?q=" + encodedUrlString;
+        // Check to see if unformattedUrlString is a valid URL.  Otherwise, convert it into a Duck Duck Go search.
+        if (Patterns.WEB_URL.matcher(unformattedUrlString).matches()) {
+            // Add http:// at the beginning if it is missing.  Otherwise the app will segfault.
+            if (!unformattedUrlString.startsWith("http")) {
+                unformattedUrlString = "http://" + unformattedUrlString;
             }
 
-            mainWebView.loadUrl(formattedUrlString);
+            // Convert unformattedUrlString to a URL, then to a URI, and then back to a string, which sanitizes the input and adds in any missing components.
+            try {
+                unformattedUrl = new URL(unformattedUrlString);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
 
-            // Hides the keyboard so we can see the webpage.
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(mainWebView.getWindowToken(), 0);
+            // The ternary operator (? :) makes sure that a null pointer exception is not thrown, which would happen if .get was called on a null value.
+            final String scheme = unformattedUrl != null ? unformattedUrl.getProtocol() : null;
+            final String authority = unformattedUrl != null ? unformattedUrl.getAuthority() : null;
+            final String path = unformattedUrl != null ? unformattedUrl.getPath() : null;
+            final String query = unformattedUrl != null ? unformattedUrl.getQuery() : null;
+            final String fragment = unformattedUrl != null ? unformattedUrl.getRef() : null;
+
+            formattedUri.scheme(scheme).authority(authority).path(path).query(query).fragment(fragment);
+            formattedUrlString = formattedUri.build().toString();
+        } else {
+            // Sanitize the search input and convert it to a DuckDuckGo search.
+            final String encodedUrlString = URLEncoder.encode(unformattedUrlString, "UTF-8");
+
+            // Use the correct search URL based on javaScriptEnabled.
+            if (javaScriptEnabled) {
+                formattedUrlString = "https://duckduckgo.com/?q=" + encodedUrlString;
+            } else {
+                formattedUrlString = "https://duckduckgo.com/html/?q=" + encodedUrlString;
+            }
         }
+
+        mainWebView.loadUrl(formattedUrlString);
+
+        // Hides the keyboard so we can see the webpage.
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(mainWebView.getWindowToken(), 0);
     }
 }

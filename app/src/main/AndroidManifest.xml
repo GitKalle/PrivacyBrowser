@@ -33,7 +33,7 @@
         android:label="@string/privacy_browser"
         android:theme="@style/AppTheme" >
 
-        <!-- android:configChanges="orientation|screenSize" makes the app not reload when the orientation changes. -->
+        <!-- android:configChanges="orientation|screenSize" makes the app not reload when the orientation changes, which preserves scroll location in the WebView. -->
         <!-- android:launchMode="singleTask" makes the app launch in a new task instead of inside the task of the program that sends it an intent.
             It also makes it reuse an existing Privacy Browser activity if available instead of launching a new one. -->
         <activity
@@ -47,7 +47,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- android.intent.action.VIEW with the two schemes enables processing of web intents. -->
+            <!-- android.intent.action.VIEW with the two data schemes enables processing of web intents. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
