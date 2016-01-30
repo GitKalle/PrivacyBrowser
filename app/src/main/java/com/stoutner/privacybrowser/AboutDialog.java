@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Soren Stoutner <soren@stoutner.com>.
+ * Copyright 2015-2016 Soren Stoutner <soren@stoutner.com>.
  *
  * This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
  *
@@ -26,10 +26,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class AboutDialog extends AppCompatDialogFragment {
-    // onCreateDialog requires @NonNull.
     @Override
+    // onCreateDialog requires @NonNull.
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Create a WebView to display about_text.html
@@ -50,6 +51,16 @@ public class AboutDialog extends AppCompatDialogFragment {
         // Assign alertDialogBuilder to an AlertDialog and show it on the screen.
         final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+
+        aboutDialogWebView.setWebViewClient(new WebViewClient() {
+            // shouldOverrideUrlLoading lets us close AboutDialog when a link is touched.  Otherwise the dialog covers the website that loads beneath in Privacy Browser.
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                MainWebView.mainWebView.loadUrl(url);
+                alertDialog.dismiss();
+                return true;
+            }
+        });
 
         // onCreateDialog requires the return of an AlertDialog.
         return alertDialog;

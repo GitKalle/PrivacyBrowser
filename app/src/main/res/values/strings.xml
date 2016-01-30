@@ -24,23 +24,23 @@
     <string name="favorite_icon">Favorite Icon</string>
 
     <!-- Menu. -->
-    <string name="javaScript">JavaScript</string>
-    <string name="domStorage">DOM Storage</string>
-    <string name="saveFormData">Save Form Data</string>
+    <string name="javascript">JavaScript</string>
+    <string name="dom_storage">DOM Storage</string>
+    <string name="save_form_data">Save Form Data</string>
     <string name="cookies">Cookies</string>
-    <string name="clearDomStorage">Clear DOM Storage</string>
-    <string name="clearCookies">Clear Cookies</string>
+    <string name="clear_dom_storage">Clear DOM Storage</string>
+    <string name="clear_cookies">Clear Cookies</string>
     <string name="home">Home</string>
     <string name="refresh">Refresh</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
-    <string name="copy_URL">Copy URL</string>
-    <string name="paste_URL">Paste URL</string>
-    <string name="share_URL">Share URL</string>
+    <string name="copy_url">Copy URL</string>
+    <string name="paste_url">Paste URL</string>
+    <string name="share_url">Share URL</string>
     <string name="add_to_home_screen">Add to Home Screen</string>
     <string name="downloads">Downloads</string>
     <string name="about">About</string>
-    <string name="exit">Exit</string>
+    <string name="clear_and_exit">Clear and Exit</string>
 
     <!-- Create Home Screen Shorcut Alert Dialog. -->
     <string name="shortcut_name">Shortcut name</string>

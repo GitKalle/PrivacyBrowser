@@ -57,12 +57,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class Webview extends AppCompatActivity implements CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
+public class MainWebView extends AppCompatActivity implements CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
     // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
     public static Bitmap favoriteIcon;
+    // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate and onOptionsItemSelected.
+    public static WebView mainWebView;
 
-    // mainWebView is used in onCreate and onOptionsItemSelected.
-    private WebView mainWebView;
     // formattedUrlString is used in onCreate, onOptionsItemSelected, onCreateHomeScreenShortcutCreate, and loadUrlFromTextBox.
     private String formattedUrlString;
     // homepage is used in onCreate and onOptionsItemSelected.
@@ -332,8 +332,14 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
         */
         MenuItem toggleCookies = menu.findItem(R.id.toggleCookies);
 
+        // Set the initial icon for toggleJavaScript
+        if (enableJavaScript) {
+            toggleJavaScript.setIcon(R.drawable.javascript_on);
+        } else {
+            toggleJavaScript.setIcon(R.drawable.javascript_off);
+        }
+
         // Set the initial status of the menu item checkboxes.
-        toggleJavaScript.setChecked(enableJavaScript);
         toggleDomStorage.setChecked(enableDomStorage);
         /* toggleSaveFormData does nothing until database storage is implemented.
         toggleSaveFormData.setChecked(enableSaveFormData);
@@ -380,14 +386,16 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
             case R.id.toggleJavaScript:
                 if (enableJavaScript) {
                     enableJavaScript = false;
-                    menuItem.setChecked(false);
+                    menuItem.setIcon(R.drawable.javascript_off);
                     mainWebView.getSettings().setJavaScriptEnabled(false);
                     mainWebView.reload();
+                    Toast.makeText(getApplicationContext(), "JavaScript Disabled", Toast.LENGTH_SHORT).show();
                 } else {
                     enableJavaScript = true;
-                    menuItem.setChecked(true);
+                    menuItem.setIcon(R.drawable.javascript_on);
                     mainWebView.getSettings().setJavaScriptEnabled(true);
                     mainWebView.reload();
+                    Toast.makeText(getApplicationContext(), "JavaScript Enabled", Toast.LENGTH_SHORT).show();
                 }
                 return true;
 
@@ -524,7 +532,7 @@ public class Webview extends AppCompatActivity implements CreateHomeScreenShortc
                 aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
                 return true;
 
-            case R.id.exit:
+            case R.id.clearAndExit:
                 // Clear DOM storage.
                 WebStorage domStorage = WebStorage.getInstance();
                 domStorage.deleteAllData();

@@ -20,19 +20,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Webview">
+    tools:context=".MainWebView">
 
     <item
         android:id="@+id/toggleJavaScript"
-        android:title="@string/javaScript"
+        android:title="@string/javascript"
         android:orderInCategory="1"
-        android:checkable="true"
-        app:showAsAction="never" />
-
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/toggleDomStorage"
-        android:title="@string/domStorage"
+        android:title="@string/dom_storage"
         android:orderInCategory="2"
         android:checkable="true"
         app:showAsAction="never" />
@@ -55,13 +53,13 @@
 
     <item
         android:id="@+id/clearDomStorage"
-        android:title="@string/clearDomStorage"
+        android:title="@string/clear_dom_storage"
         android:orderInCategory="5"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/clearCookies"
-        android:title="@string/clearCookies"
+        android:title="@string/clear_cookies"
         android:orderInCategory="6"
         app:showAsAction="never" />
 
@@ -69,7 +67,6 @@
         android:id="@+id/home"
         android:title="@string/home"
         android:orderInCategory="10"
-        android:icon="@drawable/ic_home_black_24dp"
         app:showAsAction="never" />
 
     <item
@@ -82,20 +79,18 @@
         android:id="@+id/back"
         android:title="@string/back"
         android:orderInCategory="30"
-        android:icon="@drawable/ic_back"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/forward"
         android:title="@string/forward"
         android:orderInCategory="40"
-        android:icon="@drawable/ic_forward"
         app:showAsAction="never" />
 
     <!-- tools:targetApi="11" is required because copy and paste was not available on earlier version of Android. -->
     <item
         android:id="@+id/copyURL"
-        android:title="@string/copy_URL"
+        android:title="@string/copy_url"
         android:orderInCategory="50"
         tools:targetApi="11"
         app:showAsAction="never" />
@@ -103,14 +98,14 @@
     <!-- tools:targetApi="11" is required because copy and paste was not available on earlier version of Android. -->
     <item
         android:id="@+id/pasteURL"
-        android:title="@string/paste_URL"
+        android:title="@string/paste_url"
         android:orderInCategory="60"
         tools:targetApi="11"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/shareURL"
-        android:title="@string/share_URL"
+        android:title="@string/share_url"
         android:orderInCategory="70"
         app:showAsAction="never" />
 
@@ -133,8 +128,8 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/exit"
-        android:title="@string/exit"
+        android:id="@+id/clearAndExit"
+        android:title="@string/clear_and_exit"
         android:orderInCategory="110"
         app:showAsAction="never" />
 </menu>
