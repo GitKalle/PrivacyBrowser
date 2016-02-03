@@ -63,6 +63,8 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
     // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
     public static WebView mainWebView;
 
+    // mainMenu is used in onCreateOptionsMenu() and onOptionsItemSelected().
+    private Menu mainMenu;
     // formattedUrlString is used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
     private String formattedUrlString;
     // homepage is used in onCreate() and onOptionsItemSelected().
@@ -299,7 +301,7 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
 
     @Override
     protected void onNewIntent(Intent intent) {
-        // Sets the new intent as the activity intent, so that any future getIntent() picks up this one.
+        // Sets the new intent as the activity intent, so that any future getIntent()s pick up this one instead of creating a new activity.
         setIntent(intent);
 
         if (intent.getData() != null) {
@@ -317,6 +319,9 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_webview, menu);
 
+        // Set mainMenu so it can be used by onOptionsItemSelected.
+        mainMenu = menu;
+
         // Get MenuItems for checkable menu items.
         MenuItem toggleJavaScript = menu.findItem(R.id.toggleJavaScript);
         MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
@@ -329,7 +334,11 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
         if (javaScriptEnabled) {
             toggleJavaScript.setIcon(R.drawable.javascript_on);
         } else {
-            toggleJavaScript.setIcon(R.drawable.javascript_off);
+            if (domStorageEnabled || cookiesEnabled) {
+                toggleJavaScript.setIcon(R.drawable.warning_on);
+            } else {
+                toggleJavaScript.setIcon(R.drawable.privacy_mode);
+            }
         }
 
         // Set the initial status of the menu item checkboxes.
@@ -372,23 +381,43 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
     @SuppressWarnings("deprecation")
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int menuItemId = menuItem.getItemId();
+
+        // Some options need to access the clipboard.
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+
+        // Some options need to update the drawable for toggleJavaScript.
+        MenuItem toggleJavaScript = mainMenu.findItem(R.id.toggleJavaScript);
 
         // Sets the commands that relate to the menu entries.
         switch (menuItemId) {
             case R.id.toggleJavaScript:
                 if (javaScriptEnabled) {
                     javaScriptEnabled = false;
-                    menuItem.setIcon(R.drawable.javascript_off);
                     mainWebView.getSettings().setJavaScriptEnabled(false);
                     mainWebView.reload();
-                    Toast.makeText(getApplicationContext(), "JavaScript Disabled", Toast.LENGTH_SHORT).show();
+
+                    // Update the toggleJavaScript icon and display a toast message.
+                    if (domStorageEnabled || cookiesEnabled) {
+                        menuItem.setIcon(R.drawable.warning_on);
+                        if (domStorageEnabled && cookiesEnabled) {
+                            Toast.makeText(getApplicationContext(), "JavaScript disabled, DOM Storage and Cookies still enabled", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (domStorageEnabled) {
+                                Toast.makeText(getApplicationContext(), "JavaScript disabled, DOM Storage still enabled", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "JavaScript disabled, Cookies still enabled", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } else {
+                        menuItem.setIcon(R.drawable.privacy_mode);
+                        Toast.makeText(getApplicationContext(), "Privacy Mode", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     javaScriptEnabled = true;
                     menuItem.setIcon(R.drawable.javascript_on);
                     mainWebView.getSettings().setJavaScriptEnabled(true);
                     mainWebView.reload();
-                    Toast.makeText(getApplicationContext(), "JavaScript Enabled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "JavaScript enabled", Toast.LENGTH_SHORT).show();
                 }
                 return true;
 
@@ -398,11 +427,29 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                     menuItem.setChecked(false);
                     mainWebView.getSettings().setDomStorageEnabled(false);
                     mainWebView.reload();
+
+                    // Update the toggleJavaScript icon and display a toast message if appropriate.
+                    if (!javaScriptEnabled && !cookiesEnabled) {
+                        toggleJavaScript.setIcon(R.drawable.privacy_mode);
+                        Toast.makeText(getApplicationContext(), "Privacy Mode", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (cookiesEnabled) {
+                            toggleJavaScript.setIcon(R.drawable.warning_on);
+                            Toast.makeText(getApplicationContext(), "Cookies still enabled", Toast.LENGTH_SHORT).show();
+                        } // Else Do nothing because JavaScript is enabled.
+                    }
                 } else {
                     domStorageEnabled = true;
                     menuItem.setChecked(true);
                     mainWebView.getSettings().setDomStorageEnabled(true);
                     mainWebView.reload();
+
+                    // Update the toggleJavaScript icon if appropriate.
+                    if (!javaScriptEnabled) {
+                        toggleJavaScript.setIcon(R.drawable.warning_on);
+                    } // Else Do nothing because JavaScript is enabled.
+
+                    Toast.makeText(getApplicationContext(), "DOM Storage enabled", Toast.LENGTH_SHORT).show();
                 }
                 return true;
 
@@ -428,11 +475,29 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                     menuItem.setChecked(false);
                     cookieManager.setAcceptCookie(false);
                     mainWebView.reload();
+
+                    // Update the toggleJavaScript icon and display a toast message if appropriate.
+                    if (!javaScriptEnabled && !domStorageEnabled) {
+                        toggleJavaScript.setIcon(R.drawable.privacy_mode);
+                        Toast.makeText(getApplicationContext(), "Privacy Mode", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (domStorageEnabled) {
+                            toggleJavaScript.setIcon(R.drawable.warning_on);
+                            Toast.makeText(getApplicationContext(), "DOM Storage still enabled", Toast.LENGTH_SHORT).show();
+                        } // Else Do nothing because JavaScript is enabled.
+                    }
                 } else {
                     cookiesEnabled = true;
                     menuItem.setChecked(true);
                     cookieManager.setAcceptCookie(true);
                     mainWebView.reload();
+
+                    // Update the toggleJavaScript icon if appropriate.
+                    if (!javaScriptEnabled) {
+                        toggleJavaScript.setIcon(R.drawable.warning_on);
+                    } // Else Do nothing because JavaScript is enabled.
+
+                    Toast.makeText(getApplicationContext(), "Cookies enabled", Toast.LENGTH_SHORT).show();
                 }
                 return true;
 
