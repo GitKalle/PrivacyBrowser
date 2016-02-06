@@ -398,13 +398,10 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int menuItemId = menuItem.getItemId();
 
-        // Some options need to access the clipboard.
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-
         // Some options need to update the drawable for toggleJavaScript.
         MenuItem toggleJavaScript = mainMenu.findItem(R.id.toggleJavaScript);
 
-        // Sets the commands that relate to the menu entries.
+        // Set the commands that relate to the menu entries.
         switch (menuItemId) {
             case R.id.toggleJavaScript:
                 if (javaScriptEnabled) {
@@ -532,44 +529,6 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                 Toast.makeText(getApplicationContext(), "Cookies deleted", Toast.LENGTH_SHORT).show();
                 return true;
 
-            case R.id.home:
-                mainWebView.loadUrl(homepage);
-                return true;
-
-            case R.id.refresh:
-                mainWebView.reload();
-                return true;
-
-            case R.id.back:
-                mainWebView.goBack();
-                return true;
-
-            case R.id.forward:
-                mainWebView.goForward();
-                return true;
-
-            case R.id.copyURL:
-                clipboard.setPrimaryClip(ClipData.newPlainText("URL", urlTextBox.getText()));
-                return true;
-
-            case R.id.pasteURL:
-                ClipData.Item clipboardData = clipboard.getPrimaryClip().getItemAt(0);
-                urlTextBox.setText(clipboardData.coerceToText(this));
-                    try {
-                        loadUrlFromTextBox();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                return true;
-
-            case R.id.shareURL:
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
-                shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent, "Share URL"));
-                return true;
-
             case R.id.addToHomescreen:
                 // Show the CreateHomeScreenShortcut AlertDialog and name this instance createShortcut.
                 AppCompatDialogFragment shortcutDialog = new CreateHomeScreenShortcut();
@@ -586,6 +545,30 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                 downloadManangerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(downloadManangerIntent);
+                return true;
+
+            case R.id.home:
+                mainWebView.loadUrl(homepage);
+                return true;
+
+            case R.id.refresh:
+                mainWebView.reload();
+                return true;
+
+            case R.id.back:
+                mainWebView.goBack();
+                return true;
+
+            case R.id.forward:
+                mainWebView.goForward();
+                return true;
+
+            case R.id.share:
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Share URL"));
                 return true;
 
             case R.id.settings:

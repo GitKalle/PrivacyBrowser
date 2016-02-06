@@ -42,11 +42,11 @@
 
         <!-- android:imeOptions="actionGo" sets the keyboard to have a "go" key instead of a "new line" key. -->
         <!-- android:inputType="textUri" disables spell check in the EditText and changes the "go" key from a check mark to an arrow. -->
-        <!-- android:layout_weight="1" makes urlTextBox take up all the remaining space. -->
+        <!-- For some reason, android:layout_weight="1" doesdn't makes urlTextBox take up all the remaining space when it is inside a SupportActionBar.
+            layout_width="2000" is less elegant, but it does the trick. -->
         <EditText
             android:id="@+id/urlTextBox"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="2000dp"
             android:layout_height="wrap_content"
             android:imeOptions="actionGo"
             android:inputType="textUri" />
