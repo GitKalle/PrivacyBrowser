@@ -20,9 +20,9 @@
 
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize style here. -->
+    <!-- We want to use .NoActionBar so that we can set a SupportActionBar. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/light_blue</item>
     </style>
 
 </resources>

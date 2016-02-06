@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  Copyright 2015 Soren Stoutner <soren@stoutner.com>.
+  Copyright 2015-2016 Soren Stoutner <soren@stoutner.com>.
 
   This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
 
@@ -21,22 +21,32 @@
 <RelativeLayout
     android:id="@+id/rootRelativeLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
-        <WebView
-            android:id="@+id/mainWebView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <!-- fullScreenVideoFrameLayout is used to display full screen videos.  It is initially android:visibility="gone" to hide it from view. -->
-        <FrameLayout
-            android:id="@+id/fullScreenVideoFrameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="#000000" />
+    <WebView
+        android:id="@+id/mainWebView"
+        android:layout_below="@id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
+    <!-- fullScreenVideoFrameLayout is used to display full screen videos.  It is initially android:visibility="gone" to hide it from view. -->
+    <FrameLayout
+        android:id="@+id/fullScreenVideoFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/black" />
 </RelativeLayout>

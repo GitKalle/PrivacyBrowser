@@ -37,6 +37,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -59,6 +60,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+// We need to use AppCompatActivity from android.support.v7.app.AppCompatActivity to have access to the SupportActionBar until the minimum API is >= 21.
 public class MainWebView extends AppCompatActivity implements CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
     // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
     public static Bitmap favoriteIcon;
@@ -95,23 +97,26 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.appBar);
+        setSupportActionBar(toolbar);
 
         final FrameLayout fullScreenVideoFrameLayout = (FrameLayout) findViewById(R.id.fullScreenVideoFrameLayout);
         final Activity mainWebViewActivity = this;
-        final ActionBar actionBar = getSupportActionBar();
+        // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
+        final ActionBar appBar = getSupportActionBar();
 
         mainWebView = (WebView) findViewById(R.id.mainWebView);
 
-        if (actionBar != null) {
-            // Remove the title from the action bar.
-            actionBar.setDisplayShowTitleEnabled(false);
+        if (appBar != null) {
+            // Remove the title from the app bar.
+            appBar.setDisplayShowTitleEnabled(false);
 
-            // Add the custom app_bar layout, which shows the favoriteIcon, urlTextBar, and progressBar.
-            actionBar.setCustomView(R.layout.app_bar);
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            // Add the custom url_bar layout, which shows the favoriteIcon, urlTextBar, and progressBar.
+            appBar.setCustomView(R.layout.url_bar);
+            appBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
             // Set the "go" button on the keyboard to load the URL in urlTextBox.
-            urlTextBox = (EditText) actionBar.getCustomView().findViewById(R.id.urlTextBox);
+            urlTextBox = (EditText) appBar.getCustomView().findViewById(R.id.urlTextBox);
             urlTextBox.setOnKeyListener(new View.OnKeyListener() {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     // If the event is a key-down event on the "enter" button, load the URL.
@@ -164,9 +169,9 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
             // Update the progress bar when a page is loading.
             @Override
             public void onProgressChanged(WebView view, int progress) {
-                // Make sure that actionBar is not null.
-                if (actionBar != null) {
-                    ProgressBar progressBar = (ProgressBar) actionBar.getCustomView().findViewById(R.id.progressBar);
+                // Make sure that appBar is not null.
+                if (appBar != null) {
+                    ProgressBar progressBar = (ProgressBar) appBar.getCustomView().findViewById(R.id.progressBar);
                     progressBar.setProgress(progress);
                     if (progress < 100) {
                         progressBar.setVisibility(View.VISIBLE);
@@ -182,9 +187,9 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                 // Save a copy of the favorite icon for use if a shortcut is added to the home screen.
                 favoriteIcon = icon;
 
-                // Place the favorite icon in the actionBar if it is not null.
-                if (actionBar != null) {
-                    ImageView imageViewFavoriteIcon = (ImageView) actionBar.getCustomView().findViewById(R.id.favoriteIcon);
+                // Place the favorite icon in the appBar if it is not null.
+                if (appBar != null) {
+                    ImageView imageViewFavoriteIcon = (ImageView) appBar.getCustomView().findViewById(R.id.favoriteIcon);
                     imageViewFavoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
                 }
             }
@@ -192,8 +197,8 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
             // Enter full screen video
             @Override
             public void onShowCustomView(View view, CustomViewCallback callback) {
-                if (actionBar != null) {
-                    actionBar.hide();
+                if (appBar != null) {
+                    appBar.hide();
                 }
 
                 fullScreenVideoFrameLayout.addView(view);
@@ -224,8 +229,8 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
 
             // Exit full screen video
             public void onHideCustomView() {
-                if (actionBar != null) {
-                    actionBar.show();
+                if (appBar != null) {
+                    appBar.show();
                 }
 
                 mainWebView.setVisibility(View.VISIBLE);
