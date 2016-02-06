@@ -56,6 +56,18 @@
                 <data android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Settings"
+            android:label="@string/privacy_browser_settings"
+            android:parentActivityName=".MainWebView" >
+
+            <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainWebView" />
+        </activity>
+
     </application>
 
 </manifest>

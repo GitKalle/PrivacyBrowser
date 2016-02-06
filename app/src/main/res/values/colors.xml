@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  Copyright 2015-2016 Soren Stoutner <soren@stoutner.com>.
+  Copyright 2016 Soren Stoutner <soren@stoutner.com>.
 
   This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
 
@@ -18,11 +18,9 @@
   You should have received a copy of the GNU General Public License
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
+<!-- These color resources are hardcoded for vector drawables.  Once the minimum API is >= 22 we can remove the hardcoded colors and reference these entries. -->
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize style here. -->
-    </style>
-
+    <color name="green">#FF64DD17</color>
+    <color name="red">#FFD50000</color>
+    <color name="yellow">#FFFFD600</color>
 </resources>

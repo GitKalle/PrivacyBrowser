@@ -27,10 +27,12 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -68,7 +70,7 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
     // formattedUrlString is used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
     private String formattedUrlString;
     // homepage is used in onCreate() and onOptionsItemSelected().
-    private String homepage = "https://www.duckduckgo.com/";
+    private String homepage;
     // javaScriptEnabled is used in onCreate(), onCreateOptionsMenu(), onOptionsItemSelected(), and loadUrlFromTextBox().
     private boolean javaScriptEnabled;
     // domStorageEnabled is used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
@@ -262,12 +264,18 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
             mainWebView.getSettings().setDisplayZoomControls(false);
         }
 
+        // Initialize the default preference values the first time the program is run.
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        // Get the shared preference values.
+        SharedPreferences savedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         // Set JavaScript initial status.
-        javaScriptEnabled = false;
+        javaScriptEnabled = savedPreferences.getBoolean("javascript_enabled", false);
         mainWebView.getSettings().setJavaScriptEnabled(javaScriptEnabled);
 
-        // Set DOM Storage initial status.
-        domStorageEnabled = false;
+        // Set DOM storage initial status.
+        domStorageEnabled = savedPreferences.getBoolean("dom_storage_enabled", false);
         mainWebView.getSettings().setDomStorageEnabled(domStorageEnabled);
 
         /* Save Form Data does nothing until database storage is implemented.
@@ -276,10 +284,13 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
         mainWebView.getSettings().setSaveFormData(saveFormDataEnabled);
         */
 
-        // Set Cookies initial status.
-        cookiesEnabled = false;
+        // Set cookies initial status.
+        cookiesEnabled = savedPreferences.getBoolean("cookies_enabled", false);
         cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(cookiesEnabled);
+
+        // Set hompage initial status.
+        homepage = savedPreferences.getString("homepage", "https://www.duckduckgo.com");
 
         // Get the intent information that started the app.
         final Intent intent = getIntent();
@@ -570,6 +581,12 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                 downloadManangerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(downloadManangerIntent);
+                return true;
+
+            case R.id.settings:
+                // Start the Settings activity.
+                Intent intent = new Intent(this, Settings.class);
+                startActivity(intent);
                 return true;
 
             case R.id.about:
