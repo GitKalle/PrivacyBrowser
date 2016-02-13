@@ -23,9 +23,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DownloadManager;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -43,6 +40,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
@@ -61,7 +59,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 // We need to use AppCompatActivity from android.support.v7.app.AppCompatActivity to have access to the SupportActionBar until the minimum API is >= 21.
-public class MainWebView extends AppCompatActivity implements CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
+public class MainWebViewActivity extends AppCompatActivity implements CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
     // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
     public static Bitmap favoriteIcon;
     // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
@@ -95,10 +93,17 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
     @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
+        // Window.FEATURE_ACTION_BAR_OVERLAY must be enabled to set the app bar to HideOnContentScroll.  It must be set before any content is added to the activity.
+        if (Build.VERSION.SDK_INT >= 11) {
+            requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.appBar);
-        setSupportActionBar(toolbar);
+
+        // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
+        Toolbar supportAppBar = (Toolbar) findViewById(R.id.appBar);
+        setSupportActionBar(supportAppBar);
 
         final FrameLayout fullScreenVideoFrameLayout = (FrameLayout) findViewById(R.id.fullScreenVideoFrameLayout);
         final Activity mainWebViewActivity = this;
@@ -108,6 +113,13 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
         mainWebView = (WebView) findViewById(R.id.mainWebView);
 
         if (appBar != null) {
+            /* TODO Enable app bar scrolling.
+            // Scroll the app bar, but only if the API supports overlay mode (>= 11).
+            if (Build.VERSION.SDK_INT >= 11) {
+                appBar.setHideOnContentScrollEnabled(true);
+            }
+            */
+
             // Remove the title from the app bar.
             appBar.setDisplayShowTitleEnabled(false);
 
@@ -572,8 +584,8 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                 return true;
 
             case R.id.settings:
-                // Start the Settings activity.
-                Intent intent = new Intent(this, Settings.class);
+                // Launch SettingsActivity.
+                Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
 
@@ -588,18 +600,22 @@ public class MainWebView extends AppCompatActivity implements CreateHomeScreenSh
                 WebStorage domStorage = WebStorage.getInstance();
                 domStorage.deleteAllData();
 
-                // Clear cookies.
-                if (Build.VERSION.SDK_INT < 21) {
-                    cookieManager.removeAllCookie();
-                } else {
+                // Clear cookies.  The commands changed slightly in API 21.
+                if (Build.VERSION.SDK_INT >= 21) {
                     cookieManager.removeAllCookies(null);
+                } else {
+                    cookieManager.removeAllCookie();
                 }
 
                 // Destroy the internal state of the webview.
                 mainWebView.destroy();
 
-                // Close Privacy Browser.
-                finish();
+                // Close Privacy Browser.  finishAndRemoveTask also removes Privacy Browser from the recent app list.
+                if (Build.VERSION.SDK_INT >= 21) {
+                    finishAndRemoveTask();
+                } else {
+                    finish();
+                }
                 return true;
 
             default:

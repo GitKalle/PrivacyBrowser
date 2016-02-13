@@ -56,7 +56,7 @@ public class AboutDialog extends AppCompatDialogFragment {
             // shouldOverrideUrlLoading lets us close AboutDialog when a link is touched.  Otherwise the dialog covers the website that loads beneath in Privacy Browser.
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                MainWebView.mainWebView.loadUrl(url);
+                MainWebViewActivity.mainWebView.loadUrl(url);
                 alertDialog.dismiss();
                 return true;
             }

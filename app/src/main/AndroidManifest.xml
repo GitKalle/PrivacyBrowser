@@ -37,7 +37,7 @@
         <!-- android:launchMode="singleTask" makes the app launch in a new task instead of inside the task of the program that sends it an intent.
             It also makes it reuse an existing Privacy Browser activity if available instead of launching a new one. -->
         <activity
-            android:name=".MainWebView"
+            android:name=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/privacy_browser"
             android:launchMode="singleTask">
@@ -58,14 +58,14 @@
         </activity>
 
         <activity
-            android:name=".Settings"
+            android:name=".SettingsActivity"
             android:label="@string/privacy_browser_settings"
-            android:parentActivityName=".MainWebView" >
+            android:parentActivityName=".MainWebViewActivity" >
 
             <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainWebView" />
+                android:value=".MainWebViewActivity" />
         </activity>
 
     </application>

@@ -60,7 +60,7 @@ public class CreateHomeScreenShortcut extends AppCompatDialogFragment {
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Create a drawable version of the favorite icon.
-        Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), MainWebView.favoriteIcon);
+        Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), MainWebViewActivity.favoriteIcon);
 
         // Use AlertDialog.Builder to create the AlertDialog
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
