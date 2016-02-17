@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  Copyright 2015 Soren Stoutner <soren@stoutner.com>.
+  Copyright 2015-2016 Soren Stoutner <soren@stoutner.com>.
 
   This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
 
@@ -25,32 +25,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/addressBarLinearLayout"
+    <RelativeLayout
+        android:id="@+id/addressBarRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="wrap_content">
 
         <!-- Set the program icon as the initial favoriteIcon. -->
+        <!-- layout_width and layout_height of 28dp matches the appBar icons. -->
         <ImageView
             android:id="@+id/favoriteIcon"
             android:src="@drawable/ic_language_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
             android:contentDescription="@string/favorite_icon"/>
 
         <!-- android:imeOptions="actionGo" sets the keyboard to have a "go" key instead of a "new line" key. -->
         <!-- android:inputType="textUri" disables spell check in the EditText and changes the "go" key from a check mark to an arrow. -->
-        <!-- For some reason, android:layout_weight="1" doesdn't makes urlTextBox take up all the remaining space when it is inside a SupportActionBar.
-            layout_width="2000" is less elegant, but it does the trick. -->
+        <!-- android:layout_toEndOf requires API >= 17, but is compatible with right-to-left layouts.  android:layout_toRightOf is required for previous APIs. -->
         <EditText
             android:id="@+id/urlTextBox"
-            android:layout_width="2000dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/favoriteIcon"
+            android:layout_toRightOf="@id/favoriteIcon"
             android:imeOptions="actionGo"
             android:inputType="textUri" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- android:max changes the maximum ProgressBar value from 10000 to 100 to match progress percentage. -->
     <!-- android:layout_height="2dp" works best for API 23 "Marshmallow", but "3dp" is required for visibility on API <= 22. -->
