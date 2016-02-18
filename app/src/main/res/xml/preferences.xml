@@ -23,19 +23,19 @@
         android:key="privacy_settings"
         android:title="@string/privacy_settings" >
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="javascript_enabled"
             android:title="@string/javascript_preference"
             android:summary="@string/javascript_preference_summary"
             android:defaultValue="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="dom_storage_enabled"
             android:title="@string/dom_storage_preference"
             android:summary="@string/dom_storage_preference_summary"
             android:defaultValue="false" />
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="cookies_enabled"
             android:title="@string/cookies_preference"
             android:summary="@string/cookies_preference_summary"
@@ -50,6 +50,7 @@
             android:key="homepage"
             android:title="@string/homepage_preference"
             android:summary="@string/homepage_preference_summary"
-            android:defaultValue="https://www.duckduckgo.com" />
+            android:defaultValue="https://www.duckduckgo.com"
+            android:singleLine="true"/>
     </PreferenceCategory>
 </PreferenceScreen>

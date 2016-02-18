@@ -19,30 +19,47 @@
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
 <!-- Setting the layout root to be focusableInTouchMode prevents urlTextBox from stealing focus on launch and opening the keyboard. -->
-<RelativeLayout
-    android:id="@+id/rootRelativeLayout"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/rootCoordinatorLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.stoutner.privacybrowser.MainWebViewActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     android:focusableInTouchMode="true" >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/appBar"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay" >
 
-    <WebView
-        android:id="@+id/mainWebView"
-        android:layout_below="@id/appBar"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+
+    <!-- android:layout_martinTop="?attr/actionBarSize" moves the SwipeRefreshLayout below the AppBarLayout, which otherwise would cover the top of the WebView. -->
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <!-- Google does not currently want to support hiding the AppBar on scroll for a WebView child with the Support Toolbar.  https://code.google.com/p/android/issues/detail?id=200394 -->
+        <WebView
+            android:id="@+id/mainWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <!-- fullScreenVideoFrameLayout is used to display full screen videos.  It is initially android:visibility="gone" to hide it from view. -->
     <FrameLayout
@@ -51,4 +68,4 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:background="@color/black" />
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

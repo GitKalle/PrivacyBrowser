@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -40,7 +41,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
@@ -90,14 +90,9 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
     private EditText urlTextBox;
 
     @Override
-    // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
+    // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.  The whole premise of Privacy Browser is built around an understanding of these dangers.
     @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
-        // Window.FEATURE_ACTION_BAR_OVERLAY must be enabled to set the app bar to HideOnContentScroll.  It must be set before any content is added to the activity.
-        if (Build.VERSION.SDK_INT >= 11) {
-            requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
@@ -110,19 +105,19 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
         final ActionBar appBar = getSupportActionBar();
 
+        // Implement swipe to refresh
+        final SwipeRefreshLayout swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeToRefresh.setColorSchemeResources(R.color.blue);
+        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mainWebView.reload();
+            }
+        });
+
         mainWebView = (WebView) findViewById(R.id.mainWebView);
 
         if (appBar != null) {
-            /* TODO Enable app bar scrolling.
-            // Scroll the app bar, but only if the API supports overlay mode (>= 11).
-            if (Build.VERSION.SDK_INT >= 11) {
-                appBar.setHideOnContentScrollEnabled(true);
-            }
-            */
-
-            // Remove the title from the app bar.
-            appBar.setDisplayShowTitleEnabled(false);
-
             // Add the custom url_bar layout, which shows the favoriteIcon, urlTextBar, and progressBar.
             appBar.setCustomView(R.layout.url_bar);
             appBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -189,6 +184,9 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                         progressBar.setVisibility(View.VISIBLE);
                     } else {
                         progressBar.setVisibility(View.GONE);
+
+                        //Stop the SwipeToRefresh indicator if it is running
+                        swipeToRefresh.setRefreshing(false);
                     }
                 }
             }
@@ -340,6 +338,9 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
 
         // Load the website.
         mainWebView.loadUrl(formattedUrlString);
+
+        // Clear the keyboard if displayed and remove the focus on the urlTextBar if it has it.
+        mainWebView.requestFocus();
     }
 
     @Override
@@ -561,10 +562,6 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
 
             case R.id.home:
                 mainWebView.loadUrl(homepage);
-                return true;
-
-            case R.id.refresh:
-                mainWebView.reload();
                 return true;
 
             case R.id.back:

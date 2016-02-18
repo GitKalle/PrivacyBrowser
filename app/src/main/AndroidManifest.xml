@@ -26,6 +26,7 @@
     <!-- Required to create homescreen shortcuts. -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
+    <!-- on API >= 23, app data is automatically backed up to Google cloud servers unless android:allowBackup="false" and android:fullBackupContent="false" is set. -->
     <application
         android:allowBackup="false"
         android:fullBackupContent="false"
@@ -40,7 +41,8 @@
             android:name=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/privacy_browser"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

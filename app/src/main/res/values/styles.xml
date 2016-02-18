@@ -20,13 +20,20 @@
 
 <resources>
 
-    <!-- We want to use .NoActionBar so that we can set a SupportActionBar. -->
     <!-- android:actionBarSize is supported by API >= 11.  actionBarSize is for older versions. -->
     <!-- The default actionBarSize is 56dp.  53dp is the smallest that doesn't cause the urlTextBox to scroll vertically with a font size of Huge. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorAccent">@color/light_blue</item>
-        <item name="android:actionBarSize">53dp</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/blue</item>
         <item name="actionBarSize">53dp</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
