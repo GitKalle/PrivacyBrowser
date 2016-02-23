@@ -21,28 +21,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.stoutner.privacybrowser" >
 
+    <!-- Required to load websites. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Required to create homescreen shortcuts. -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
+    <!-- Required to upload files to websites. -->
+    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
+
     <!-- on API >= 23, app data is automatically backed up to Google cloud servers unless android:allowBackup="false" and android:fullBackupContent="false" is set. -->
     <application
-        android:allowBackup="false"
-        android:fullBackupContent="false"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/privacy_browser"
-        android:theme="@style/AppTheme" >
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme"
+        android:allowBackup="false"
+        android:fullBackupContent="false" >
 
         <!-- android:configChanges="orientation|screenSize" makes the app not reload when the orientation changes, which preserves scroll location in the WebView. -->
         <!-- android:launchMode="singleTask" makes the app launch in a new task instead of inside the task of the program that sends it an intent.
             It also makes it reuse an existing Privacy Browser activity if available instead of launching a new one. -->
+        <!-- android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
         <activity
             android:name=".MainWebViewActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/privacy_browser"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:persistableMode="persistNever" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,10 +65,12 @@
             </intent-filter>
         </activity>
 
+        <!-- android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
         <activity
             android:name=".SettingsActivity"
             android:label="@string/privacy_browser_settings"
-            android:parentActivityName=".MainWebViewActivity" >
+            android:parentActivityName=".MainWebViewActivity"
+            android:persistableMode="persistNever" >
 
             <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->
             <meta-data

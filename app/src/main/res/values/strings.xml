@@ -23,6 +23,12 @@
     <string name="privacy_browser">Privacy Browser</string>
     <string name="privacy_browser_settings">Privacy Browser Settings</string>
 
+    <!-- Ad control strings. -->
+    <string name="free_flavor">false</string>
+
+    <!-- MainWebViewActivity. -->
+    <string name="privacy_mode">Privacy Mode</string>
+
     <!-- Custom App Bar. -->
     <string name="favorite_icon">Favorite Icon</string>
 

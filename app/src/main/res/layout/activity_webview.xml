@@ -44,22 +44,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <!-- android:layout_martinTop="?attr/actionBarSize" moves the SwipeRefreshLayout below the AppBarLayout, which otherwise would cover the top of the WebView. -->
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
-
-        <!-- Google does not currently want to support hiding the AppBar on scroll for a WebView child with the Support Toolbar.  https://code.google.com/p/android/issues/detail?id=200394 -->
-        <WebView
-            android:id="@+id/mainWebView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <include layout="@layout/ad_view" />
 
     <!-- fullScreenVideoFrameLayout is used to display full screen videos.  It is initially android:visibility="gone" to hide it from view. -->
     <FrameLayout

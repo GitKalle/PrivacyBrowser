@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright 2016 Soren Stoutner <soren@stoutner.com>.
+
+  This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
+
+  Privacy Browser is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Privacy Browser is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<!-- android:layout_martinTop="?attr/actionBarSize" moves adRelativeLayout below the appBarLayout, which otherwise would cover the top of mainWebView. -->
+<RelativeLayout
+    android:id="@+id/adRelativeLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    tools:context="com.stoutner.privacybrowser.MainWebViewActivity"
+    tools:showIn="@layout/activity_webview">
+
+    <!-- Set to visibility="gone" in the standard flavor. -->
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/ad_id">
+    </com.google.android.gms.ads.AdView>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/adView">
+
+        <!-- Google does not currently want to support hiding the AppBar on scroll for a WebView child with the Support Toolbar.  https://code.google.com/p/android/issues/detail?id=200394 -->
+        <WebView
+            android:id="@+id/mainWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

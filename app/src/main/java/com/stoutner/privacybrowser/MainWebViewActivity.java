@@ -53,6 +53,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -104,6 +108,9 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         final Activity mainWebViewActivity = this;
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
         final ActionBar appBar = getSupportActionBar();
+
+        // Setup the AdView for the free flavor.
+        final AdView adView = (AdView) findViewById(R.id.adView);
 
         // Implement swipe to refresh
         final SwipeRefreshLayout swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -211,10 +218,17 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                     appBar.hide();
                 }
 
+                // Show the fullScreenVideoFrameLayout.
                 fullScreenVideoFrameLayout.addView(view);
                 fullScreenVideoFrameLayout.setVisibility(View.VISIBLE);
 
+                // Hide the mainWebView.
                 mainWebView.setVisibility(View.GONE);
+
+                // Hide the add if this is the free flavor.
+                if (getString(R.string.free_flavor).equals("true")) {
+                    adView.setVisibility(View.GONE);
+                }
 
                 /* SYSTEM_UI_FLAG_HIDE_NAVIGATION hides the navigation bars on the bottom or right of the screen.
                 ** SYSTEM_UI_FLAG_FULLSCREEN hides the status bar across the top of the screen.
@@ -243,8 +257,15 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                     appBar.show();
                 }
 
+                // Show the mainWebView.
                 mainWebView.setVisibility(View.VISIBLE);
 
+                // Show the adView if this is the free flavor.
+                if (getString(R.string.free_flavor).equals("true")) {
+                    adView.setVisibility(View.VISIBLE);
+                }
+
+                // Hide the fullScreenVideoFrameLayout.
                 fullScreenVideoFrameLayout.removeAllViews();
                 fullScreenVideoFrameLayout.setVisibility(View.GONE);
             }
@@ -323,6 +344,12 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
 
         // Load the initial website.
         mainWebView.loadUrl(formattedUrlString);
+
+        // Load the ad if this is the free flavor.
+        if (getString(R.string.free_flavor).equals("true")) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
     }
 
     @Override
@@ -436,7 +463,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                         }
                     } else {
                         menuItem.setIcon(R.drawable.privacy_mode);
-                        Toast.makeText(getApplicationContext(), "Privacy Mode", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.privacy_mode, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     javaScriptEnabled = true;
@@ -457,7 +484,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                     // Update the toggleJavaScript icon and display a toast message if appropriate.
                     if (!javaScriptEnabled && !cookiesEnabled) {
                         toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                        Toast.makeText(getApplicationContext(), "Privacy Mode", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.privacy_mode, Toast.LENGTH_SHORT).show();
                     } else {
                         if (cookiesEnabled) {
                             toggleJavaScript.setIcon(R.drawable.warning);
@@ -505,7 +532,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                     // Update the toggleJavaScript icon and display a toast message if appropriate.
                     if (!javaScriptEnabled && !domStorageEnabled) {
                         toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                        Toast.makeText(getApplicationContext(), "Privacy Mode", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.privacy_mode, Toast.LENGTH_SHORT).show();
                     } else {
                         if (domStorageEnabled) {
                             toggleJavaScript.setIcon(R.drawable.warning);

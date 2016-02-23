@@ -21,7 +21,6 @@ package com.stoutner.privacybrowser;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.support.v7.widget.Toolbar;
 
 // Once the minimum API is >= 11 we can switch from the deprecated PreferenceActivity to using a PreferenceFragment.
 public class SettingsActivity extends PreferenceActivity {

@@ -1,9 +1,29 @@
+/**
+ * Copyright 2016 Soren Stoutner <soren@stoutner.com>.
+ *
+ * This file is part of Privacy Browser.
+ *
+ * Privacy Browser is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Privacy Browser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "com.stoutner.privacybrowser"
         minSdkVersion 10
@@ -11,11 +31,21 @@ android {
         versionCode 1
         versionName "1.0"
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        standard {
+            applicationId "com.stoutner.privacybrowser.standard"
+            versionName "1.0-standard"
+        }
+
+        free {
+            applicationId "com.stoutner.privacybrowser.free"
+            versionName "1.0-free"
         }
     }
 }
@@ -25,4 +55,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
 }
