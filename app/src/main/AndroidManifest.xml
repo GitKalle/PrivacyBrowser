@@ -33,7 +33,7 @@
     <!-- on API >= 23, app data is automatically backed up to Google cloud servers unless android:allowBackup="false" and android:fullBackupContent="false" is set. -->
     <application
         android:label="@string/privacy_browser"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/privacy_browser"
         android:theme="@style/AppTheme"
         android:allowBackup="false"
         android:fullBackupContent="false" >

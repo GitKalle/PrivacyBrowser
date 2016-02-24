@@ -28,6 +28,7 @@
 
     <!-- MainWebViewActivity. -->
     <string name="privacy_mode">Privacy Mode</string>
+    <string name="download_started">Download started</string>
 
     <!-- Custom App Bar. -->
     <string name="favorite_icon">Favorite Icon</string>

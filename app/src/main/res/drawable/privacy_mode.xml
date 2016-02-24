@@ -1,13 +1,13 @@
 <!--
   privacy_mode.xml is part of the Android Material icon set, where it is named ic_visibility_off.
   It is released under the CC-BY license <https://creativecommons.org/licenses/by/4.0/>.
-  Changes to fill color were made by Soren Stoutner in 2016. -->
+  Changes to fill color and size were made by Soren Stoutner in 2016. -->
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
+        android:width="26dp"
+        android:height="26dp"
+        android:viewportWidth="26.0"
+        android:viewportHeight="26.0">
 
     <!-- The fillColor must be hardcoded in this file unitl the minimum API is >= 22.  Then the resources in colors.xml may be used instead. -->
     <path

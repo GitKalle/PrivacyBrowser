@@ -35,7 +35,7 @@
         <!-- layout_width and layout_height of 26dp matches the AppBar icons. -->
         <ImageView
             android:id="@+id/favoriteIcon"
-            android:src="@drawable/ic_language_black_24dp"
+            android:src="@drawable/world"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_centerVertical="true"

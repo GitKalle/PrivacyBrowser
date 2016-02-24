@@ -288,7 +288,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 }
 
                 downloadManager.enqueue(requestUri);
-                Toast.makeText(mainWebViewActivity, "Download started", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mainWebViewActivity, R.string.download_started, Toast.LENGTH_SHORT).show();
             }
         });
 
