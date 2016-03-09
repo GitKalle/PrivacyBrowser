@@ -1,7 +1,7 @@
 /**
  * Copyright 2016 Soren Stoutner <soren@stoutner.com>.
  *
- * This file is part of Privacy Browser.
+ * This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
  *
  * Privacy Browser is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
     }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
@@ -31,12 +32,14 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     productFlavors {
         standard {
             applicationId "com.stoutner.privacybrowser.standard"
@@ -48,6 +51,11 @@ android {
             versionName "1.0-free"
         }
     }
+
+    // `lintOptions abortOnError false` is required for F-Droid to build correctly.
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -55,5 +63,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
     compile 'com.android.support:support-v4:23.2.0'
+    // Only compile com.google.android.gms:play-services-ads for the free version so that the standard version can build of F-Droid.
     freeCompile 'com.google.android.gms:play-services-ads:8.4.0'
 }
