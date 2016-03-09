@@ -1,7 +1,7 @@
 /**
  * Copyright 2015-2016 Soren Stoutner <soren@stoutner.com>.
  *
- * This file is part of Privacy Browser.
+ * This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
  *
  * Privacy Browser is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,9 +53,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -109,8 +106,8 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
         final ActionBar appBar = getSupportActionBar();
 
-        // Setup the AdView for the free flavor.
-        final AdView adView = (AdView) findViewById(R.id.adView);
+        // Setup AdView for the free flavor.
+        final View adView = findViewById(R.id.adView);
 
         // Implement swipe to refresh
         final SwipeRefreshLayout swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -225,10 +222,8 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 // Hide the mainWebView.
                 mainWebView.setVisibility(View.GONE);
 
-                // Hide the add if this is the free flavor.
-                if (getString(R.string.free_flavor).equals("true")) {
-                    adView.setVisibility(View.GONE);
-                }
+                // Hide the ad if this is the free flavor.
+                BannerAd.hideAd(adView);
 
                 /* SYSTEM_UI_FLAG_HIDE_NAVIGATION hides the navigation bars on the bottom or right of the screen.
                 ** SYSTEM_UI_FLAG_FULLSCREEN hides the status bar across the top of the screen.
@@ -260,10 +255,8 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 // Show the mainWebView.
                 mainWebView.setVisibility(View.VISIBLE);
 
-                // Show the adView if this is the free flavor.
-                if (getString(R.string.free_flavor).equals("true")) {
-                    adView.setVisibility(View.VISIBLE);
-                }
+                // Show the ad if this is the free flavor.
+                BannerAd.showAd(adView);
 
                 // Hide the fullScreenVideoFrameLayout.
                 fullScreenVideoFrameLayout.removeAllViews();
@@ -346,10 +339,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         mainWebView.loadUrl(formattedUrlString);
 
         // Load the ad if this is the free flavor.
-        if (getString(R.string.free_flavor).equals("true")) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
-        }
+        BannerAd.requestAd(adView);
     }
 
     @Override

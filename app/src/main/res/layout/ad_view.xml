@@ -3,7 +3,7 @@
 <!--
   Copyright 2016 Soren Stoutner <soren@stoutner.com>.
 
-  This file is part of Privacy Browser <https://privacybrowser.stoutner.com/>.
+  This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
 
   Privacy Browser is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,8 +19,9 @@
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
 <!-- android:layout_martinTop="?attr/actionBarSize" moves adRelativeLayout below the appBarLayout, which otherwise would cover the top of mainWebView. -->
+<!-- the RelativeLayout has an id of adView in the standard flavor so that the ad commands (which do nothing in the standard flavor) don't produce errors. -->
 <RelativeLayout
-    android:id="@+id/adRelativeLayout"
+    android:id="@+id/adView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -29,21 +30,10 @@
     tools:context="com.stoutner.privacybrowser.MainWebViewActivity"
     tools:showIn="@layout/activity_webview" >
 
-    <!-- Set to visibility="gone" in the standard flavor. -->
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone">
-    </com.google.android.gms.ads.AdView>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/adView">
+        android:layout_height="match_parent" >
 
         <!-- Google does not currently want to support hiding the AppBar on scroll for a WebView child with the Support Toolbar.  https://code.google.com/p/android/issues/detail?id=200394 -->
         <WebView

@@ -19,16 +19,35 @@
 
 package com.stoutner.privacybrowser;
 
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
-// Once the minimum API is >= 11 we can switch from the deprecated PreferenceActivity to using a PreferenceFragment.
-public class SettingsActivity extends PreferenceActivity {
-    @Override
-    // Until minumum API is >= 11 we needs to use the deprecated addPreferenceFromResource from PreferenceActivity.
-    @SuppressWarnings("deprecation")
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+public class BannerAd extends AppCompatActivity{
+    public static void requestAd(View view) {
+        // Cast view to an AdView.
+        AdView adView = (AdView) view;
+
+        // Load an ad.
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
+
+    public static void hideAd(View view) {
+        // Cast view to an AdView.
+        AdView adView = (AdView) view;
+
+        // Hide the ad.
+        adView.setVisibility(View.GONE);
+    }
+
+    public static void showAd(View view) {
+        // Cast view to an AdView.
+        AdView adView = (AdView) view;
+
+        // Hide the ad.
+        adView.setVisibility(View.VISIBLE);
     }
 }
