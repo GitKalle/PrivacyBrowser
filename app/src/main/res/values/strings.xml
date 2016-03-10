@@ -23,9 +23,6 @@
     <string name="privacy_browser">Privacy Browser</string>
     <string name="privacy_browser_settings">Privacy Browser Settings</string>
 
-    <!-- Ad control strings. -->
-    <string name="free_flavor">false</string>
-
     <!-- MainWebViewActivity. -->
     <string name="privacy_mode">Privacy Mode</string>
     <string name="download_started">Download started</string>
@@ -36,7 +33,6 @@
     <!-- Menu. -->
     <string name="javascript">JavaScript</string>
     <string name="dom_storage">DOM Storage</string>
-    <string name="save_form_data">Save Form Data</string>
     <string name="cookies">Cookies</string>
     <string name="clear_dom_storage">Clear DOM Storage</string>
     <string name="clear_cookies">Clear Cookies</string>
@@ -44,7 +40,6 @@
     <string name="downloads">Downloads</string>
     <string name="navigation">Navigation</string>
     <string name="home">Home</string>
-    <string name="refresh">Refresh</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
     <string name="share">Share</string>
@@ -52,7 +47,7 @@
     <string name="about">About</string>
     <string name="clear_and_exit">Clear and Exit</string>
 
-    <!-- Create Home Screen Shorcut Alert Dialog. -->
+    <!-- Create Home Screen Shortcut Alert Dialog. -->
     <string name="shortcut_name">Shortcut name</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>

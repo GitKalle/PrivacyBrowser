@@ -29,8 +29,8 @@ android {
         applicationId "com.stoutner.privacybrowser"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
 
     buildTypes {
@@ -43,18 +43,13 @@ android {
     productFlavors {
         standard {
             applicationId "com.stoutner.privacybrowser.standard"
-            versionName "1.0-standard"
+            versionName "1.1-standard"
         }
 
         free {
             applicationId "com.stoutner.privacybrowser.free"
-            versionName "1.0-free"
+            versionName "1.1-free"
         }
-    }
-
-    // `lintOptions abortOnError false` is required for F-Droid to build correctly.
-    lintOptions {
-        abortOnError false
     }
 }
 

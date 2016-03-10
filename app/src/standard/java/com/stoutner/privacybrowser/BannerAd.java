@@ -21,7 +21,7 @@ package com.stoutner.privacybrowser;
 
 import android.view.View;
 
-public class BannerAd {
+class BannerAd {
     public static void requestAd(View view) {
         // Do nothing because this is the standard version.
     }

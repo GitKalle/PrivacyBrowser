@@ -318,7 +318,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(cookiesEnabled);
 
-        // Set hompage initial status.
+        // Set homepage initial status.
         homepage = savedPreferences.getString("homepage", "https://www.duckduckgo.com");
 
         // Get the intent information that started the app.
@@ -569,12 +569,12 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
 
             case R.id.downloads:
                 // Launch the system Download Manager.
-                Intent downloadManangerIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
+                Intent downloadManagerIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
 
                 // Launch as a new task so that Download Manager and Privacy Browser show as separate windows in the recent tasks list.
-                downloadManangerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                downloadManagerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                startActivity(downloadManangerIntent);
+                startActivity(downloadManagerIntent);
                 return true;
 
             case R.id.home:
@@ -673,7 +673,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         }
     }
 
-    public void loadUrlFromTextBox() throws UnsupportedEncodingException {
+    private void loadUrlFromTextBox() throws UnsupportedEncodingException {
         // Get the text from urlTextBox and convert it to a string.
         String unformattedUrlString = urlTextBox.getText().toString();
         URL unformattedUrl = null;

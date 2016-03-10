@@ -25,7 +25,7 @@ import android.preference.PreferenceActivity;
 // Once the minimum API is >= 11 we can switch from the deprecated PreferenceActivity to using a PreferenceFragment.
 public class SettingsActivity extends PreferenceActivity {
     @Override
-    // Until minumum API is >= 11 we needs to use the deprecated addPreferenceFromResource from PreferenceActivity.
+    // Until minimum API is >= 11 we needs to use the deprecated addPreferenceFromResource from PreferenceActivity.
     @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -43,7 +43,7 @@ public class CreateHomeScreenShortcut extends AppCompatDialogFragment {
         void onCreateHomeScreenShortcutCreate(DialogFragment dialog);
     }
 
-    CreateHomeScreenSchortcutListener buttonListener;
+    private CreateHomeScreenSchortcutListener buttonListener;
 
     // Check to make sure that the activity that called CreateHomeScreenShortcut implements both listeners.
     public void onAttach(Activity activity) {

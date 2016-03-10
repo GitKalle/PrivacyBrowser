@@ -25,7 +25,7 @@ import android.view.View;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-public class BannerAd extends AppCompatActivity{
+class BannerAd extends AppCompatActivity{
     public static void requestAd(View view) {
         // Cast view to an AdView.
         AdView adView = (AdView) view;

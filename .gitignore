@@ -5,3 +5,9 @@
 .DS_Store
 /build
 /captures
+
+# Built APK files.
+*.apk
+
+# IntelliJ config files.
+*.iml
