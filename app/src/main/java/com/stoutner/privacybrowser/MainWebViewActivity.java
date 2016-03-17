@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -102,7 +103,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         setSupportActionBar(supportAppBar);
 
         final FrameLayout fullScreenVideoFrameLayout = (FrameLayout) findViewById(R.id.fullScreenVideoFrameLayout);
-        final Activity mainWebViewActivity = this;
+
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
         final ActionBar appBar = getSupportActionBar();
 
@@ -155,12 +156,6 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 mainWebView.loadUrl(url);
                 return true;
             }
-
-            /* These errors do not provide any useful information and clutter the screen.
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                Toast.makeText(mainWebViewActivity, "Error loading " + request + "   Error: " + error, Toast.LENGTH_SHORT).show();
-            }
-            */
 
             // Update the URL in urlTextBox when the page starts to load.
             @Override
@@ -281,7 +276,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 }
 
                 downloadManager.enqueue(requestUri);
-                Toast.makeText(mainWebViewActivity, R.string.download_started, Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.mainWebView), R.string.download_started, Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -439,28 +434,28 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                     mainWebView.getSettings().setJavaScriptEnabled(false);
                     mainWebView.reload();
 
-                    // Update the toggleJavaScript icon and display a toast message.
+                    // Update the toggleJavaScript icon and display a snackbar.
                     if (domStorageEnabled || cookiesEnabled) {
                         menuItem.setIcon(R.drawable.warning);
                         if (domStorageEnabled && cookiesEnabled) {
-                            Toast.makeText(getApplicationContext(), "JavaScript disabled, DOM Storage and Cookies still enabled", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.mainWebView), R.string.both_still_enabled, Snackbar.LENGTH_SHORT).show();
                         } else {
                             if (domStorageEnabled) {
-                                Toast.makeText(getApplicationContext(), "JavaScript disabled, DOM Storage still enabled", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_still_enabled, Snackbar.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getApplicationContext(), "JavaScript disabled, Cookies still enabled", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_still_enabled, Snackbar.LENGTH_SHORT).show();
                             }
                         }
                     } else {
                         menuItem.setIcon(R.drawable.privacy_mode);
-                        Toast.makeText(getApplicationContext(), R.string.privacy_mode, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
                     }
                 } else {
                     javaScriptEnabled = true;
                     menuItem.setIcon(R.drawable.javascript_enabled);
                     mainWebView.getSettings().setJavaScriptEnabled(true);
                     mainWebView.reload();
-                    Toast.makeText(getApplicationContext(), "JavaScript enabled", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.mainWebView), R.string.javascript_enabled, Snackbar.LENGTH_SHORT).show();
                 }
                 return true;
 
@@ -471,14 +466,14 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                     mainWebView.getSettings().setDomStorageEnabled(false);
                     mainWebView.reload();
 
-                    // Update the toggleJavaScript icon and display a toast message if appropriate.
+                    // Update the toggleJavaScript icon and display a snackbar if appropriate.
                     if (!javaScriptEnabled && !cookiesEnabled) {
                         toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                        Toast.makeText(getApplicationContext(), R.string.privacy_mode, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
                     } else {
                         if (cookiesEnabled) {
                             toggleJavaScript.setIcon(R.drawable.warning);
-                            Toast.makeText(getApplicationContext(), "Cookies still enabled", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_still_enabled, Snackbar.LENGTH_SHORT).show();
                         } // Else Do nothing because JavaScript is enabled.
                     }
                 } else {
@@ -492,7 +487,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                         toggleJavaScript.setIcon(R.drawable.warning);
                     } // Else Do nothing because JavaScript is enabled.
 
-                    Toast.makeText(getApplicationContext(), "DOM Storage enabled", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_enabled, Snackbar.LENGTH_SHORT).show();
                 }
                 return true;
 
@@ -519,14 +514,14 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                     cookieManager.setAcceptCookie(false);
                     mainWebView.reload();
 
-                    // Update the toggleJavaScript icon and display a toast message if appropriate.
+                    // Update the toggleJavaScript icon and display a snackbar if appropriate.
                     if (!javaScriptEnabled && !domStorageEnabled) {
                         toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                        Toast.makeText(getApplicationContext(), R.string.privacy_mode, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
                     } else {
                         if (domStorageEnabled) {
                             toggleJavaScript.setIcon(R.drawable.warning);
-                            Toast.makeText(getApplicationContext(), "DOM Storage still enabled", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_enabled, Snackbar.LENGTH_SHORT).show();
                         } // Else Do nothing because JavaScript is enabled.
                     }
                 } else {
@@ -540,14 +535,14 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                         toggleJavaScript.setIcon(R.drawable.warning);
                     } // Else Do nothing because JavaScript is enabled.
 
-                    Toast.makeText(getApplicationContext(), "Cookies enabled", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_enabled, Snackbar.LENGTH_SHORT).show();
                 }
                 return true;
 
             case R.id.clearDomStorage:
                 WebStorage webStorage = WebStorage.getInstance();
                 webStorage.deleteAllData();
-                Toast.makeText(getApplicationContext(), "DOM storage deleted", Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_deleted, Snackbar.LENGTH_SHORT).show();
                 return true;
 
             case R.id.clearCookies:
@@ -556,7 +551,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 } else {
                     cookieManager.removeAllCookies(null);
                 }
-                Toast.makeText(getApplicationContext(), "Cookies deleted", Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_deleted, Snackbar.LENGTH_SHORT).show();
                 return true;
 
             case R.id.addToHomescreen:

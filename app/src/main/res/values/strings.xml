@@ -24,8 +24,16 @@
     <string name="privacy_browser_settings">Privacy Browser Settings</string>
 
     <!-- MainWebViewActivity. -->
-    <string name="privacy_mode">Privacy Mode</string>
     <string name="download_started">Download started</string>
+    <string name="privacy_mode">Privacy Mode</string>
+    <string name="javascript_enabled">JavaScript enabled</string>
+    <string name="dom_storage_enabled">DOM Storage enabled</string>
+    <string name="cookies_enabled">Cookies enabled</string>
+    <string name="dom_storage_still_enabled">JavaScript disabled, DOM Storage still enabled</string>
+    <string name="cookies_still_enabled">Cookies still enabled</string>
+    <string name="both_still_enabled">JavaScript disabled, DOM Storage and Cookies still enabled</string>
+    <string name="dom_storage_deleted">DOM Storage deleted</string>
+    <string name="cookies_deleted">Cookies deleted</string>
 
     <!-- Custom App Bar. -->
     <string name="favorite_icon">Favorite Icon</string>
