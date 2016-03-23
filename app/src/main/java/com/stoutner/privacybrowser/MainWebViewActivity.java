@@ -226,9 +226,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 */
 
                 // Set the one flag supported by API >= 14.
-                if (Build.VERSION.SDK_INT >= 14) {
-                    view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-                }
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
                 // Set the two flags that are supported by API >= 16.
                 if (Build.VERSION.SDK_INT >= 16) {
@@ -270,11 +268,10 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 // Add the URL as the description for the download.
                 requestUri.setDescription(url);
 
-                // Show the download notification after the download is completed if the API is 11 or greater.
-                if (Build.VERSION.SDK_INT >= 11) {
-                    requestUri.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                }
+                // Show the download notification after the download is completed.
+                requestUri.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
+                // Initiate the download and display a Snackbar.
                 downloadManager.enqueue(requestUri);
                 Snackbar.make(findViewById(R.id.mainWebView), R.string.download_started, Snackbar.LENGTH_SHORT).show();
             }
@@ -283,10 +280,8 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         // Allow pinch to zoom.
         mainWebView.getSettings().setBuiltInZoomControls(true);
 
-        // Hide zoom controls if the API is 11 or greater.
-        if (Build.VERSION.SDK_INT >= 11) {
-            mainWebView.getSettings().setDisplayZoomControls(false);
-        }
+        // Hide zoom controls.
+        mainWebView.getSettings().setDisplayZoomControls(false);
 
         // Initialize the default preference values the first time the program is run.
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -414,8 +409,6 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
     }
 
     @Override
-    // @TargetApi(11) turns off the errors regarding copy and paste, which are removed from view in menu_webview.xml for lower version of Android.
-    @TargetApi(11)
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
     @SuppressLint("SetJavaScriptEnabled")
     // removeAllCookies is deprecated, but it is required for API < 21.
