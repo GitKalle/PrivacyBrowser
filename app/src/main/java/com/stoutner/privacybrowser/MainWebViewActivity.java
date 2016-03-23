@@ -167,7 +167,11 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
             @Override
             public void onPageFinished(WebView view, String url) {
                 formattedUrlString = url;
-                urlTextBox.setText(formattedUrlString);
+
+                // Only update urlTextBox if the user is not typing in it.
+                if (!urlTextBox.hasFocus()) {
+                    urlTextBox.setText(formattedUrlString);
+                }
             }
         });
 
