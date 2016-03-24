@@ -18,7 +18,7 @@
   You should have received a copy of the GNU General Public License
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
-<!-- android:layout_martinTop="?attr/actionBarSize" moves adRelativeLayout below the appBarLayout, which otherwise would cover the top of mainWebView. -->
+<!-- android:layout_martinTop="?attr/actionBarSize" moves the RelativeLayout below the appBarLayout, which otherwise would cover the top of mainWebView. -->
 <!-- the RelativeLayout has an id of adView in the standard flavor so that the ad commands (which do nothing in the standard flavor) don't produce errors. -->
 <RelativeLayout
     android:id="@+id/adView"
@@ -28,7 +28,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
     tools:context="com.stoutner.privacybrowser.MainWebViewActivity"
-    tools:showIn="@layout/activity_webview" >
+    tools:showIn="@layout/coordinator_layout" >
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"

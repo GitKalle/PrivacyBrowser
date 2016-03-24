@@ -20,7 +20,6 @@
 package com.stoutner.privacybrowser;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Intent;
@@ -32,8 +31,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.Toolbar;
@@ -53,7 +54,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -67,6 +67,8 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
     // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
     public static WebView mainWebView;
 
+    // DrawerTottle is use in onCrate() and onPostCreate().
+    private ActionBarDrawerToggle drawerToggle;
     // mainMenu is used in onCreateOptionsMenu() and onOptionsItemSelected().
     private Menu mainMenu;
     // formattedUrlString is used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
@@ -96,7 +98,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
     @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webview);
+        setContentView(R.layout.coordinator_layout);
 
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
         Toolbar supportAppBar = (Toolbar) findViewById(R.id.appBar);
@@ -148,6 +150,9 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 }
             });
         }
+
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, supportAppBar, R.string.open_navigation, R.string.close_navigation);
 
         mainWebView.setWebViewClient(new WebViewClient() {
             // shouldOverrideUrlLoading makes this WebView the default handler for URLs inside the app, so that links are not kicked out to other apps.
@@ -627,6 +632,14 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // Sync the state of the DrawerToggle after onRestoreInstanceState has finished.
+        drawerToggle.syncState();
     }
 
     @Override

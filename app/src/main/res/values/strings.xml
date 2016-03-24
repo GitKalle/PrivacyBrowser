@@ -34,6 +34,8 @@
     <string name="both_still_enabled">JavaScript disabled, DOM Storage and Cookies still enabled</string>
     <string name="dom_storage_deleted">DOM Storage deleted</string>
     <string name="cookies_deleted">Cookies deleted</string>
+    <string name="open_navigation">Open Navigation Drawer</string>
+    <string name="close_navigation">Close Navigation Drawer</string>
 
     <!-- Custom App Bar. -->
     <string name="favorite_icon">Favorite Icon</string>

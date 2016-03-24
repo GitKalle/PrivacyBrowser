@@ -21,7 +21,7 @@
 <!-- These color resources are hardcoded for vector drawables.  Once the minimum API is >= 22 we can remove the hardcoded colors and reference these entries. -->
 <resources>
     <color name="black">#FF000000</color>
-    <color name="blue">#1e88e5</color>
+    <color name="blue">#FF1976D2</color>
     <color name="green">#FF64DD17</color>
     <color name="red">#FFD50000</color>
     <color name="white">#FFFFFFFF</color>

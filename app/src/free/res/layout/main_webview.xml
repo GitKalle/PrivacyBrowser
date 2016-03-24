@@ -30,7 +30,6 @@
     tools:context="com.stoutner.privacybrowser.MainWebViewActivity"
     tools:showIn="@layout/activity_webview">
 
-    <!-- Set to visibility="gone" in the standard flavor. -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
