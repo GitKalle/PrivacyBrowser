@@ -66,64 +66,14 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/addToHomescreen"
-        android:title="@string/add_to_home_screen"
+        android:id="@+id/share"
+        android:title="@string/share"
         android:orderInCategory="70"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/downloads"
-        android:title="@string/downloads"
+        android:id="@+id/addToHomescreen"
+        android:title="@string/add_to_home_screen"
         android:orderInCategory="80"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/navigation"
-        android:title="@string/navigation"
-        android:orderInCategory="90"
-        app:showAsAction="never" >
-        <menu>
-            <item
-                android:id="@+id/home"
-                android:title="@string/home"
-                android:orderInCategory="91"
-                app:showAsAction="never" />
-
-            <item
-                android:id="@+id/back"
-                android:title="@string/back"
-                android:orderInCategory="92"
-                app:showAsAction="never" />
-
-            <item
-                android:id="@+id/forward"
-                android:title="@string/forward"
-                android:orderInCategory="93"
-                app:showAsAction="never" />
-        </menu>
-    </item>
-
-    <item
-        android:id="@+id/share"
-        android:title="@string/share"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        android:orderInCategory="110"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/about"
-        android:title="@string/about"
-        android:orderInCategory="120"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/clearAndExit"
-        android:title="@string/clear_and_exit"
-        android:orderInCategory="130"
         app:showAsAction="never" />
 </menu>

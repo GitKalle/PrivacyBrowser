@@ -40,22 +40,25 @@
     <!-- Custom App Bar. -->
     <string name="favorite_icon">Favorite Icon</string>
 
+    <!-- Navigation Drawer. -->
+    <string name="navigation_drawer">Navigation Drawer</string>
+    <string name="navigation">Navigation</string>
+    <string name="home">Home</string>
+    <string name="back">Back</string>
+    <string name="forward">Forward</string>
+    <string name="downloads">Downloads</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="clear_and_exit">Clear and Exit</string>
+
     <!-- Menu. -->
     <string name="javascript">JavaScript</string>
     <string name="dom_storage">DOM Storage</string>
     <string name="cookies">Cookies</string>
     <string name="clear_dom_storage">Clear DOM Storage</string>
     <string name="clear_cookies">Clear Cookies</string>
-    <string name="add_to_home_screen">Add to Home Screen</string>
-    <string name="downloads">Downloads</string>
-    <string name="navigation">Navigation</string>
-    <string name="home">Home</string>
-    <string name="back">Back</string>
-    <string name="forward">Forward</string>
     <string name="share">Share</string>
-    <string name="settings">Settings</string>
-    <string name="about">About</string>
-    <string name="clear_and_exit">Clear and Exit</string>
+    <string name="add_to_home_screen">Add to Home Screen</string>
 
     <!-- Create Home Screen Shortcut Alert Dialog. -->
     <string name="shortcut_name">Shortcut name</string>

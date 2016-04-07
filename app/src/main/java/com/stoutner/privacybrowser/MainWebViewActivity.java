@@ -24,13 +24,16 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -61,14 +64,16 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 // We need to use AppCompatActivity from android.support.v7.app.AppCompatActivity to have access to the SupportActionBar until the minimum API is >= 21.
-public class MainWebViewActivity extends AppCompatActivity implements CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
+public class MainWebViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
     // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
     public static Bitmap favoriteIcon;
-    // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
+    // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate(), onOptionsItemSelected(), onNavigationItemSelected(), and loadUrlFromTextBox().
     public static WebView mainWebView;
 
-    // DrawerTottle is use in onCrate() and onPostCreate().
+    // drawerToggle is used in onCreate(), onPostCreate(), onConfigurationChanged(), onNewIntent(), and onNavigationItemSelected().
     private ActionBarDrawerToggle drawerToggle;
+    // drawerLayout is used in onCreate(), onNewIntent(), and onBackPressed().
+    private DrawerLayout drawerLayout;
     // mainMenu is used in onCreateOptionsMenu() and onOptionsItemSelected().
     private Menu mainMenu;
     // formattedUrlString is used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
@@ -85,7 +90,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
     private boolean saveFormDataEnabled;
     */
 
-    // cookieManager is used in onCreate() and onOptionsItemSelected().
+    // cookieManager is used in onCreate(), onOptionsItemSelected(), and onNavigationItemSelected().
     private CookieManager cookieManager;
     // cookiesEnabled is used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
     private boolean cookiesEnabled;
@@ -151,7 +156,16 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
             });
         }
 
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        // Create the navigation drawer.
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        // The DrawerTitle identifies the drawer in accessibility mode.
+        drawerLayout.setDrawerTitle(GravityCompat.START, getString(R.string.navigation_drawer));
+
+        // Listen for touches on the navigation menu.
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // drawerToggle creates the hamburger icon at the start of the AppBar.
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, supportAppBar, R.string.open_navigation, R.string.close_navigation);
 
         mainWebView.setWebViewClient(new WebViewClient() {
@@ -352,6 +366,11 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
             formattedUrlString = intentUriData.toString();
         }
 
+        // Close the navigation drawer if it is open.
+        if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+
         // Load the website.
         mainWebView.loadUrl(formattedUrlString);
 
@@ -362,7 +381,7 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_webview, menu);
+        getMenuInflater().inflate(R.menu.menu_options, menu);
 
         // Set mainMenu so it can be used by onOptionsItemSelected.
         mainMenu = menu;
@@ -401,14 +420,6 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         // Enable Clear Cookies if there are any.
         MenuItem clearCookies = menu.findItem(R.id.clearCookies);
         clearCookies.setEnabled(cookieManager.hasCookies());
-
-        // Enable Back if canGoBack().
-        MenuItem back = menu.findItem(R.id.back);
-        back.setEnabled(mainWebView.canGoBack());
-
-        // Enable forward if canGoForward().
-        MenuItem forward = menu.findItem(R.id.forward);
-        forward.setEnabled(mainWebView.canGoForward());
 
         // Run all the other default commands.
         super.onPrepareOptionsMenu(menu);
@@ -556,6 +567,14 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_deleted, Snackbar.LENGTH_SHORT).show();
                 return true;
 
+            case R.id.share:
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Share URL"));
+                return true;
+
             case R.id.addToHomescreen:
                 // Show the CreateHomeScreenShortcut AlertDialog and name this instance createShortcut.
                 AppCompatDialogFragment shortcutDialog = new CreateHomeScreenShortcut();
@@ -563,6 +582,34 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
 
                 //Everything else will be handled by CreateHomeScreenShortcut and the associated listeners below.
                 return true;
+
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
+    @Override
+    // removeAllCookies is deprecated, but it is required for API < 21.
+    @SuppressWarnings("deprecation")
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        int menuItemId = menuItem.getItemId();
+
+        switch (menuItemId) {
+            case R.id.home:
+                mainWebView.loadUrl(homepage);
+                break;
+
+            case R.id.back:
+                if (mainWebView.canGoBack()) {
+                    mainWebView.goBack();
+                }
+                break;
+
+            case R.id.forward:
+                if (mainWebView.canGoForward()) {
+                    mainWebView.goForward();
+                }
+                break;
 
             case R.id.downloads:
                 // Launch the system Download Manager.
@@ -572,39 +619,19 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 downloadManagerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(downloadManagerIntent);
-                return true;
-
-            case R.id.home:
-                mainWebView.loadUrl(homepage);
-                return true;
-
-            case R.id.back:
-                mainWebView.goBack();
-                return true;
-
-            case R.id.forward:
-                mainWebView.goForward();
-                return true;
-
-            case R.id.share:
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, urlTextBox.getText().toString());
-                shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent, "Share URL"));
-                return true;
+                break;
 
             case R.id.settings:
                 // Launch SettingsActivity.
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
-                return true;
+                break;
 
             case R.id.about:
                 // Show the AboutDialog AlertDialog and name this instance aboutDialog.
                 AppCompatDialogFragment aboutDialog = new AboutDialog();
                 aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
-                return true;
+                break;
 
             case R.id.clearAndExit:
                 // Clear DOM storage.
@@ -627,11 +654,15 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
                 } else {
                     finish();
                 }
-                return true;
+                break;
 
             default:
-                return super.onOptionsItemSelected(menuItem);
+                break;
         }
+
+        // Close the navigation drawer.
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
@@ -640,6 +671,14 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
 
         // Sync the state of the DrawerToggle after onRestoreInstanceState has finished.
         drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Update the status of the drawerToggle icon.
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -666,15 +705,22 @@ public class MainWebViewActivity extends AppCompatActivity implements CreateHome
         sendBroadcast(placeBookmarkShortcut);
     }
 
-    // Override onBackPressed so that if mainWebView can go back it does when the system back button is pressed.
+    // Override onBackPressed to handle the navigation drawer and mainWebView.
     @Override
     public void onBackPressed() {
         final WebView mainWebView = (WebView) findViewById(R.id.mainWebView);
 
-        if (mainWebView.canGoBack()) {
-            mainWebView.goBack();
+        // Close the navigation drawer if it is available.  GravityCompat.START is the drawer on the left on Left-to-Right layout text.
+        if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            // Load the previous URL if available.
+            if (mainWebView.canGoBack()) {
+                mainWebView.goBack();
+            } else {
+                // Pass onBackPressed to the system.
+                super.onBackPressed();
+            }
         }
     }
 

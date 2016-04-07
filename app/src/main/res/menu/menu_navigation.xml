@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright 2016 Soren Stoutner <soren@stoutner.com>.
+
+  This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
+
+  Privacy Browser is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Privacy Browser is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:title="@string/home"
+        android:icon="@drawable/home"
+        android:orderInCategory="11" />
+
+    <item
+        android:id="@+id/back"
+        android:title="@string/back"
+        android:icon="@drawable/back"
+        android:orderInCategory="12" />
+
+    <item
+        android:id="@+id/forward"
+        android:title="@string/forward"
+        android:icon="@drawable/forward"
+        android:orderInCategory="13" />
+
+    <!-- If a group has an id, a line is drawn above it in the navigation view. -->
+    <group
+        android:id="@+id/navigationGroup1" >
+        <item
+            android:id="@+id/downloads"
+            android:title="@string/downloads"
+            android:icon="@drawable/downloads"
+            android:orderInCategory="20" />
+
+        <item
+            android:id="@+id/settings"
+            android:title="@string/settings"
+            android:icon="@drawable/settings"
+            android:orderInCategory="30" />
+
+        <item
+            android:id="@+id/about"
+            android:title="@string/about"
+            android:icon="@drawable/about"
+            android:orderInCategory="40" />
+    </group>
+
+    <!-- If a group has an id, a line is drawn above it in the navigation view. -->
+    <group
+        android:id="@+id/navigationGroup2" >
+        <item
+            android:id="@+id/clearAndExit"
+            android:title="@string/clear_and_exit"
+            android:icon="@drawable/exit"
+            android:orderInCategory="50" />
+    </group>
+</menu>

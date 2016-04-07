@@ -35,7 +35,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -43,21 +43,19 @@ android {
     productFlavors {
         standard {
             applicationId "com.stoutner.privacybrowser.standard"
-            versionName "1.1-standard"
+            versionName "1.2-standard"
         }
 
         free {
             applicationId "com.stoutner.privacybrowser.free"
-            versionName "1.1-free"
+            versionName "1.2-free"
         }
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:design:23.3.0'
     // Only compile com.google.android.gms:play-services-ads for the free version so that the standard version can build of F-Droid.
     freeCompile 'com.google.android.gms:play-services-ads:8.4.0'
 }
