@@ -1,3 +1,5 @@
+<!-- back.xml comes from the Android Material icon set, where it is called ic_arrow_back.  It is released under the CC-BY license <https://creativecommons.org/licenses/by/4.0/>. -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="24dp"
         android:height="24dp"
