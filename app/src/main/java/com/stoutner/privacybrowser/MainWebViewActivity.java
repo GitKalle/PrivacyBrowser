@@ -92,8 +92,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
     // cookieManager is used in onCreate(), onOptionsItemSelected(), and onNavigationItemSelected().
     private CookieManager cookieManager;
-    // cookiesEnabled is used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
-    private boolean cookiesEnabled;
+    // firstPartyCookiesEnabled is used in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
+    private boolean firstPartyCookiesEnabled;
+    // thirdPartyCookiesEnabled is uesd in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
+    private boolean thirdPartyCookiesEnabled;
 
     // urlTextBox is used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
     private EditText urlTextBox;
@@ -316,20 +318,22 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         javaScriptEnabled = savedPreferences.getBoolean("javascript_enabled", false);
         mainWebView.getSettings().setJavaScriptEnabled(javaScriptEnabled);
 
+        // Initialize cookieManager.
+        cookieManager = CookieManager.getInstance();
+
+        // Set cookies initial status.
+        firstPartyCookiesEnabled = savedPreferences.getBoolean("first_party_cookies_enabled", false);
+        cookieManager.setAcceptCookie(firstPartyCookiesEnabled);
+
+        // Set third-party cookies initial status if API >= 21.
+        if (Build.VERSION.SDK_INT >= 21) {
+            thirdPartyCookiesEnabled = savedPreferences.getBoolean("third_party_cookies_enabled", false);
+            cookieManager.setAcceptThirdPartyCookies(mainWebView, thirdPartyCookiesEnabled);
+        }
+
         // Set DOM storage initial status.
         domStorageEnabled = savedPreferences.getBoolean("dom_storage_enabled", false);
         mainWebView.getSettings().setDomStorageEnabled(domStorageEnabled);
-
-        /* Save Form Data does nothing until database storage is implemented.
-        // Set Save Form Data initial status.
-        saveFormDataEnabled = true;
-        mainWebView.getSettings().setSaveFormData(saveFormDataEnabled);
-        */
-
-        // Set cookies initial status.
-        cookiesEnabled = savedPreferences.getBoolean("cookies_enabled", false);
-        cookieManager = CookieManager.getInstance();
-        cookieManager.setAcceptCookie(cookiesEnabled);
 
         // Set homepage initial status.
         homepage = savedPreferences.getString("homepage", "https://www.duckduckgo.com");
@@ -388,17 +392,18 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
         // Get MenuItems for checkable menu items.
         MenuItem toggleJavaScript = menu.findItem(R.id.toggleJavaScript);
+        MenuItem toggleFirstPartyCookies = menu.findItem(R.id.toggleFirstPartyCookies);
+        MenuItem toggleThirdPartyCookies = menu.findItem(R.id.toggleThirdPartyCookies);
         MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
         /* toggleSaveFormData does nothing until database storage is implemented.
         MenuItem toggleSaveFormData = menu.findItem(R.id.toggleSaveFormData);
         */
-        MenuItem toggleCookies = menu.findItem(R.id.toggleCookies);
 
         // Set the initial icon for toggleJavaScript
         if (javaScriptEnabled) {
             toggleJavaScript.setIcon(R.drawable.javascript_enabled);
         } else {
-            if (domStorageEnabled || cookiesEnabled) {
+            if (domStorageEnabled || firstPartyCookiesEnabled) {
                 toggleJavaScript.setIcon(R.drawable.warning);
             } else {
                 toggleJavaScript.setIcon(R.drawable.privacy_mode);
@@ -406,17 +411,26 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         }
 
         // Set the initial status of the menu item checkboxes.
+        toggleFirstPartyCookies.setChecked(firstPartyCookiesEnabled);
+        toggleThirdPartyCookies.setChecked(thirdPartyCookiesEnabled);
         toggleDomStorage.setChecked(domStorageEnabled);
         /* toggleSaveFormData does nothing until database storage is implemented.
         toggleSaveFormData.setChecked(saveFormDataEnabled);
         */
-        toggleCookies.setChecked(cookiesEnabled);
 
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        // Only enable Third-Party Cookies if SDK >= 21 and First-Party Cookies are enabled.
+        MenuItem toggleThirdPartyCookies = menu.findItem(R.id.toggleThirdPartyCookies);
+        if ((Build.VERSION.SDK_INT >= 21) && firstPartyCookiesEnabled) {
+            toggleThirdPartyCookies.setEnabled(true);
+        } else {
+            toggleThirdPartyCookies.setEnabled(false);
+        }
+
         // Enable Clear Cookies if there are any.
         MenuItem clearCookies = menu.findItem(R.id.clearCookies);
         clearCookies.setEnabled(cookieManager.hasCookies());
@@ -448,17 +462,9 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                     mainWebView.reload();
 
                     // Update the toggleJavaScript icon and display a snackbar.
-                    if (domStorageEnabled || cookiesEnabled) {
+                    if (domStorageEnabled || firstPartyCookiesEnabled) {
                         menuItem.setIcon(R.drawable.warning);
-                        if (domStorageEnabled && cookiesEnabled) {
-                            Snackbar.make(findViewById(R.id.mainWebView), R.string.both_still_enabled, Snackbar.LENGTH_SHORT).show();
-                        } else {
-                            if (domStorageEnabled) {
-                                Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_still_enabled, Snackbar.LENGTH_SHORT).show();
-                            } else {
-                                Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_still_enabled, Snackbar.LENGTH_SHORT).show();
-                            }
-                        }
+                        Snackbar.make(findViewById(R.id.mainWebView), R.string.javascript_disabled, Snackbar.LENGTH_SHORT).show();
                     } else {
                         menuItem.setIcon(R.drawable.privacy_mode);
                         Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
@@ -472,6 +478,60 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 }
                 return true;
 
+            case R.id.toggleFirstPartyCookies:
+                if (firstPartyCookiesEnabled) {
+                    firstPartyCookiesEnabled = false;
+                    menuItem.setChecked(false);
+                    cookieManager.setAcceptCookie(false);
+                    mainWebView.reload();
+
+                    // Update the toggleJavaScript icon if appropriate and display a snackbar.
+                    if (!javaScriptEnabled) {
+                        if (domStorageEnabled) {
+                            toggleJavaScript.setIcon(R.drawable.warning);
+                            Snackbar.make(findViewById(R.id.mainWebView), R.string.first_party_cookies_disabled, Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            toggleJavaScript.setIcon(R.drawable.privacy_mode);
+                            Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Snackbar.make(findViewById(R.id.mainWebView), R.string.first_party_cookies_disabled, Snackbar.LENGTH_SHORT).show();
+                    }
+                } else {
+                    firstPartyCookiesEnabled = true;
+                    menuItem.setChecked(true);
+                    cookieManager.setAcceptCookie(true);
+                    mainWebView.reload();
+
+                    // Update the toggleJavaScript icon if appropriate.
+                    if (!javaScriptEnabled) {
+                        toggleJavaScript.setIcon(R.drawable.warning);
+                    } // Else do nothing because JavaScript is enabled.
+
+                    Snackbar.make(findViewById(R.id.mainWebView), R.string.first_party_cookies_enabled, Snackbar.LENGTH_SHORT).show();
+                }
+                return true;
+
+            case R.id.toggleThirdPartyCookies:
+                if (Build.VERSION.SDK_INT >= 21) {
+                    if (thirdPartyCookiesEnabled) {
+                        thirdPartyCookiesEnabled = false;
+                        menuItem.setChecked(false);
+                        cookieManager.setAcceptThirdPartyCookies(mainWebView, false);
+                        mainWebView.reload();
+
+                        Snackbar.make(findViewById(R.id.mainWebView), R.string.third_party_cookies_disabled, Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        thirdPartyCookiesEnabled = true;
+                        menuItem.setChecked(true);
+                        cookieManager.setAcceptThirdPartyCookies(mainWebView, true);
+                        mainWebView.reload();
+
+                        Snackbar.make(findViewById(R.id.mainWebView), R.string.third_party_cookies_enabled, Snackbar.LENGTH_SHORT).show();
+                    }
+                } // Else do nothing because SDK < 21.
+                return true;
+
             case R.id.toggleDomStorage:
                 if (domStorageEnabled) {
                     domStorageEnabled = false;
@@ -479,15 +539,17 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                     mainWebView.getSettings().setDomStorageEnabled(false);
                     mainWebView.reload();
 
-                    // Update the toggleJavaScript icon and display a snackbar if appropriate.
-                    if (!javaScriptEnabled && !cookiesEnabled) {
-                        toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                        Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        if (cookiesEnabled) {
+                    // Update the toggleJavaScript icon if appropriate and display a snackbar.
+                    if (!javaScriptEnabled) {
+                        if (firstPartyCookiesEnabled) {
                             toggleJavaScript.setIcon(R.drawable.warning);
-                            Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_still_enabled, Snackbar.LENGTH_SHORT).show();
-                        } // Else Do nothing because JavaScript is enabled.
+                            Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_disabled, Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            toggleJavaScript.setIcon(R.drawable.privacy_mode);
+                            Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_disabled, Snackbar.LENGTH_SHORT).show();
                     }
                 } else {
                     domStorageEnabled = true;
@@ -504,60 +566,6 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 }
                 return true;
 
-            /* toggleSaveFormData does nothing until database storage is implemented.
-            case R.id.toggleSaveFormData:
-                if (saveFormDataEnabled) {
-                    saveFormDataEnabled = false;
-                    menuItem.setChecked(false);
-                    mainWebView.getSettings().setSaveFormData(false);
-                    mainWebView.reload();
-                } else {
-                    saveFormDataEnabled = true;
-                    menuItem.setChecked(true);
-                    mainWebView.getSettings().setSaveFormData(true);
-                    mainWebView.reload();
-                }
-                return true;
-            */
-
-            case R.id.toggleCookies:
-                if (cookiesEnabled) {
-                    cookiesEnabled = false;
-                    menuItem.setChecked(false);
-                    cookieManager.setAcceptCookie(false);
-                    mainWebView.reload();
-
-                    // Update the toggleJavaScript icon and display a snackbar if appropriate.
-                    if (!javaScriptEnabled && !domStorageEnabled) {
-                        toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                        Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        if (domStorageEnabled) {
-                            toggleJavaScript.setIcon(R.drawable.warning);
-                            Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_enabled, Snackbar.LENGTH_SHORT).show();
-                        } // Else Do nothing because JavaScript is enabled.
-                    }
-                } else {
-                    cookiesEnabled = true;
-                    menuItem.setChecked(true);
-                    cookieManager.setAcceptCookie(true);
-                    mainWebView.reload();
-
-                    // Update the toggleJavaScript icon if appropriate.
-                    if (!javaScriptEnabled) {
-                        toggleJavaScript.setIcon(R.drawable.warning);
-                    } // Else Do nothing because JavaScript is enabled.
-
-                    Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_enabled, Snackbar.LENGTH_SHORT).show();
-                }
-                return true;
-
-            case R.id.clearDomStorage:
-                WebStorage webStorage = WebStorage.getInstance();
-                webStorage.deleteAllData();
-                Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_deleted, Snackbar.LENGTH_SHORT).show();
-                return true;
-
             case R.id.clearCookies:
                 if (Build.VERSION.SDK_INT < 21) {
                     cookieManager.removeAllCookie();
@@ -565,6 +573,12 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                     cookieManager.removeAllCookies(null);
                 }
                 Snackbar.make(findViewById(R.id.mainWebView), R.string.cookies_deleted, Snackbar.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.clearDomStorage:
+                WebStorage webStorage = WebStorage.getInstance();
+                webStorage.deleteAllData();
+                Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_deleted, Snackbar.LENGTH_SHORT).show();
                 return true;
 
             case R.id.share:
@@ -622,7 +636,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 break;
 
             case R.id.settings:
-                // Launch SettingsActivity.
+                // Launch PreferenceFragment.
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;

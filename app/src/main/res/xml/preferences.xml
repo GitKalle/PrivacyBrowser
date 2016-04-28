@@ -30,15 +30,21 @@
             android:defaultValue="false" />
 
         <SwitchPreference
-            android:key="dom_storage_enabled"
-            android:title="@string/dom_storage_preference"
-            android:summary="@string/dom_storage_preference_summary"
+            android:key="first_party_cookies_enabled"
+            android:title="@string/first_party_cookies_preference"
+            android:summary="@string/first_party_cookies_preference_summary"
             android:defaultValue="false" />
 
         <SwitchPreference
-            android:key="cookies_enabled"
-            android:title="@string/cookies_preference"
-            android:summary="@string/cookies_preference_summary"
+            android:key="third_party_cookies_enabled"
+            android:title="@string/third_party_cookies_preference"
+            android:summary="@string/third_party_cookies_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:key="dom_storage_enabled"
+            android:title="@string/dom_storage_preference"
+            android:summary="@string/dom_storage_preference_summary"
             android:defaultValue="false" />
     </PreferenceCategory>
 

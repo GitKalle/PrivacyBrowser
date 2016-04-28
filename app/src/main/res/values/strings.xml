@@ -27,13 +27,15 @@
     <string name="download_started">Download started</string>
     <string name="privacy_mode">Privacy Mode</string>
     <string name="javascript_enabled">JavaScript enabled</string>
+    <string name="javascript_disabled">JavaScript disabled</string>
     <string name="dom_storage_enabled">DOM Storage enabled</string>
-    <string name="cookies_enabled">Cookies enabled</string>
-    <string name="dom_storage_still_enabled">JavaScript disabled, DOM Storage still enabled</string>
-    <string name="cookies_still_enabled">Cookies still enabled</string>
-    <string name="both_still_enabled">JavaScript disabled, DOM Storage and Cookies still enabled</string>
-    <string name="dom_storage_deleted">DOM Storage deleted</string>
+    <string name="dom_storage_disabled">DOM Storage disabled</string>
+    <string name="first_party_cookies_enabled">First-Party Cookies enabled</string>
+    <string name="first_party_cookies_disabled">First-Party Cookies disabled</string>
+    <string name="third_party_cookies_enabled">Third-Party Cookies enabled</string>
+    <string name="third_party_cookies_disabled">Third-Party Cookies disabled</string>
     <string name="cookies_deleted">Cookies deleted</string>
+    <string name="dom_storage_deleted">DOM Storage deleted</string>
     <string name="open_navigation">Open Navigation Drawer</string>
     <string name="close_navigation">Close Navigation Drawer</string>
 
@@ -51,12 +53,13 @@
     <string name="about">About</string>
     <string name="clear_and_exit">Clear and Exit</string>
 
-    <!-- Menu. -->
+    <!-- Options Menu. -->
     <string name="javascript">JavaScript</string>
+    <string name="first_party_cookies">First-Party Cookies</string>
+    <string name="third_party_cookies">Third-Party Cookies</string>
     <string name="dom_storage">DOM Storage</string>
-    <string name="cookies">Cookies</string>
-    <string name="clear_dom_storage">Clear DOM Storage</string>
     <string name="clear_cookies">Clear Cookies</string>
+    <string name="clear_dom_storage">Clear DOM Storage</string>
     <string name="share">Share</string>
     <string name="add_to_home_screen">Add to Home Screen</string>
 
@@ -67,15 +70,21 @@
 
     <!-- Preferences. -->
     <string name="privacy_settings">Privacy Settings</string>
-    <string name="javascript_preference">JavaScript</string>
-    <string name="javascript_preference_summary">Enable JavaScript by default</string>
-    <string name="dom_storage_preference">DOM Storage</string>
-    <string name="dom_storage_preference_summary">Enable DOM storage by default</string>
-    <string name="cookies_preference">Cookies</string>
-    <string name="cookies_preference_summary">Enable cookies by default</string>
+    <string name="javascript_preference">Enable JavaScript by default</string>
+    <string name="javascript_preference_summary">JavaScript allows websites to run programs (scripts) on your device.</string>
+    <string name="first_party_cookies_preference">Enable First-Party Cookies by default</string>
+    <string name="first_party_cookies_preference_summary">Cookies allow websites to store information on your device.
+        First-party cookies come from the server listed in the address bar.
+        Devices with versions of Android older than Lollipop (version 5.0) will also enable third-party cookies with this setting.</string>
+    <string name="third_party_cookies_preference">Enable Third-Party Cookies by default</string>
+    <string name="third_party_cookies_summary">Third-party cookies allow parts of websites that aren\'t the main website, like advertisements, to store information on your device.
+        This setting requires Android Lollipop (version 5.0) or higher.  It has no effect if first-party cookies are disabled.</string>
+    <string name="dom_storage_preference">Enable DOM Storage by default</string>
+    <string name="dom_storage_preference_summary">Document Object Management storage, also called web storage, is an enhanced form of cookies
+        that allows websites to store larger and more complex types of information, like pictures, on your device.</string>
     <string name="general_settings">General Settings</string>
     <string name="homepage_preference">Homepage</string>
-    <string name="homepage_preference_summary">Set the homepage</string>
+    <string name="homepage_preference_summary">Set the homepage.</string>
 
     <!-- About Dialog. -->
     <string name="about_privacy_browser">About Privacy Browser</string>

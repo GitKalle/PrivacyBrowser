@@ -31,37 +31,35 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/toggleDomStorage"
-        android:title="@string/dom_storage"
+        android:id="@+id/toggleFirstPartyCookies"
+        android:title="@string/first_party_cookies"
         android:orderInCategory="20"
         android:checkable="true"
         app:showAsAction="never" />
 
-    <!-- toggleSaveFormData does nothing until database storage is implemented
     <item
-        android:id="@+id/toggleSaveFormData"
-        android:title="@string/saveFormData"
+        android:id="@+id/toggleThirdPartyCookies"
+        android:title="@string/third_party_cookies"
         android:orderInCategory="30"
         android:checkable="true"
         app:showAsAction="never" />
-        -->
 
     <item
-        android:id="@+id/toggleCookies"
-        android:title="@string/cookies"
+        android:id="@+id/toggleDomStorage"
+        android:title="@string/dom_storage"
         android:orderInCategory="40"
         android:checkable="true"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/clearDomStorage"
-        android:title="@string/clear_dom_storage"
+        android:id="@+id/clearCookies"
+        android:title="@string/clear_cookies"
         android:orderInCategory="50"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/clearCookies"
-        android:title="@string/clear_cookies"
+        android:id="@+id/clearDomStorage"
+        android:title="@string/clear_dom_storage"
         android:orderInCategory="60"
         app:showAsAction="never" />
 

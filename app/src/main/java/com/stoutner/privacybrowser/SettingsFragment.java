@@ -20,14 +20,12 @@
 package com.stoutner.privacybrowser;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.preference.PreferenceFragment;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsFragment extends PreferenceFragment {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Display SettingsFragment
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
+        addPreferencesFromResource(R.xml.preferences);
     }
 }
