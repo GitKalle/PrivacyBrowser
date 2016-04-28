@@ -67,35 +67,30 @@ import java.net.URLEncoder;
 public class MainWebViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
     // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
     public static Bitmap favoriteIcon;
-    // mainWebView is public static so it can be accessed from AboutDialog.  It is also used in onCreate(), onOptionsItemSelected(), onNavigationItemSelected(), and loadUrlFromTextBox().
+    // mainWebView is public static so it can be accessed from AboutDialog and SettingsFragment.  It is also used in onCreate(), onOptionsItemSelected(), onNavigationItemSelected(), and loadUrlFromTextBox().
     public static WebView mainWebView;
+
+    // mainMenu is public static so it can be accessed from SettingsFragment.  It is also used in onCreateOptionsMenu() and onOptionsItemSelected().
+    public static Menu mainMenu;
+    // cookieManager is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onOptionsItemSelected(), and onNavigationItemSelected().
+    public static CookieManager cookieManager;
+    // javaScriptEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), onOptionsItemSelected(), and loadUrlFromTextBox().
+    public static boolean javaScriptEnabled;
+    // firstPartyCookiesEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
+    public static boolean firstPartyCookiesEnabled;
+    // thirdPartyCookiesEnabled is uesd in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
+    public static boolean thirdPartyCookiesEnabled;
+    // domStorageEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
+    public static boolean domStorageEnabled;
+    // homepage is public static so it can be accessed from  SettingsFragment.  It is also used in onCreate() and onOptionsItemSelected().
+    public static String homepage;
 
     // drawerToggle is used in onCreate(), onPostCreate(), onConfigurationChanged(), onNewIntent(), and onNavigationItemSelected().
     private ActionBarDrawerToggle drawerToggle;
     // drawerLayout is used in onCreate(), onNewIntent(), and onBackPressed().
     private DrawerLayout drawerLayout;
-    // mainMenu is used in onCreateOptionsMenu() and onOptionsItemSelected().
-    private Menu mainMenu;
     // formattedUrlString is used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
     private String formattedUrlString;
-    // homepage is used in onCreate() and onOptionsItemSelected().
-    private String homepage;
-    // javaScriptEnabled is used in onCreate(), onCreateOptionsMenu(), onOptionsItemSelected(), and loadUrlFromTextBox().
-    private boolean javaScriptEnabled;
-    // domStorageEnabled is used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
-    private boolean domStorageEnabled;
-
-    /* saveFormDataEnabled does nothing until database storage is implemented.
-    // saveFormDataEnabled is used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
-    private boolean saveFormDataEnabled;
-    */
-
-    // cookieManager is used in onCreate(), onOptionsItemSelected(), and onNavigationItemSelected().
-    private CookieManager cookieManager;
-    // firstPartyCookiesEnabled is used in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
-    private boolean firstPartyCookiesEnabled;
-    // thirdPartyCookiesEnabled is uesd in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
-    private boolean thirdPartyCookiesEnabled;
 
     // urlTextBox is used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
     private EditText urlTextBox;

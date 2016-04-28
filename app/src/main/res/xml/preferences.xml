@@ -55,8 +55,8 @@
         <EditTextPreference
             android:key="homepage"
             android:title="@string/homepage_preference"
-            android:summary="@string/homepage_preference_summary"
             android:defaultValue="https://www.duckduckgo.com"
-            android:singleLine="true"/>
+            android:inputType="textUri"
+            android:singleLine="true" />
     </PreferenceCategory>
 </PreferenceScreen>
