@@ -20,8 +20,8 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:key="privacy_settings"
-        android:title="@string/privacy_settings" >
+        android:key="privacy"
+        android:title="@string/privacy" >
 
         <SwitchPreference
             android:key="javascript_enabled"
@@ -49,8 +49,41 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="general_settings"
-        android:title="@string/general_settings" >
+        android:key="search"
+        android:title="@string/search">
+
+        <ListPreference
+            android:key="javascript_disabled_search"
+            android:title="@string/javascript_disabled_search"
+            android:entries="@array/javascript_disabled_search_entries"
+            android:entryValues="@array/javascript_disabled_search_entry_values"
+            android:defaultValue="https://duckduckgo.com/html/?q=" />
+
+        <EditTextPreference
+            android:key="javascript_disabled_search_custom_url"
+            android:title="@string/javascript_disabled_search_custom_url"
+            android:defaultValue=""
+            android:inputType="textUri"
+            android:singleLine="true" />
+
+        <ListPreference
+            android:key="javascript_enabled_search"
+            android:title="@string/javascript_enabled_search"
+            android:entries="@array/javascript_enabled_search_entries"
+            android:entryValues="@array/javascript_enabled_search_entry_values"
+            android:defaultValue="https://duckduckgo.com/?q=" />
+
+        <EditTextPreference
+            android:key="javascript_enabled_search_custom_url"
+            android:title="@string/javascript_enabled_search_custom_url"
+            android:defaultValue=""
+            android:inputType="textUri"
+            android:singleLine="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="general"
+        android:title="@string/general" >
 
         <EditTextPreference
             android:key="homepage"

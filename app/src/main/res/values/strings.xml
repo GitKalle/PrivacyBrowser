@@ -70,7 +70,7 @@
     <string name="create">Create</string>
 
     <!-- Preferences. -->
-    <string name="privacy_settings">Privacy Settings</string>
+    <string name="privacy">Privacy</string>
     <string name="javascript_preference">Enable JavaScript by default</string>
     <string name="javascript_preference_summary">JavaScript allows websites to run programs (scripts) on your device.</string>
     <string name="first_party_cookies_preference">Enable first-party cookies by default</string>
@@ -79,11 +79,44 @@
         Devices with versions of Android older than Lollipop (version 5.0) will also enable third-party cookies with this setting.</string>
     <string name="third_party_cookies_preference">Enable third-party cookies by default</string>
     <string name="third_party_cookies_summary">Third-party cookies allow parts of websites that aren\'t the main website, like advertisements, to store information on your device.
-        This setting requires Android Lollipop (version 5.0) or higher.  It has no effect if first-party cookies are disabled.</string>
+        This setting requires Android Lollipop (version 5.0) or higher.  This setting has no effect if first-party cookies are disabled.</string>
     <string name="dom_storage_preference">Enable DOM storage by default</string>
     <string name="dom_storage_preference_summary">Document Object Management storage, also called web storage, is an enhanced form of cookies
         that allows websites to store larger and more complex types of information, like pictures, on your device.</string>
-    <string name="general_settings">General Settings</string>
+    <string name="search">Search</string>
+    <string name="javascript_disabled_search">JavaScript-disabled search</string>
+    <string-array name="javascript_disabled_search_entries">
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Yahoo</item>
+        <item>Custom</item>
+    </string-array>
+    <string-array name="javascript_disabled_search_entry_values">
+        <item>https://duckduckgo.com/html/?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://search.yahoo.com/mobile/s?nojs=1&amp;p=</item>
+        <item>Custom URL</item>
+    </string-array>
+    <string name="javascript_disabled_search_custom_url">JavaScript-disabled search custom URL</string>
+    <string name="javascript_enabled_search">JavaScript-enabled search</string>
+    <string-array name="javascript_enabled_search_entries">
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Yahoo</item>
+        <item>Custom</item>
+    </string-array>
+    <string-array name="javascript_enabled_search_entry_values">
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://search.yahoo.com/mobile/s?p=</item>
+        <item>Custom URL</item>
+    </string-array>
+    <string name="javascript_enabled_search_custom_url">JavaScript-enabled search custom URL</string>
+    <string name="general">General</string>
     <string name="homepage_preference">Homepage</string>
     <string name="swipe_to_refresh_enabled">Swipe to refresh</string>
     <string name="swipe_to_refresh_enabled_summary">Some websites don\'t work well if swipe to refresh is enabled.</string>

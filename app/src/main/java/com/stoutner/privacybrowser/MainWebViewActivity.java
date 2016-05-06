@@ -82,6 +82,14 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     public static boolean thirdPartyCookiesEnabled;
     // domStorageEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
     public static boolean domStorageEnabled;
+    // javaScriptDisabledSearchURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
+    public static String javaScriptDisabledSearchURL;
+    // javaScriptDisabledSearchCustomURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
+    public static String javaScriptDisabledSearchCustomURL;
+    // javaScriptEnabledSearchURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
+    public static String javaScriptEnabledSearchURL;
+    // javaScriptEnabledSearchCustomURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
+    public static String javaScriptEnabledSearchCustomURL;
     // homepage is public static so it can be accessed from  SettingsFragment.  It is also used in onCreate() and onOptionsItemSelected().
     public static String homepage;
     // swipeToRefresh is public static so it can be accessed from SettingsFragment.  It is also used in onCreate().
@@ -314,28 +322,34 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         // Get the shared preference values.
         SharedPreferences savedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Set JavaScript initial status.
+        // Set JavaScript initial status.  The default value is false.
         javaScriptEnabled = savedPreferences.getBoolean("javascript_enabled", false);
         mainWebView.getSettings().setJavaScriptEnabled(javaScriptEnabled);
 
         // Initialize cookieManager.
         cookieManager = CookieManager.getInstance();
 
-        // Set cookies initial status.
+        // Set cookies initial status.  The default value is false.
         firstPartyCookiesEnabled = savedPreferences.getBoolean("first_party_cookies_enabled", false);
         cookieManager.setAcceptCookie(firstPartyCookiesEnabled);
 
-        // Set third-party cookies initial status if API >= 21.
+        // Set third-party cookies initial status if API >= 21.  The default value is false.
         if (Build.VERSION.SDK_INT >= 21) {
             thirdPartyCookiesEnabled = savedPreferences.getBoolean("third_party_cookies_enabled", false);
             cookieManager.setAcceptThirdPartyCookies(mainWebView, thirdPartyCookiesEnabled);
         }
 
-        // Set DOM storage initial status.
+        // Set DOM storage initial status.  The default value is false.
         domStorageEnabled = savedPreferences.getBoolean("dom_storage_enabled", false);
         mainWebView.getSettings().setDomStorageEnabled(domStorageEnabled);
 
-        // Set homepage initial status.
+        // Set the initial status for the search URLs.
+        javaScriptDisabledSearchURL = savedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=");
+        javaScriptDisabledSearchCustomURL = savedPreferences.getString("javascript_disabled_search_custom_url", "");
+        javaScriptEnabledSearchURL = savedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=");
+        javaScriptEnabledSearchCustomURL = savedPreferences.getString("javascript_enabled_search_custom_url", "");
+
+        // Set homepage initial status.  The default value is "https://www.duckduckgo.com".
         homepage = savedPreferences.getString("homepage", "https://www.duckduckgo.com");
 
         // Set swipe to refresh initial status.  The default is true.
@@ -781,9 +795,17 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
             // Use the correct search URL based on javaScriptEnabled.
             if (javaScriptEnabled) {
-                formattedUrlString = "https://duckduckgo.com/?q=" + encodedUrlString;
-            } else {
-                formattedUrlString = "https://duckduckgo.com/html/?q=" + encodedUrlString;
+                if (javaScriptEnabledSearchURL.equals("Custom URL")) {
+                    formattedUrlString = javaScriptEnabledSearchCustomURL + encodedUrlString;
+                } else {
+                    formattedUrlString = javaScriptEnabledSearchURL + encodedUrlString;
+                }
+            } else { // JavaScript is disabled.
+                if (javaScriptDisabledSearchURL.equals("Custom URL")) {
+                    formattedUrlString = javaScriptDisabledSearchCustomURL + encodedUrlString;
+                } else {
+                    formattedUrlString = javaScriptDisabledSearchURL + encodedUrlString;
+                }
             }
         }
 
