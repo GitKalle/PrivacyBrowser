@@ -62,6 +62,7 @@
     <string name="clear_dom_storage">Clear DOM Storage</string>
     <string name="share">Share</string>
     <string name="add_to_home_screen">Add to Home Screen</string>
+    <string name="refresh">Refresh</string>
 
     <!-- Create Home Screen Shortcut Alert Dialog. -->
     <string name="shortcut_name">Shortcut name</string>
@@ -84,6 +85,8 @@
         that allows websites to store larger and more complex types of information, like pictures, on your device.</string>
     <string name="general_settings">General Settings</string>
     <string name="homepage_preference">Homepage</string>
+    <string name="swipe_to_refresh_enabled">Swipe to refresh</string>
+    <string name="swipe_to_refresh_enabled_summary">Some websites don\'t work well if swipe to refresh is enabled.</string>
 
     <!-- About Dialog. -->
     <string name="about_privacy_browser">About Privacy Browser</string>

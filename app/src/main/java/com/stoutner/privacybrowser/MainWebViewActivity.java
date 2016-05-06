@@ -84,6 +84,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     public static boolean domStorageEnabled;
     // homepage is public static so it can be accessed from  SettingsFragment.  It is also used in onCreate() and onOptionsItemSelected().
     public static String homepage;
+    // swipeToRefresh is public static so it can be accessed from SettingsFragment.  It is also used in onCreate().
+    public static SwipeRefreshLayout swipeToRefresh;
+    // swipeToRefreshEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate().
+    public static boolean swipeToRefreshEnabled;
 
     // drawerToggle is used in onCreate(), onPostCreate(), onConfigurationChanged(), onNewIntent(), and onNavigationItemSelected().
     private ActionBarDrawerToggle drawerToggle;
@@ -115,7 +119,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         final View adView = findViewById(R.id.adView);
 
         // Implement swipe to refresh
-        final SwipeRefreshLayout swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeToRefresh.setColorSchemeResources(R.color.blue);
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -303,6 +307,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         // Hide zoom controls.
         mainWebView.getSettings().setDisplayZoomControls(false);
 
+
         // Initialize the default preference values the first time the program is run.
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -332,6 +337,11 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
         // Set homepage initial status.
         homepage = savedPreferences.getString("homepage", "https://www.duckduckgo.com");
+
+        // Set swipe to refresh initial status.  The default is true.
+        swipeToRefreshEnabled = savedPreferences.getBoolean("swipe_to_refresh_enabled", true);
+        swipeToRefresh.setEnabled(swipeToRefreshEnabled);
+
 
         // Get the intent information that started the app.
         final Intent intent = getIntent();
@@ -591,6 +601,9 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
                 //Everything else will be handled by CreateHomeScreenShortcut and the associated listeners below.
                 return true;
+
+            case R.id.refresh:
+                mainWebView.reload();
 
             default:
                 return super.onOptionsItemSelected(menuItem);

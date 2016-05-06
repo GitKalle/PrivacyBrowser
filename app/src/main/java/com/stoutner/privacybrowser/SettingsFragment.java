@@ -143,6 +143,13 @@ public class SettingsFragment extends PreferenceFragment {
                         MainWebViewActivity.homepage = sharedPreferences.getString("homepage", "https://www.duckduckgo.com");
                         return;
 
+                    case "swipe_to_refresh_enabled":
+                        // Set swipeToRefreshEnabled to the new state.  The default is true.
+                        MainWebViewActivity.swipeToRefreshEnabled = sharedPreferences.getBoolean("swipe_to_refresh_enabled", true);
+
+                        // Update swipeRefreshLayout to match the new state.
+                        MainWebViewActivity.swipeToRefresh.setEnabled(MainWebViewActivity.swipeToRefreshEnabled);
+
                     // If no match, do nothing.
                     default:
                 }
@@ -153,6 +160,8 @@ public class SettingsFragment extends PreferenceFragment {
         savedPreferences.registerOnSharedPreferenceChangeListener(preferencesListener);
     }
 
+    // It is necessary to reregister the listener on every resume or it will randomly stop working for the user because apps can be paused and resumed at any time,
+    // even when they are in the foreground.
     @Override
     public void onResume() {
         super.onResume();

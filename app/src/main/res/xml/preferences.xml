@@ -58,5 +58,11 @@
             android:defaultValue="https://www.duckduckgo.com"
             android:inputType="textUri"
             android:singleLine="true" />
+
+        <SwitchPreference
+            android:key="swipe_to_refresh_enabled"
+            android:title="@string/swipe_to_refresh_enabled"
+            android:summary="@string/swipe_to_refresh_enabled_summary"
+            android:defaultValue="true" />
     </PreferenceCategory>
 </PreferenceScreen>

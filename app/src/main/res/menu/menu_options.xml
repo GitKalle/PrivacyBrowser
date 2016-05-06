@@ -74,4 +74,10 @@
         android:title="@string/add_to_home_screen"
         android:orderInCategory="80"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/refresh"
+        android:title="@string/refresh"
+        android:orderInCategory="90"
+        app:showAsAction="never" />
 </menu>
