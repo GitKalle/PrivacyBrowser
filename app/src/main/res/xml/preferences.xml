@@ -52,7 +52,7 @@
             android:title="@string/user_agent"
             android:entries="@array/user_agent_entries"
             android:entryValues="@array/user_agent_entry_values"
-            android:defaultValue="" />
+            android:defaultValue="Default user agent" />
 
         // Android doesn't let EditTextPreferences have more than one line, but I include singleLine="false" in case they ever wisen up.
         <EditTextPreference
