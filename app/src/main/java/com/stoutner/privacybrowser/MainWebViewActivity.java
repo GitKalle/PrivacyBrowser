@@ -343,6 +343,24 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         domStorageEnabled = savedPreferences.getBoolean("dom_storage_enabled", false);
         mainWebView.getSettings().setDomStorageEnabled(domStorageEnabled);
 
+        // Set the user agent initial status.
+        String userAgentString = savedPreferences.getString("user_agent", "Default user agent");
+        switch (userAgentString) {
+            case "Default user agent":
+                // Do nothing.
+                break;
+
+            case "Custom user agent":
+                // Set the custom user agent on mainWebView,  The default is "PrivacyBrowser/1.0".
+                mainWebView.getSettings().setUserAgentString(savedPreferences.getString("custom_user_agent", "PrivacyBrowser/1.0"));
+                break;
+
+            default:
+                // Set the selected user agent on mainWebView.  The default is "PrivacyBrowser/1.0".
+                mainWebView.getSettings().setUserAgentString(savedPreferences.getString("user_agent", "PrivacyBrowser/1.0"));
+                break;
+        }
+
         // Set the initial status for the search URLs.
         javaScriptDisabledSearchURL = savedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=");
         javaScriptDisabledSearchCustomURL = savedPreferences.getString("javascript_disabled_search_custom_url", "");
@@ -618,8 +636,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
             case R.id.refresh:
                 mainWebView.reload();
+                return true;
 
             default:
+                // Don't consume the event.
                 return super.onOptionsItemSelected(menuItem);
         }
     }

@@ -46,6 +46,21 @@
             android:title="@string/dom_storage_preference"
             android:summary="@string/dom_storage_preference_summary"
             android:defaultValue="false" />
+
+        <ListPreference
+            android:key="user_agent"
+            android:title="@string/user_agent"
+            android:entries="@array/user_agent_entries"
+            android:entryValues="@array/user_agent_entry_values"
+            android:defaultValue="" />
+
+        // Android doesn't let EditTextPreferences have more than one line, but I include singleLine="false" in case they ever wisen up.
+        <EditTextPreference
+            android:key="custom_user_agent"
+            android:title="@string/custom_user_agent"
+            android:defaultValue="PrivacyBrowser/1.0"
+            android:inputType="textUri"
+            android:singleLine="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory

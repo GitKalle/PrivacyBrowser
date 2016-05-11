@@ -38,7 +38,7 @@
         android:allowBackup="false"
         android:fullBackupContent="false" >
 
-        <!-- android:configChanges="orientation|screenSize" makes the app not reload when the orientation changes, which preserves scroll location in the WebView. -->
+        <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes, which preserves scroll location in the WebView. -->
         <!-- android:launchMode="singleTask" makes the app launch in a new task instead of inside the task of the program that sends it an intent.
             It also makes it reuse an existing Privacy Browser activity if available instead of launching a new one. -->
         <!-- android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
@@ -66,10 +66,12 @@
         </activity>
 
         <!-- android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
+        <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.  -->
         <activity
             android:name=".SettingsActivity"
             android:label="@string/privacy_browser_settings"
             android:parentActivityName=".MainWebViewActivity"
+            android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >
 
             <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->

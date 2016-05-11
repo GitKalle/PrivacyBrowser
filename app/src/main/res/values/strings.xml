@@ -83,6 +83,36 @@
     <string name="dom_storage_preference">Enable DOM storage by default</string>
     <string name="dom_storage_preference_summary">Document Object Management storage, also called web storage, is an enhanced form of cookies
         that allows websites to store larger and more complex types of information, like pictures, on your device.</string>
+    <string name="user_agent">User agent</string>
+    <string-array name="user_agent_entries">
+        <item>WebView Default</item>
+        <item>Privacy Browser 1.0</item>
+        <item>Firefox 46 on Android 6.0.1</item>
+        <item>Chrome 50 on Android 6.0.1</item>
+        <item>Firefox 46 on Linux</item>
+        <item>Chromium 50 on Linux</item>
+        <item>Konqueror 4.14 on Linux</item>
+        <item>Firefox 46 on Windows 10</item>
+        <item>Chrome 50 on Windows 10</item>
+        <item>Internet Explorer 11 on Windows 10</item>
+        <item>Edge 13 on Windows 10</item>
+        <item>Custom</item>
+    </string-array>
+    <string-array name="user_agent_entry_values">
+        <item>Default user agent</item>
+        <item>PrivacyBrowser/1.0</item>
+        <item>Mozilla/5.0 (Android 6.0.1; Mobile; rv:46.0) Gecko/46.0 Firefox/46.0</item>
+        <item>Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6P Build/MHC19Q) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.89 Mobile Safari/537.36</item>
+        <item>Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0</item>
+        <item>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.94 Safari/537.36</item>
+        <item>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.21 (KHTML, like Gecko) konqueror/4.14.14 Safari/537.21</item>
+        <item>Mozilla/5.0 (Windows NT 10.0; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0</item>
+        <item>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36</item>
+        <item>Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko</item>
+        <item>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586</item>
+        <item>Custom user agent</item>
+    </string-array>
+    <string name="custom_user_agent">Custom user agent</string>
     <string name="search">Search</string>
     <string name="javascript_disabled_search">JavaScript-disabled search</string>
     <string-array name="javascript_disabled_search_entries">
