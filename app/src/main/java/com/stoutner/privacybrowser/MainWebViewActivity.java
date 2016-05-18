@@ -84,12 +84,8 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     public static boolean domStorageEnabled;
     // javaScriptDisabledSearchURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
     public static String javaScriptDisabledSearchURL;
-    // javaScriptDisabledSearchCustomURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
-    public static String javaScriptDisabledSearchCustomURL;
     // javaScriptEnabledSearchURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
     public static String javaScriptEnabledSearchURL;
-    // javaScriptEnabledSearchCustomURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
-    public static String javaScriptEnabledSearchCustomURL;
     // homepage is public static so it can be accessed from  SettingsFragment.  It is also used in onCreate() and onOptionsItemSelected().
     public static String homepage;
     // swipeToRefresh is public static so it can be accessed from SettingsFragment.  It is also used in onCreate().
@@ -361,11 +357,24 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 break;
         }
 
-        // Set the initial status for the search URLs.
-        javaScriptDisabledSearchURL = savedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=");
-        javaScriptDisabledSearchCustomURL = savedPreferences.getString("javascript_disabled_search_custom_url", "");
-        javaScriptEnabledSearchURL = savedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=");
-        javaScriptEnabledSearchCustomURL = savedPreferences.getString("javascript_enabled_search_custom_url", "");
+        // Set the initial string for JavaScript disabled search.
+        if (savedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=").equals("Custom URL")) {
+            // Get the custom URL string.  The default is "".
+            javaScriptDisabledSearchURL = savedPreferences.getString("javascript_disabled_search_custom_url", "");
+        } else {
+            // Use the string from javascript_disabled_search.
+            javaScriptDisabledSearchURL = savedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=");
+        }
+
+        // Set the initial string for JavaScript enabled search.
+        if (savedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=").equals("Custom URL")) {
+            // Get the custom URL string.  The default is "".
+            javaScriptEnabledSearchURL = savedPreferences.getString("javascript_enabled_search_custom_url", "");
+        } else {
+            // Use the string from javascript_enabled_search.
+            javaScriptEnabledSearchURL = savedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=");
+        }
+
 
         // Set homepage initial status.  The default value is "https://www.duckduckgo.com".
         homepage = savedPreferences.getString("homepage", "https://www.duckduckgo.com");
@@ -815,17 +824,9 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
             // Use the correct search URL based on javaScriptEnabled.
             if (javaScriptEnabled) {
-                if (javaScriptEnabledSearchURL.equals("Custom URL")) {
-                    formattedUrlString = javaScriptEnabledSearchCustomURL + encodedUrlString;
-                } else {
-                    formattedUrlString = javaScriptEnabledSearchURL + encodedUrlString;
-                }
+                formattedUrlString = javaScriptEnabledSearchURL + encodedUrlString;
             } else { // JavaScript is disabled.
-                if (javaScriptDisabledSearchURL.equals("Custom URL")) {
-                    formattedUrlString = javaScriptDisabledSearchCustomURL + encodedUrlString;
-                } else {
-                    formattedUrlString = javaScriptDisabledSearchURL + encodedUrlString;
-                }
+                formattedUrlString = javaScriptDisabledSearchURL + encodedUrlString;
             }
         }
 
