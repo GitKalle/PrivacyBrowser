@@ -99,6 +99,8 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     private DrawerLayout drawerLayout;
     // formattedUrlString is used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
     private String formattedUrlString;
+    // privacyIcon is used in onCreateOptionsMenu() and updatePrivacyIcon().
+    private MenuItem privacyIcon;
 
     // urlTextBox is used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
     private EditText urlTextBox;
@@ -436,8 +438,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         // Set mainMenu so it can be used by onOptionsItemSelected.
         mainMenu = menu;
 
+        // Initialize privacyIcon
+        privacyIcon = menu.findItem(R.id.toggleJavaScript);
+
         // Get MenuItems for checkable menu items.
-        MenuItem toggleJavaScript = menu.findItem(R.id.toggleJavaScript);
         MenuItem toggleFirstPartyCookies = menu.findItem(R.id.toggleFirstPartyCookies);
         MenuItem toggleThirdPartyCookies = menu.findItem(R.id.toggleThirdPartyCookies);
         MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
@@ -445,16 +449,8 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         MenuItem toggleSaveFormData = menu.findItem(R.id.toggleSaveFormData);
         */
 
-        // Set the initial icon for toggleJavaScript
-        if (javaScriptEnabled) {
-            toggleJavaScript.setIcon(R.drawable.javascript_enabled);
-        } else {
-            if (domStorageEnabled || firstPartyCookiesEnabled) {
-                toggleJavaScript.setIcon(R.drawable.warning);
-            } else {
-                toggleJavaScript.setIcon(R.drawable.privacy_mode);
-            }
-        }
+        // Set the initial status of the privacy icon.
+        updatePrivacyIcon();
 
         // Set the initial status of the menu item checkboxes.
         toggleFirstPartyCookies.setChecked(firstPartyCookiesEnabled);
@@ -502,114 +498,78 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         // Set the commands that relate to the menu entries.
         switch (menuItemId) {
             case R.id.toggleJavaScript:
-                if (javaScriptEnabled) {
-                    javaScriptEnabled = false;
-                    mainWebView.getSettings().setJavaScriptEnabled(false);
-                    mainWebView.reload();
+                // Switch the status of javaScriptEnabled.
+                javaScriptEnabled = !javaScriptEnabled;
 
-                    // Update the toggleJavaScript icon and display a snackbar.
+                // Apply the new JavaScript status.
+                mainWebView.getSettings().setJavaScriptEnabled(javaScriptEnabled);
+
+                // Update the privacy icon.
+                updatePrivacyIcon();
+
+                // Display a Snackbar.
+                if (javaScriptEnabled) {
+                    Snackbar.make(findViewById(R.id.mainWebView), R.string.javascript_enabled, Snackbar.LENGTH_SHORT).show();
+                } else {
                     if (domStorageEnabled || firstPartyCookiesEnabled) {
-                        menuItem.setIcon(R.drawable.warning);
                         Snackbar.make(findViewById(R.id.mainWebView), R.string.javascript_disabled, Snackbar.LENGTH_SHORT).show();
                     } else {
-                        menuItem.setIcon(R.drawable.privacy_mode);
                         Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
                     }
-                } else {
-                    javaScriptEnabled = true;
-                    menuItem.setIcon(R.drawable.javascript_enabled);
-                    mainWebView.getSettings().setJavaScriptEnabled(true);
-                    mainWebView.reload();
-                    Snackbar.make(findViewById(R.id.mainWebView), R.string.javascript_enabled, Snackbar.LENGTH_SHORT).show();
                 }
+
+                // Reload the WebView.
+                mainWebView.reload();
                 return true;
 
             case R.id.toggleFirstPartyCookies:
-                if (firstPartyCookiesEnabled) {
-                    firstPartyCookiesEnabled = false;
-                    menuItem.setChecked(false);
-                    cookieManager.setAcceptCookie(false);
-                    mainWebView.reload();
+                // Switch the status of firstPartyCookiesEnabled.
+                firstPartyCookiesEnabled = !firstPartyCookiesEnabled;
 
-                    // Update the toggleJavaScript icon if appropriate and display a snackbar.
-                    if (!javaScriptEnabled) {
-                        if (domStorageEnabled) {
-                            toggleJavaScript.setIcon(R.drawable.warning);
-                            Snackbar.make(findViewById(R.id.mainWebView), R.string.first_party_cookies_disabled, Snackbar.LENGTH_SHORT).show();
-                        } else {
-                            toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                            Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Snackbar.make(findViewById(R.id.mainWebView), R.string.first_party_cookies_disabled, Snackbar.LENGTH_SHORT).show();
-                    }
-                } else {
-                    firstPartyCookiesEnabled = true;
-                    menuItem.setChecked(true);
-                    cookieManager.setAcceptCookie(true);
-                    mainWebView.reload();
+                // Update the menu checkbox.
+                menuItem.setChecked(firstPartyCookiesEnabled);
 
-                    // Update the toggleJavaScript icon if appropriate.
-                    if (!javaScriptEnabled) {
-                        toggleJavaScript.setIcon(R.drawable.warning);
-                    } // Else do nothing because JavaScript is enabled.
+                // Apply the new cookie status.
+                cookieManager.setAcceptCookie(firstPartyCookiesEnabled);
 
-                    Snackbar.make(findViewById(R.id.mainWebView), R.string.first_party_cookies_enabled, Snackbar.LENGTH_SHORT).show();
-                }
+                // Update the privacy icon.
+                updatePrivacyIcon();
+
+                // Reload the WebView.
+                mainWebView.reload();
                 return true;
 
             case R.id.toggleThirdPartyCookies:
                 if (Build.VERSION.SDK_INT >= 21) {
-                    if (thirdPartyCookiesEnabled) {
-                        thirdPartyCookiesEnabled = false;
-                        menuItem.setChecked(false);
-                        cookieManager.setAcceptThirdPartyCookies(mainWebView, false);
-                        mainWebView.reload();
+                    // Switch the status of thirdPartyCookiesEnabled.
+                    thirdPartyCookiesEnabled = !thirdPartyCookiesEnabled;
 
-                        Snackbar.make(findViewById(R.id.mainWebView), R.string.third_party_cookies_disabled, Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        thirdPartyCookiesEnabled = true;
-                        menuItem.setChecked(true);
-                        cookieManager.setAcceptThirdPartyCookies(mainWebView, true);
-                        mainWebView.reload();
+                    // Update the menu checkbox.
+                    menuItem.setChecked(thirdPartyCookiesEnabled);
 
-                        Snackbar.make(findViewById(R.id.mainWebView), R.string.third_party_cookies_enabled, Snackbar.LENGTH_SHORT).show();
-                    }
+                    // Apply the new cookie status.
+                    cookieManager.setAcceptThirdPartyCookies(mainWebView, thirdPartyCookiesEnabled);
+
+                    // Reload the WebView.
+                    mainWebView.reload();
                 } // Else do nothing because SDK < 21.
                 return true;
 
             case R.id.toggleDomStorage:
-                if (domStorageEnabled) {
-                    domStorageEnabled = false;
-                    menuItem.setChecked(false);
-                    mainWebView.getSettings().setDomStorageEnabled(false);
-                    mainWebView.reload();
+                // Switch the status of domStorageEnabled.
+                domStorageEnabled = !domStorageEnabled;
 
-                    // Update the toggleJavaScript icon if appropriate and display a snackbar.
-                    if (!javaScriptEnabled) {
-                        if (firstPartyCookiesEnabled) {
-                            toggleJavaScript.setIcon(R.drawable.warning);
-                            Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_disabled, Snackbar.LENGTH_SHORT).show();
-                        } else {
-                            toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                            Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
-                        }
-                    }else {
-                        Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_disabled, Snackbar.LENGTH_SHORT).show();
-                    }
-                } else {
-                    domStorageEnabled = true;
-                    menuItem.setChecked(true);
-                    mainWebView.getSettings().setDomStorageEnabled(true);
-                    mainWebView.reload();
+                // Update the menu checkbox.
+                menuItem.setChecked(domStorageEnabled);
 
-                    // Update the toggleJavaScript icon if appropriate.
-                    if (!javaScriptEnabled) {
-                        toggleJavaScript.setIcon(R.drawable.warning);
-                    } // Else Do nothing because JavaScript is enabled.
+                // Apply the new DOM Storage status.
+                mainWebView.getSettings().setDomStorageEnabled(domStorageEnabled);
 
-                    Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_enabled, Snackbar.LENGTH_SHORT).show();
-                }
+                // Update the privacy icon.
+                updatePrivacyIcon();
+
+                // Reload the WebView.
+                mainWebView.reload();
                 return true;
 
             case R.id.clearCookies:
@@ -835,5 +795,17 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         // Hides the keyboard so we can see the webpage.
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(mainWebView.getWindowToken(), 0);
+    }
+
+    private void updatePrivacyIcon() {
+        if (javaScriptEnabled) {
+            privacyIcon.setIcon(R.drawable.javascript_enabled);
+        } else {
+            if (domStorageEnabled || firstPartyCookiesEnabled) {
+                privacyIcon.setIcon(R.drawable.warning);
+            } else {
+                privacyIcon.setIcon(R.drawable.privacy_mode);
+            }
+        }
     }
 }

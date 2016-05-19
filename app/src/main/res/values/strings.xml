@@ -28,12 +28,6 @@
     <string name="privacy_mode">Privacy Mode</string>
     <string name="javascript_enabled">JavaScript enabled</string>
     <string name="javascript_disabled">JavaScript disabled</string>
-    <string name="dom_storage_enabled">DOM Storage enabled</string>
-    <string name="dom_storage_disabled">DOM Storage disabled</string>
-    <string name="first_party_cookies_enabled">First-Party Cookies enabled</string>
-    <string name="first_party_cookies_disabled">First-Party Cookies disabled</string>
-    <string name="third_party_cookies_enabled">Third-Party Cookies enabled</string>
-    <string name="third_party_cookies_disabled">Third-Party Cookies disabled</string>
     <string name="cookies_deleted">Cookies deleted</string>
     <string name="dom_storage_deleted">DOM Storage deleted</string>
     <string name="open_navigation">Open Navigation Drawer</string>
