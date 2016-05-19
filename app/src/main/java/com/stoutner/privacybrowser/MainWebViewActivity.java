@@ -702,13 +702,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        // Update the status of the drawerToggle icon.
-        drawerToggle.onConfigurationChanged(newConfig);
-
         // Reload the ad if this is the free flavor.
         BannerAd.reloadAfterRotate(adView, getApplicationContext(), getString(R.string.ad_id));
 
-        // Reinitialize the adView variable, as the View will have been removed and readded.
+        // Reinitialize the adView variable, as the View will have been removed and readded in the free flavor by BannerAd.reloadAfterRotate().
         adView = findViewById(R.id.adView);
     }
 
