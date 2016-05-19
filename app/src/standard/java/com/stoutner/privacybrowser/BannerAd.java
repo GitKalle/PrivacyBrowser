@@ -19,18 +19,31 @@
 
 package com.stoutner.privacybrowser;
 
+import android.content.Context;
 import android.view.View;
 
 class BannerAd {
     public static void requestAd(View view) {
-        // Do nothing because this is the standard version.
+        // Do nothing because this is the standard flavor.
+    }
+
+    public static void reloadAfterRotate(View view, Context applicationContext, String ad_id) {
+        // Do nothing because this is the standard flavor.
     }
 
     public static void hideAd(View view) {
-        // Do nothing because this is the standard version.
+        // Do nothing because this is the standard flavor.
     }
 
     public static void showAd(View view) {
-        // Do nothing because this is the standard version.
+        // Do nothing because this is the standard flavor.
+    }
+
+    public static void pauseAd(View view) {
+        // Do nothing because this is the standard flavor.
+    }
+
+    public static void resumeAd(View view) {
+        // Do nothing because this is the standard flavor.
     }
 }

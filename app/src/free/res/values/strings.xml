@@ -22,6 +22,6 @@
     <!-- Activities. -->
     <string name="privacy_browser">Privacy Browser Free</string>
 
-    <!-- Ad control strings. -->
+    <!-- Ad control. -->
     <string name="ad_id">ca-app-pub-5962503714887045/2738552414</string>
 </resources>

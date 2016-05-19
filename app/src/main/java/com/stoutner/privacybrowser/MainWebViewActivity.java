@@ -101,9 +101,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     private String formattedUrlString;
     // privacyIcon is used in onCreateOptionsMenu() and updatePrivacyIcon().
     private MenuItem privacyIcon;
-
     // urlTextBox is used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
     private EditText urlTextBox;
+    // adView is used in onCreate() and onConfigurationChanged().
+    private View adView;
 
     @Override
     // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.  The whole premise of Privacy Browser is built around an understanding of these dangers.
@@ -120,9 +121,6 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
         final ActionBar appBar = getSupportActionBar();
-
-        // Setup AdView for the free flavor.
-        final View adView = findViewById(R.id.adView);
 
         // Implement swipe to refresh
         swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -403,9 +401,11 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         // Load the initial website.
         mainWebView.loadUrl(formattedUrlString);
 
-        // Load the ad if this is the free flavor.
+        // Initialize AdView for the free flavor and request an ad.  If this is not the free flavor BannerAd.requestAd() does nothing.
+        adView = findViewById(R.id.adView);
         BannerAd.requestAd(adView);
     }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -704,6 +704,12 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
         // Update the status of the drawerToggle icon.
         drawerToggle.onConfigurationChanged(newConfig);
+
+        // Reload the ad if this is the free flavor.
+        BannerAd.reloadAfterRotate(adView, getApplicationContext(), getString(R.string.ad_id));
+
+        // Reinitialize the adView variable, as the View will have been removed and readded.
+        adView = findViewById(R.id.adView);
     }
 
     @Override
@@ -747,6 +753,22 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 super.onBackPressed();
             }
         }
+    }
+
+    @Override
+    public void onPause() {
+        // We need to pause the adView or it will continue to consume resources in the background on the free flavor.
+        BannerAd.pauseAd(adView);
+
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // We need to resume the adView for the free flavor.
+        BannerAd.resumeAd(adView);
     }
 
     private void loadUrlFromTextBox() throws UnsupportedEncodingException {

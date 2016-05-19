@@ -319,14 +319,14 @@ public class SettingsFragment extends PreferenceFragment {
     // It is necessary to re-register the listener on every resume or it will randomly stop working because apps can be paused and resumed at any time
     // even while running in the foreground.
     @Override
-    public void onResume() {
-        super.onResume();
-        savedPreferences.registerOnSharedPreferenceChangeListener(preferencesListener);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         savedPreferences.unregisterOnSharedPreferenceChangeListener(preferencesListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        savedPreferences.registerOnSharedPreferenceChangeListener(preferencesListener);
     }
 }
