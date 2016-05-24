@@ -25,8 +25,8 @@
     android:layout_height="wrap_content" >
 
     <!-- android:imeOptions="actionGo" sets the keyboard to have a "go" key instead of a "new line" key. -->
-    <!-- android:inputType="textUri" disables spell check in the EditText and changes the "go" key from a check mark to an arrow. -->
-    <!-- android:imeOptions="actionGo" sets the keyboard to have a "go" key instead of a "new line" key. -->
+    <!-- android:imeOptions=flagNoExtractUi" doesn't cover up the entire UI when typing in landscape orientation. -->
+    <!-- android:inputType="textUri" disables spell check in the EditText. -->
     <EditText
         android:id="@+id/shortcutNameEditText"
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
-        android:imeOptions="actionGo"
+        android:imeOptions="actionGo|flagNoExtractUi"
         android:inputType="textUri" />
 
 </RelativeLayout>

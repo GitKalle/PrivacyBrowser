@@ -42,7 +42,8 @@
             android:contentDescription="@string/favorite_icon"/>
 
         <!-- android:imeOptions="actionGo" sets the keyboard to have a "go" key instead of a "new line" key. -->
-        <!-- android:inputType="textUri" disables spell check in the EditText and changes the "go" key from a check mark to an arrow. -->
+        <!-- android:imeOptions=flagNoExtractUi" doesn't cover up the entire UI when typing in landscape orientation. -->
+        <!-- android:inputType="textUri" disables spell check in the EditText. -->
         <!-- android:layout_toEndOf requires API >= 17, but is compatible with right-to-left layouts.  android:layout_toRightOf is required for previous APIs. -->
         <EditText
             android:id="@+id/urlTextBox"
@@ -50,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/favoriteIcon"
             android:layout_toRightOf="@id/favoriteIcon"
-            android:imeOptions="actionGo"
+            android:imeOptions="actionGo|flagNoExtractUi"
             android:inputType="textUri" />
     </RelativeLayout>
 

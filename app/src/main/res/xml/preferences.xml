@@ -54,13 +54,14 @@
             android:entryValues="@array/user_agent_entry_values"
             android:defaultValue="Default user agent" />
 
-        // Android doesn't let EditTextPreferences have more than one line, but singleLine="false" is included in case they ever wisen up.
+        <!-- android:inputType="textVisiblePassword" sets the keyboard to have a dedicated number row. -->
+        <!-- android:imeOptions="flagNoExtractUi" is not set because with the dedicated number row there often isn't room to see the EditText in landscape orientation. -->
         <EditTextPreference
             android:key="custom_user_agent"
             android:title="@string/custom_user_agent"
             android:defaultValue="PrivacyBrowser/1.0"
-            android:inputType="textUri"
-            android:singleLine="false"/>
+            android:inputType="textVisiblePassword|textMultiLine" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -74,6 +75,7 @@
             android:entryValues="@array/javascript_disabled_search_entry_values"
             android:defaultValue="https://duckduckgo.com/html/?q=" />
 
+        <!-- android:imeOptions="flagNoExtractUi" is not set because with the the length of the title of the dialog box there often isn't enough space to see the EditText in landscape orientation. -->
         <EditTextPreference
             android:key="javascript_disabled_search_custom_url"
             android:title="@string/javascript_disabled_search_custom_url"
@@ -88,6 +90,7 @@
             android:entryValues="@array/javascript_enabled_search_entry_values"
             android:defaultValue="https://duckduckgo.com/?q=" />
 
+        <!-- android:imeOptions="flagNoExtractUi" is not set because with the the length of the title of the dialog box there often isn't enough space to see the EditText in landscape orientation. -->
         <EditTextPreference
             android:key="javascript_enabled_search_custom_url"
             android:title="@string/javascript_enabled_search_custom_url"
@@ -100,6 +103,7 @@
         android:key="general"
         android:title="@string/general" >
 
+        <!-- android:imeOptions="flagNoExtractUi" is not set because in special character mode there often isn't enough space to see the EditText in landscape orientation. -->
         <EditTextPreference
             android:key="homepage"
             android:title="@string/homepage_preference"
