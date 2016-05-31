@@ -24,19 +24,19 @@
         android:id="@+id/home"
         android:title="@string/home"
         android:icon="@drawable/home"
-        android:orderInCategory="11" />
+        android:orderInCategory="10" />
 
     <item
         android:id="@+id/back"
         android:title="@string/back"
         android:icon="@drawable/back"
-        android:orderInCategory="12" />
+        android:orderInCategory="20" />
 
     <item
         android:id="@+id/forward"
         android:title="@string/forward"
         android:icon="@drawable/forward"
-        android:orderInCategory="13" />
+        android:orderInCategory="30" />
 
     <!-- If a group has an id, a line is drawn above it in the navigation view. -->
     <group
@@ -45,19 +45,25 @@
             android:id="@+id/downloads"
             android:title="@string/downloads"
             android:icon="@drawable/downloads"
-            android:orderInCategory="20" />
+            android:orderInCategory="40" />
+
+        <item
+            android:id="@+id/guide"
+            android:title="@string/guide"
+            android:icon="@drawable/guide"
+            android:orderInCategory="50" />
 
         <item
             android:id="@+id/settings"
             android:title="@string/settings"
             android:icon="@drawable/settings"
-            android:orderInCategory="30" />
+            android:orderInCategory="60" />
 
         <item
             android:id="@+id/about"
             android:title="@string/about"
             android:icon="@drawable/about"
-            android:orderInCategory="40" />
+            android:orderInCategory="70" />
     </group>
 
     <!-- If a group has an id, a line is drawn above it in the navigation view. -->
@@ -67,6 +73,6 @@
             android:id="@+id/clearAndExit"
             android:title="@string/clear_and_exit"
             android:icon="@drawable/exit"
-            android:orderInCategory="50" />
+            android:orderInCategory="80" />
     </group>
 </menu>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright 2016 Soren Stoutner <soren@stoutner.com>.
+
+  This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
+
+  Privacy Browser is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Privacy Browser is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<!-- The ScrollView allows the LinearLayout to scroll if it exceeds the height of the page. -->
+<ScrollView
+    android:id="@+id/about_version_scrollview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/about_version_linearlayout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- The RelativeLayout contains the header. -->
+        <RelativeLayout
+            android:id="@+id/about_version_relativelayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            xmlns:tools="http://schemas.android.com/tools">
+
+            <!--tools:ignore="ContentDescription" suppresses the lint warning about supplying a content description for the ImageView,
+              which isn't needed in this case because the ImageView because is only decorative. -->
+            <ImageView
+                android:id="@+id/about_version_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/privacy_browser"
+                android:paddingTop="10dp"
+                tools:ignore="ContentDescription" />
+
+            <!-- We need to include android:layout_toRightOf until API>=17. -->
+            <TextView
+                android:id="@+id/about_version_privacy_browser_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/privacy_browser"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:layout_toEndOf="@id/about_version_icon"
+                android:layout_toRightOf="@id/about_version_icon" />
+
+            <!-- We need to include android:layout_toRightOf until API>=17. -->
+            <TextView
+                android:id="@+id/about_version_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blue"
+                android:layout_below="@id/about_version_privacy_browser_textview"
+                android:layout_toEndOf="@id/about_version_icon"
+                android:layout_toRightOf="@id/about_version_icon" />
+        </RelativeLayout>
+
+        <!-- The purpose of this LinearLayout is to provide padding on the start of the TextViews to make them line up with about_version_icon.
+          We have to use android:paddingLeft in addition to android:paddingStart until API>=17.
+          Although we don't need them, we have to include android:paddingEnd and android:paddingRight to make lint happy. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="0dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp">
+
+            <!-- Hardware. -->
+            <TextView
+                android:id="@+id/about_version_hardware"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hardware"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/black" />
+
+            <!-- Brand. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_brand_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/brand"/>
+
+                <TextView
+                    android:id="@+id/about_version_brand_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Manufacturer. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_manufacturer_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manufacturer" />
+
+                <TextView
+                    android:id="@+id/about_version_manufacturer_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Model. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_model_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/model" />
+
+                <TextView
+                    android:id="@+id/about_version_model_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Device. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_device_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/device" />
+
+                <TextView
+                    android:id="@+id/about_version_device_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Bootloader. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_bootloader_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bootloader" />
+
+                <TextView
+                    android:id="@+id/about_version_bootloader_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Radio. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_radio_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio" />
+
+                <TextView
+                    android:id="@+id/about_version_radio_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Software. -->
+            <TextView
+                android:id="@+id/about_version_software"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/software"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:paddingTop="12dp" />
+
+            <!-- Android. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_android_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/android" />
+
+                <TextView
+                    android:id="@+id/about_version_android_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Build. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_build_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/build" />
+
+                <TextView
+                    android:id="@+id/about_version_build_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Security Patch. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_securitypatch_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/security_patch" />
+
+                <TextView
+                    android:id="@+id/about_version_securitypatch_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+                </LinearLayout>
+
+            <!-- WebKit. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_webkit_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/webkit" />
+
+                <TextView
+                    android:id="@+id/about_version_webkit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+
+            <!-- Chrome. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/about_version_chrome_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chrome" />
+
+                <TextView
+                    android:id="@+id/about_version_chrome_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

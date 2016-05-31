@@ -1,7 +1,21 @@
 <component name="ProjectDictionaryState">
   <dictionary name="soren">
     <words>
-      <w>wisen</w>
+      <w>androidversion</w>
+      <w>aren</w>
+      <w>buildapi</w>
+      <w>buildversion</w>
+      <w>chromeversion</w>
+      <w>khtml</w>
+      <w>konqueror</w>
+      <w>linearlayout</w>
+      <w>mozilla</w>
+      <w>nojs</w>
+      <w>relativelayout</w>
+      <w>securitypatch</w>
+      <w>snackbar</w>
+      <w>textview</w>
+      <w>webkitversion</w>
     </words>
   </dictionary>
 </component>

@@ -1,13 +1,14 @@
-<!--
-  forward.xml comes from the Android Material icon set, where it is called ic_arrow_forward.
+<!-- forward.xml comes from the Android Material icon set, where it is called ic_arrow_forward.
   It is released under the CC-BY license <https://creativecommons.org/licenses/by/4.0/>. -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:width="24dp"
+    android:viewportHeight="24.0"
+    android:viewportWidth="24.0" >
+
     <path
         android:fillColor="#FF000000"
-        android:pathData="M12,4l-1.41,1.41L16.17,11H4v2h12.17l-5.58,5.59L12,20l8,-8z"/>
+        android:pathData="M12,4l-1.41,1.41L16.17,11H4v2h12.17l-5.58,5.59L12,20l8,-8z" />
 </vector>

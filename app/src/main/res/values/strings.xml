@@ -43,6 +43,7 @@
     <string name="back">Back</string>
     <string name="forward">Forward</string>
     <string name="downloads">Downloads</string>
+    <string name="guide">Guide</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="clear_and_exit">Clear and Exit</string>
@@ -92,7 +93,7 @@
         <item>Edge 13 on Windows 10</item>
         <item>Custom</item>
     </string-array>
-    <string-array name="user_agent_entry_values">
+    <string-array name="user_agent_entry_values">  <!-- None of the items in this string-array should be translated. -->
         <item>Default user agent</item>  <!-- This item must not be translated into other languages because it is referenced in code.  It is never displayed on the screen. -->
         <item>PrivacyBrowser/1.0</item>
         <item>Mozilla/5.0 (Android 6.0.1; Mobile; rv:46.0) Gecko/46.0 Firefox/46.0</item>
@@ -116,7 +117,7 @@
         <item>Yahoo</item>
         <item>Custom</item>
     </string-array>
-    <string-array name="javascript_disabled_search_entry_values">
+    <string-array name="javascript_disabled_search_entry_values">  <!-- None of the items in this string-array should be translated. -->
         <item>https://duckduckgo.com/html/?q=</item>
         <item>https://www.google.com/search?q=</item>
         <item>https://www.bing.com/search?q=</item>
@@ -132,7 +133,7 @@
         <item>Yahoo</item>
         <item>Custom</item>
     </string-array>
-    <string-array name="javascript_enabled_search_entry_values">
+    <string-array name="javascript_enabled_search_entry_values">  <!-- None of the items in this string-array should be translated. -->
         <item>https://duckduckgo.com/?q=</item>
         <item>https://www.google.com/search?q=</item>
         <item>https://www.bing.com/search?q=</item>
@@ -146,10 +147,31 @@
     <string name="swipe_to_refresh_enabled">Swipe to refresh</string>
     <string name="swipe_to_refresh_enabled_summary">Some websites don\'t work well if swipe to refresh is enabled.</string>
 
-    <!-- About Dialog. -->
+    <!-- About Activity. -->
     <string name="about_privacy_browser">About Privacy Browser</string>
+    <string name="version">Version</string>
+        <string name="version_code">Version Code</string>
+        <string name="hardware">Hardware</string>
+            <!-- Blank spaces at the end of strings are stripped out, so you have to replace them with the Unicode literal \u00A0. -->
+            <string name="brand">Brand:\u00A0</string>
+            <string name="manufacturer">Manufacturer:\u00A0</string>
+            <string name="model">Model:\u00A0</string>
+            <string name="device">Device:\u00A0</string>
+            <string name="bootloader">Bootloader:\u00A0</string>
+            <string name="radio">Radio:\u00A0</string>
+        <string name="software">Software</string>
+            <string name="android">Android:\u00A0</string>
+            <string name="api">API</string>
+            <string name="build">Build:\u00A0</string>
+            <string name="security_patch">Security Patch:\u00A0</string>
+            <string name="webkit">WebKit:\u00A0</string>
+            <string name="chrome">Chrome:\u00A0</string>
+    <string name="permissions">Permissions</string>
+    <string name="changelog">Changelog</string>
+    <string name="license">License</string>
+    <string name="contributors">Contributors</string>
     <string name="dismiss">Dismiss</string>
 
-    <!-- Ad control. -->
+    <!-- Ad Control. -->
     <string name="ad_id">Null</string>  <!-- There are no ads in the standard flavor, but this string must exist because it is referenced in the code. -->
 </resources>

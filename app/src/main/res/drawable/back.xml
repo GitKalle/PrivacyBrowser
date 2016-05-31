@@ -1,11 +1,14 @@
-<!-- back.xml comes from the Android Material icon set, where it is called ic_arrow_back.  It is released under the CC-BY license <https://creativecommons.org/licenses/by/4.0/>. -->
+<!-- back.xml comes from the Android Material icon set, where it is called ic_arrow_back.
+  It is released under the CC-BY license <https://creativecommons.org/licenses/by/4.0/>. -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:width="24dp"
+    android:viewportHeight="24.0"
+    android:viewportWidth="24.0" >
+
     <path
         android:fillColor="#FF000000"
-        android:pathData="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"/>
+        android:pathData="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z" />
 </vector>

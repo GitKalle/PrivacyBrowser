@@ -65,11 +65,26 @@
             </intent-filter>
         </activity>
 
+        <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes. -->
         <!-- android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
-        <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.  -->
         <activity
             android:name=".SettingsActivity"
             android:label="@string/privacy_browser_settings"
+            android:parentActivityName=".MainWebViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:persistableMode="persistNever" >
+
+            <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainWebViewActivity" />
+        </activity>
+
+        <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes. -->
+        <!-- android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/about_privacy_browser"
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >

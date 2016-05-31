@@ -1,13 +1,14 @@
-<!--
-  downloads.xml comes from the Android Material icon set, where it is called ic_file_download.
+<!-- downloads.xml comes from the Android Material icon set, where it is called ic_file_download.
   It is released under the CC-BY license <https://creativecommons.org/licenses/by/4.0/>. -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:width="24dp"
+    android:viewportHeight="24.0"
+    android:viewportWidth="24.0" >
+
     <path
         android:fillColor="#FF000000"
-        android:pathData="M19,9h-4V3H9v6H5l7,7 7,-7zM5,18v2h14v-2H5z"/>
+        android:pathData="M19,9h-4V3H9v6H5l7,7 7,-7zM5,18v2h14v-2H5z" />
 </vector>

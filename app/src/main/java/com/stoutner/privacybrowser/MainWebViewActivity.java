@@ -67,7 +67,7 @@ import java.net.URLEncoder;
 public class MainWebViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
     // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
     public static Bitmap favoriteIcon;
-    // mainWebView is public static so it can be accessed from AboutDialog and SettingsFragment.  It is also used in onCreate(), onOptionsItemSelected(), onNavigationItemSelected(), and loadUrlFromTextBox().
+    // mainWebView is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onOptionsItemSelected(), onNavigationItemSelected(), and loadUrlFromTextBox().
     public static WebView mainWebView;
 
     // mainMenu is public static so it can be accessed from SettingsFragment.  It is also used in onCreateOptionsMenu() and onOptionsItemSelected().
@@ -78,7 +78,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     public static boolean javaScriptEnabled;
     // firstPartyCookiesEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
     public static boolean firstPartyCookiesEnabled;
-    // thirdPartyCookiesEnabled is uesd in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
+    // thirdPartyCookiesEnabled is used in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
     public static boolean thirdPartyCookiesEnabled;
     // domStorageEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
     public static boolean domStorageEnabled;
@@ -124,6 +124,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
         // Implement swipe to refresh
         swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        assert swipeToRefresh != null; //This assert removes the incorrect warning on the following line that swipeToRefresh might be null.
         swipeToRefresh.setColorSchemeResources(R.color.blue);
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -168,6 +169,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
         // Listen for touches on the navigation menu.
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        assert navigationView != null; // This assert removes the incorrect warning on the following line that navigationView might be null.
         navigationView.setNavigationItemSelectedListener(this);
 
         // drawerToggle creates the hamburger icon at the start of the AppBar.
@@ -239,6 +241,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 }
 
                 // Show the fullScreenVideoFrameLayout.
+                assert fullScreenVideoFrameLayout != null; //This assert removes the incorrect warning on the following line that fullScreenVideoFrameLayout might be null.
                 fullScreenVideoFrameLayout.addView(view);
                 fullScreenVideoFrameLayout.setVisibility(View.VISIBLE);
 
@@ -249,9 +252,9 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 BannerAd.hideAd(adView);
 
                 /* SYSTEM_UI_FLAG_HIDE_NAVIGATION hides the navigation bars on the bottom or right of the screen.
-                ** SYSTEM_UI_FLAG_FULLSCREEN hides the status bar across the top of the screen.
-                ** SYSTEM_UI_FLAG_IMMERSIVE_STICKY makes the navigation and status bars ghosted overlays and automatically rehides them.
-                */
+                 * SYSTEM_UI_FLAG_FULLSCREEN hides the status bar across the top of the screen.
+                 * SYSTEM_UI_FLAG_IMMERSIVE_STICKY makes the navigation and status bars ghosted overlays and automatically rehides them.
+                 */
 
                 // Set the one flag supported by API >= 14.
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
@@ -280,6 +283,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 BannerAd.showAd(adView);
 
                 // Hide the fullScreenVideoFrameLayout.
+                assert fullScreenVideoFrameLayout != null; //This assert removes the incorrect warning on the following line that fullScreenVideoFrameLayout might be null.
                 fullScreenVideoFrameLayout.removeAllViews();
                 fullScreenVideoFrameLayout.setVisibility(View.GONE);
             }
@@ -445,9 +449,6 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         MenuItem toggleFirstPartyCookies = menu.findItem(R.id.toggleFirstPartyCookies);
         MenuItem toggleThirdPartyCookies = menu.findItem(R.id.toggleThirdPartyCookies);
         MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
-        /* toggleSaveFormData does nothing until database storage is implemented.
-        MenuItem toggleSaveFormData = menu.findItem(R.id.toggleSaveFormData);
-        */
 
         // Set the initial status of the privacy icon.
         updatePrivacyIcon();
@@ -456,9 +457,6 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         toggleFirstPartyCookies.setChecked(firstPartyCookiesEnabled);
         toggleThirdPartyCookies.setChecked(thirdPartyCookiesEnabled);
         toggleDomStorage.setChecked(domStorageEnabled);
-        /* toggleSaveFormData does nothing until database storage is implemented.
-        toggleSaveFormData.setChecked(saveFormDataEnabled);
-        */
 
         return true;
     }
@@ -491,9 +489,6 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     @SuppressWarnings("deprecation")
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int menuItemId = menuItem.getItemId();
-
-        // Some options need to update the drawable for toggleJavaScript.
-        MenuItem toggleJavaScript = mainMenu.findItem(R.id.toggleJavaScript);
 
         // Set the commands that relate to the menu entries.
         switch (menuItemId) {
@@ -647,15 +642,15 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 break;
 
             case R.id.settings:
-                // Launch PreferenceFragment.
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                // Launch SettingsActivity.
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 break;
 
             case R.id.about:
-                // Show the AboutDialog AlertDialog and name this instance aboutDialog.
-                AppCompatDialogFragment aboutDialog = new AboutDialog();
-                aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
+                // Launch AboutActivity.
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
                 break;
 
             case R.id.clearAndExit:
@@ -705,7 +700,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         // Reload the ad if this is the free flavor.
         BannerAd.reloadAfterRotate(adView, getApplicationContext(), getString(R.string.ad_id));
 
-        // Reinitialize the adView variable, as the View will have been removed and readded in the free flavor by BannerAd.reloadAfterRotate().
+        // Reinitialize the adView variable, as the View will have been removed and re-added in the free flavor by BannerAd.reloadAfterRotate().
         adView = findViewById(R.id.adView);
     }
 
@@ -743,6 +738,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             // Load the previous URL if available.
+            assert mainWebView != null; //This assert removes the incorrect warning on the following line that mainWebView might be null.
             if (mainWebView.canGoBack()) {
                 mainWebView.goBack();
             } else {
