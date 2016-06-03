@@ -150,7 +150,7 @@
     <!-- About Activity. -->
     <string name="about_privacy_browser">About Privacy Browser</string>
     <string name="version">Version</string>
-        <string name="version_code">Version Code</string>
+        <string name="version_code">version code</string>
         <string name="hardware">Hardware</string>
             <!-- Blank spaces at the end of strings are stripped out, so you have to replace them with the Unicode literal \u00A0. -->
             <string name="brand">Brand:\u00A0</string>
