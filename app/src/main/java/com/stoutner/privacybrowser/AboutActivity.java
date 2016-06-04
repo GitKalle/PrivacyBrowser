@@ -52,11 +52,11 @@ public class AboutActivity extends AppCompatActivity {
         @Override
         // Get the count of the number of tabs.
         public int getCount() {
-            return 5;
+            return 6;
         }
 
         @Override
-        // Get the name of each tab.
+        // Get the name of each tab.  Tab numbers start at 0.
         public CharSequence getPageTitle(int tab) {
             switch (tab) {
                 case 0:
@@ -66,12 +66,15 @@ public class AboutActivity extends AppCompatActivity {
                     return getString(R.string.permissions);
 
                 case 2:
-                    return getString(R.string.changelog);
+                    return getString(R.string.privacy_policy);
 
                 case 3:
-                    return getString(R.string.license);
+                    return getString(R.string.changelog);
 
                 case 4:
+                    return getString(R.string.license);
+
+                case 5:
                     return getString(R.string.contributors);
 
                 default:

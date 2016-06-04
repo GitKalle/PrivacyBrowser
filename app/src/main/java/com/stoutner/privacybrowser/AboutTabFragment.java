@@ -52,7 +52,7 @@ public class AboutTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View tabLayout;
 
-        // Load the about tab layout.
+        // Load the about tab layout.  Tab numbers start at 0.
         if (tabNumber == 0) {
             // Setting false at the end of inflater.inflate does not attach the inflated layout as a child of container.
             // The fragment will take care of attaching the root automatically.
@@ -130,7 +130,7 @@ public class AboutTabFragment extends Fragment {
             // Select the substring that begins after "Chrome/" and goes until the next " ".
             String chromeVersion = userAgentString.substring(userAgentString.indexOf("Chrome/") + 7, userAgentString.indexOf(" ", userAgentString.indexOf("Chrome/")));
             versionChromeText.setText(chromeVersion);
-        } else { // load a WebView for all the other tabs.
+        } else { // load a WebView for all the other tabs.  Tab numbers start at 0.
             // Setting false at the end of inflater.inflate does not attach the inflated layout as a child of container.
             // The fragment will take care of attaching the root automatically.
             tabLayout = inflater.inflate(R.layout.about_tab_webview, container, false);
@@ -142,14 +142,18 @@ public class AboutTabFragment extends Fragment {
                     break;
 
                 case 2:
-                    tabWebView.loadUrl("file:///android_asset/about_changelog.html");
+                    tabWebView.loadUrl("file:///android_asset/about_privacy_policy.html");
                     break;
 
                 case 3:
-                    tabWebView.loadUrl("file:///android_asset/about_license.html");
+                    tabWebView.loadUrl("file:///android_asset/about_changelog.html");
                     break;
 
                 case 4:
+                    tabWebView.loadUrl("file:///android_asset/about_license.html");
+                    break;
+
+                case 5:
                     tabWebView.loadUrl("file:///android_asset/about_contributors.html");
                     break;
 

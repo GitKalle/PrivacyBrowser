@@ -167,6 +167,7 @@
             <string name="webkit">WebKit:\u00A0</string>
             <string name="chrome">Chrome:\u00A0</string>
     <string name="permissions">Permissions</string>
+    <string name="privacy_policy">Privacy Policy</string>
     <string name="changelog">Changelog</string>
     <string name="license">License</string>
     <string name="contributors">Contributors</string>
