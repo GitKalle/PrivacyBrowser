@@ -665,6 +665,12 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                     cookieManager.removeAllCookie();
                 }
 
+                // Clear cache.  The argument of "true" includes disk files.
+                mainWebView.clearCache(true);
+
+                // Clear the back/forward history.
+                mainWebView.clearHistory();
+
                 // Destroy the internal state of the webview.
                 mainWebView.destroy();
 
