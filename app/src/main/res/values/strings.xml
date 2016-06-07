@@ -171,7 +171,7 @@
     <string name="changelog">Changelog</string>
     <string name="license">License</string>
     <string name="contributors">Contributors</string>
-    <string name="dismiss">Dismiss</string>
+    <string name="links">Links</string>
 
     <!-- Ad Control. -->
     <string name="ad_id">Null</string>  <!-- There are no ads in the standard flavor, but this string must exist because it is referenced in the code. -->

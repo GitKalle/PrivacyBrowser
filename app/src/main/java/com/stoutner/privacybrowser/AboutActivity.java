@@ -52,7 +52,7 @@ public class AboutActivity extends AppCompatActivity {
         @Override
         // Get the count of the number of tabs.
         public int getCount() {
-            return 6;
+            return 7;
         }
 
         @Override
@@ -76,6 +76,9 @@ public class AboutActivity extends AppCompatActivity {
 
                 case 5:
                     return getString(R.string.contributors);
+
+                case 6:
+                    return getString(R.string.links);
 
                 default:
                     return "";

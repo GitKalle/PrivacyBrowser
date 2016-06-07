@@ -157,6 +157,9 @@ public class AboutTabFragment extends Fragment {
                     tabWebView.loadUrl("file:///android_asset/about_contributors.html");
                     break;
 
+                case 6:
+                    tabWebView.loadUrl("file:///android_asset/about_links.html");
+
                 default:
                     break;
             }
