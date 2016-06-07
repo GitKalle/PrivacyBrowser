@@ -93,7 +93,7 @@
                 android:text="@string/hardware"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/dark_blue" />
 
             <!-- Brand. -->
             <LinearLayout
@@ -105,7 +105,7 @@
                     android:id="@+id/about_version_brand_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/brand"/>
+                    android:text="@string/brand" />
 
                 <TextView
                     android:id="@+id/about_version_brand_text"
@@ -217,7 +217,7 @@
                 android:text="@string/software"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:textColor="@color/black"
+                android:textColor="@color/dark_blue"
                 android:paddingTop="12dp" />
 
             <!-- Android. -->
