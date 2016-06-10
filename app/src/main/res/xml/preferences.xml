@@ -54,8 +54,8 @@
             android:entryValues="@array/user_agent_entry_values"
             android:defaultValue="Default user agent" />
 
-        <!-- android:inputType="textVisiblePassword" sets the keyboard to have a dedicated number row. -->
-        <!-- android:imeOptions="flagNoExtractUi" is not set because with the dedicated number row there often isn't room to see the EditText in landscape orientation. -->
+        <!-- android:inputType="textVisiblePassword" sets the keyboard to have a dedicated number row.
+          android:imeOptions="flagNoExtractUi" is not set because with the dedicated number row there often isn't room to see the EditText in landscape orientation. -->
         <EditTextPreference
             android:key="custom_user_agent"
             android:title="@string/custom_user_agent"
@@ -75,13 +75,14 @@
             android:entryValues="@array/javascript_disabled_search_entry_values"
             android:defaultValue="https://duckduckgo.com/html/?q=" />
 
-        <!-- android:imeOptions="flagNoExtractUi" is not set because with the the length of the title of the dialog box there often isn't enough space to see the EditText in landscape orientation. -->
+        <!-- android:imeOptions="flagNoExtractUi" is not set because with the the length of the title of the dialog box
+          there often isn't enough space to see the EditText in landscape orientation.
+          android:singleLine="true" is not specified because it is the EditTextPreference default. -->
         <EditTextPreference
             android:key="javascript_disabled_search_custom_url"
             android:title="@string/javascript_disabled_search_custom_url"
             android:defaultValue=""
-            android:inputType="textUri"
-            android:singleLine="true" />
+            android:inputType="textUri" />
 
         <ListPreference
             android:key="javascript_enabled_search"
@@ -90,26 +91,27 @@
             android:entryValues="@array/javascript_enabled_search_entry_values"
             android:defaultValue="https://duckduckgo.com/?q=" />
 
-        <!-- android:imeOptions="flagNoExtractUi" is not set because with the the length of the title of the dialog box there often isn't enough space to see the EditText in landscape orientation. -->
+        <!-- android:imeOptions="flagNoExtractUi" is not set because with the the length of the title of the dialog box
+          there often isn't enough space to see the EditText in landscape orientation.
+          android:singleLine="true" is not specified because it is the EditTextPreference default. -->
         <EditTextPreference
             android:key="javascript_enabled_search_custom_url"
             android:title="@string/javascript_enabled_search_custom_url"
             android:defaultValue=""
-            android:inputType="textUri"
-            android:singleLine="true" />
+            android:inputType="textUri" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="general"
         android:title="@string/general" >
 
-        <!-- android:imeOptions="flagNoExtractUi" is not set because in special character mode there often isn't enough space to see the EditText in landscape orientation. -->
+        <!-- android:imeOptions="flagNoExtractUi" is not set because in special character mode there often isn't enough space to see the EditText in landscape orientation.
+          android:singleLine="true" is not specified because it is the EditTextPreference default. -->
         <EditTextPreference
             android:key="homepage"
             android:title="@string/homepage_preference"
             android:defaultValue="https://www.duckduckgo.com"
-            android:inputType="textUri"
-            android:singleLine="true" />
+            android:inputType="textUri" />
 
         <SwitchPreference
             android:key="swipe_to_refresh_enabled"

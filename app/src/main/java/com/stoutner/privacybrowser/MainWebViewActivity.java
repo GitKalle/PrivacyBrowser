@@ -111,16 +111,42 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.coordinator_layout);
+        setContentView(R.layout.main_coordinatorlayout);
 
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
         Toolbar supportAppBar = (Toolbar) findViewById(R.id.appBar);
         setSupportActionBar(supportAppBar);
+        final ActionBar appBar = getSupportActionBar();
+
+        // This is needed to get rid of the Android Studio warning that appBar might be null.
+        assert appBar != null;
+
+        // Add the custom url_bar layout, which shows the favoriteIcon, urlTextBar, and progressBar.
+        appBar.setCustomView(R.layout.url_bar);
+        appBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        // Set the "go" button on the keyboard to load the URL in urlTextBox.
+        urlTextBox = (EditText) appBar.getCustomView().findViewById(R.id.urlTextBox);
+        urlTextBox.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button, load the URL.
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Load the URL into the mainWebView and consume the event.
+                    try {
+                        loadUrlFromTextBox();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    // If the enter key was pressed, consume the event.
+                    return true;
+                } else {
+                    // If any other key was pressed, do not consume the event.
+                    return false;
+                }
+            }
+        });
 
         final FrameLayout fullScreenVideoFrameLayout = (FrameLayout) findViewById(R.id.fullScreenVideoFrameLayout);
-
-        // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
-        final ActionBar appBar = getSupportActionBar();
 
         // Implement swipe to refresh
         swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -134,33 +160,6 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         });
 
         mainWebView = (WebView) findViewById(R.id.mainWebView);
-
-        if (appBar != null) {
-            // Add the custom url_bar layout, which shows the favoriteIcon, urlTextBar, and progressBar.
-            appBar.setCustomView(R.layout.url_bar);
-            appBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-
-            // Set the "go" button on the keyboard to load the URL in urlTextBox.
-            urlTextBox = (EditText) appBar.getCustomView().findViewById(R.id.urlTextBox);
-            urlTextBox.setOnKeyListener(new View.OnKeyListener() {
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    // If the event is a key-down event on the "enter" button, load the URL.
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        // Load the URL into the mainWebView and consume the event.
-                        try {
-                            loadUrlFromTextBox();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                        // If the enter key was pressed, consume the event.
-                        return true;
-                    } else {
-                        // If any other key was pressed, do not consume the event.
-                        return false;
-                    }
-                }
-            });
-        }
 
         // Create the navigation drawer.
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);

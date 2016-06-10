@@ -40,7 +40,7 @@
             xmlns:tools="http://schemas.android.com/tools">
 
             <!--tools:ignore="ContentDescription" suppresses the lint warning about supplying a content description for the ImageView,
-              which isn't needed in this case because the ImageView because is only decorative. -->
+              which isn't needed in this case because the ImageView is only decorative. -->
             <ImageView
                 android:id="@+id/about_version_icon"
                 android:layout_width="wrap_content"

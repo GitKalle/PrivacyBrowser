@@ -20,19 +20,31 @@
 
 <resources>
 
-    <!-- The default actionBarSize is 56dp.  53dp is the smallest that doesn't cause the urlTextBox to scroll vertically with a font size of Huge. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="PrivacyBrowser" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/blue</item>
+    </style>
+
+    <!-- The default actionBarSize is 56dp.  53dp is the smallest that doesn't cause the urlTextBox to scroll vertically with a font size of Huge. -->
+    <style name="PrivacyBrowser.MainWebView">
         <item name="android:actionBarSize">53dp</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="PrivacyBrowser.About">
+        <item name="colorPrimaryDark">@color/blue</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+    <!-- colorPrimaryDark is the color of the status bar. -->
+    <style name="PrivacyBrowser.Settings" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/dark_blue</item>
+        <item name="colorAccent">@color/blue</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!-- ThemeOverlay.AppCompat.Dark.ActionBar" makes the text and the icons in the AppBar white. -->
+    <style name="PrivacyBrowser.DarkAppBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PrivacyBrowser.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+
+    <style name="PrivacyBrowser.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

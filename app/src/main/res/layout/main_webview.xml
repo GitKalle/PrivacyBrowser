@@ -18,24 +18,26 @@
   You should have received a copy of the GNU General Public License
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
-<!-- android:layout_martinTop="?attr/actionBarSize" moves the RelativeLayout below the appBarLayout, which otherwise would cover the top of mainWebView. -->
-<!-- the RelativeLayout has an id of adView in the standard flavor so that the ad commands (which do nothing in the standard flavor) don't produce errors. -->
+<!-- android:layout_martinTop="?attr/actionBarSize" moves the RelativeLayout below the appBarLayout, which otherwise would cover the top of mainWebView.
+  the RelativeLayout has an id of adView in the standard flavor so that the ad commands (which do nothing in the standard flavor) don't produce errors.
+  android:layout_weight="1" sets the RelativeLayout to fill the rest of the screen because it is encapsulated in a LinearLayout with android:orientation="vertical". -->
 <RelativeLayout
     android:id="@+id/adView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_height="0dp"
+    android:layout_weight="1"
     tools:context="com.stoutner.privacybrowser.MainWebViewActivity"
-    tools:showIn="@layout/coordinator_layout" >
+    tools:showIn="@layout/main_coordinatorlayout" >
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <!-- Google does not currently want to support hiding the AppBar on scroll for a WebView child with the Support Toolbar.  https://code.google.com/p/android/issues/detail?id=200394 -->
+        <!-- Google does not currently want to support hiding the AppBar on scroll for a WebView child with the Support Toolbar.
+          https://code.google.com/p/android/issues/detail?id=200394 -->
         <WebView
             android:id="@+id/mainWebView"
             android:layout_width="match_parent"

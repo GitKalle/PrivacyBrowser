@@ -25,13 +25,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about_linearlayout);
+        setContentView(R.layout.about_coordinatorlayout);
+
+        // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
+        Toolbar supportAppBar = (Toolbar) findViewById(R.id.about_toolbar);
+        setSupportActionBar(supportAppBar);
+
+        // Display the home arrow on supportAppBar.
+        final ActionBar appBar = getSupportActionBar();
+        assert appBar != null;// This assert removes the incorrect warning on the following line that appBar might be null.
+        appBar.setDisplayHomeAsUpEnabled(true);
 
         //  Setup the ViewPager.
         ViewPager aboutViewPager = (ViewPager) findViewById(R.id.about_viewpager);

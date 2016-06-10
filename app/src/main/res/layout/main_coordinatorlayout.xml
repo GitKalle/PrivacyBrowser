@@ -25,9 +25,9 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <!-- The main content view. -->
-    <!-- android:fitsSystemWindows="true" moves rootCoordinatorLayout below the system status bar. -->
-    <!-- Setting the layout root to be focusableInTouchMode prevents urlTextBox from stealing focus on launch and opening the keyboard. -->
+    <!-- android:fitsSystemWindows="true" moves rootCoordinatorLayout below the system status bar.
+      When it is specified the theme should include <item name="android:windowTranslucentStatus">true</item>.
+      Setting the layout root to be focusableInTouchMode prevents urlTextBox from stealing focus on launch and opening the keyboard. -->
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/rootCoordinatorLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,21 +40,28 @@
         android:focusable="true"
         android:focusableInTouchMode="true" >
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout"
+        <!-- The purpose of the LinearLayout is to place the included main_webview below appBarLayout. -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay" >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/appBar"
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appBarLayout"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </android.support.design.widget.AppBarLayout>
+                android:layout_height="wrap_content"
+                android:theme="@style/PrivacyBrowser.AppBarOverlay" >
 
-        <include layout="@layout/main_webview" />
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/appBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorPrimary"
+                    app:popupTheme="@style/PrivacyBrowser.PopupOverlay" />
+            </android.support.design.widget.AppBarLayout>
+
+            <include layout="@layout/main_webview" />
+        </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 
     <!-- The navigation drawer. -->

@@ -31,7 +31,7 @@
     <application
         android:label="@string/privacy_browser"
         android:icon="@mipmap/privacy_browser"
-        android:theme="@style/AppTheme"
+        android:theme="@style/PrivacyBrowser"
         android:allowBackup="false"
         android:fullBackupContent="false" >
 
@@ -42,7 +42,7 @@
         <activity
             android:name=".MainWebViewActivity"
             android:label="@string/privacy_browser"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/PrivacyBrowser.MainWebView"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
             android:persistableMode="persistNever" >
@@ -67,6 +67,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/privacy_browser_settings"
+            android:theme="@style/PrivacyBrowser.Settings"
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >
@@ -82,6 +83,7 @@
         <activity
             android:name=".AboutActivity"
             android:label="@string/about_privacy_browser"
+            android:theme="@style/PrivacyBrowser.About"
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >

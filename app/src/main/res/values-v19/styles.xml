@@ -19,22 +19,19 @@
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
 <resources>
-
-    <!-- The default actionBarSize is 56dp.  53dp is the smallest that doesn't cause the urlTextBox to scroll vertically with a font size of Huge. -->
-    <!-- android:windowTranslucentStatus requires API >= 19.  It makes the system status bar transparent. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">@color/blue</item>
+    <!-- The default actionBarSize is 56dp.  53dp is the smallest that doesn't cause the urlTextBox to scroll vertically with a font size of Huge.
+      android:windowTranslucentStatus requires API >= 19.  It makes the system status bar transparent.
+      When it is specified the root layout should include android:fitsSystemWindows="true". -->
+    <style name="PrivacyBrowser.MainWebView">
         <item name="android:actionBarSize">53dp</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <!-- android:windowTranslucentStatus requires API >= 19.  It makes the system status bar transparent.
+      When it is specified the root layout should include android:fitsSystemWindows="true".
+      colorPrimaryDark goes behind the status bar, which is then darkened by the overlay. -->
+    <style name="PrivacyBrowser.About">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimaryDark">@color/blue</item>
+    </style>
 </resources>

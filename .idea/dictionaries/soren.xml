@@ -3,12 +3,14 @@
     <words>
       <w>androidversion</w>
       <w>anonymized</w>
+      <w>appbarlayout</w>
       <w>aren</w>
       <w>bebdb</w>
       <w>buildapi</w>
       <w>buildversion</w>
       <w>chromeversion</w>
       <w>commitdiff</w>
+      <w>coordinatorlayout</w>
       <w>eadd</w>
       <w>exynos</w>
       <w>intl</w>
@@ -23,6 +25,7 @@
       <w>securitypatch</w>
       <w>snackbar</w>
       <w>snackbars</w>
+      <w>tablayout</w>
       <w>techrepublic</w>
       <w>textview</w>
       <w>webkitversion</w>

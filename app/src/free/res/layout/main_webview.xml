@@ -18,15 +18,16 @@
   You should have received a copy of the GNU General Public License
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
-<!-- android:layout_martinTop="?attr/actionBarSize" moves adRelativeLayout below the appBarLayout, which otherwise would cover the top of mainWebView. -->
+<!-- android:layout_martinTop="?attr/actionBarSize" moves adRelativeLayout below the appBarLayout, which otherwise would cover the top of mainWebView.
+  android:layout_weight="1" sets the RelativeLayout to fill the rest of the screen because it is encapsulated in a LinearLayout with android:orientation="vertical"-->
 <RelativeLayout
     android:id="@+id/adRelativeLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_height="0dp"
+    android:layout_weight="1"
     tools:context="com.stoutner.privacybrowser.MainWebViewActivity"
     tools:showIn="@layout/coordinator_layout">
 
@@ -52,6 +53,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:focusable="true"
-            android:focusableInTouchMode="true"/>
+            android:focusableInTouchMode="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
