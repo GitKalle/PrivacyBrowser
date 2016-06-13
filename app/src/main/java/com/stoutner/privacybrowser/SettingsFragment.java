@@ -69,35 +69,37 @@ public class SettingsFragment extends PreferenceFragment {
         // Set the JavaScript-disabled search URL as the summary text for the JavaScript-disabled search preference when the preference screen is loaded.
         // The default is "https://duckduckgo.com/html/?q=".
         final Preference javaScriptDisabledSearchPreference = findPreference("javascript_disabled_search");
-        if (savedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=").equals("Custom URL")) {
+        String javaScriptDisabledSearchString = savedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=");
+        if (javaScriptDisabledSearchString.equals("Custom URL")) {
             // If set to "Custom URL", use R.string.custom_url, which will be translated, instead of the array value, which will not.
             javaScriptDisabledSearchPreference.setSummary(R.string.custom_url);
         } else {
             // Set the array value as the summary text.
-            javaScriptDisabledSearchPreference.setSummary(savedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q="));
+            javaScriptDisabledSearchPreference.setSummary(javaScriptDisabledSearchString);
         }
 
         // Set the summary text for "javascript_disabled_search_custom_url" (the default is "") and enable it if "javascript_disabled_search" is set to "Custom URL".
         final Preference javaScriptDisabledSearchCustomURLPreference = findPreference("javascript_disabled_search_custom_url");
         javaScriptDisabledSearchCustomURLPreference.setSummary(savedPreferences.getString("javascript_disabled_search_custom_url", ""));
-        javaScriptDisabledSearchCustomURLPreference.setEnabled(javaScriptDisabledSearchPreference.getSummary().equals("Custom URL"));
+        javaScriptDisabledSearchCustomURLPreference.setEnabled(javaScriptDisabledSearchString.equals("Custom URL"));
 
 
         // Set the JavaScript-enabed searchURL as the summary text for the JavaScript-enabled search preference when the preference screen is loaded.
         // The default is "https://duckduckgo.com/?q=".
         final Preference javaScriptEnabledSearchPreference = findPreference("javascript_enabled_search");
-        if (savedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=").equals("Custom URL")) {
+        String javaScriptEnabledSearchString = savedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=");
+        if (javaScriptEnabledSearchString.equals("Custom URL")) {
             // If set to "Custom URL", use R.string.custom_url, which will be tgranslated, instead of the array value, which will not.
             javaScriptEnabledSearchPreference.setSummary(R.string.custom_url);
         } else {
             // Set the array value as the summary text.
-            javaScriptEnabledSearchPreference.setSummary(savedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q="));
+            javaScriptEnabledSearchPreference.setSummary(javaScriptEnabledSearchString);
         }
 
         // Set the summary text for "javascript_enabled_search_custom_url" (the default is "") and enable it if "javascript_enabled_search" is set to "Custom URL".
         final Preference javaScriptEnabledSearchCustomURLPreference = findPreference("javascript_enabled_search_custom_url");
         javaScriptEnabledSearchCustomURLPreference.setSummary(savedPreferences.getString("javascript_enabled_search_custom_url", ""));
-        javaScriptEnabledSearchCustomURLPreference.setEnabled(javaScriptEnabledSearchPreference.getSummary().equals("Custom URL"));
+        javaScriptEnabledSearchCustomURLPreference.setEnabled(javaScriptEnabledSearchString.equals("Custom URL"));
 
 
         // Set the homepage URL as the summary text for the Homepage preference when the preference screen is loaded.  The default is "https://www.duckduckgo.com".
@@ -236,7 +238,8 @@ public class SettingsFragment extends PreferenceFragment {
                         break;
 
                     case "javascript_disabled_search":
-                        if (sharedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=").equals("Custom URL")) {
+                        String newJavaScriptDisabledSearchString = sharedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=");
+                        if (newJavaScriptDisabledSearchString.equals("Custom URL")) {
                             // Set the summary text to R.string.custom_url, which will be translated.
                             javaScriptDisabledSearchPreference.setSummary(R.string.custom_url);
 
@@ -244,14 +247,14 @@ public class SettingsFragment extends PreferenceFragment {
                             MainWebViewActivity.javaScriptDisabledSearchURL = sharedPreferences.getString("javascript_disabled_search_custom_url", "");
                         } else {  // javascript_disabled_search is not set to Custom.
                             // Set the new search URL as the summary text for the JavaScript-disabled search preference.  The default is "https://duckduckgo.com/html/?q=".
-                            javaScriptDisabledSearchPreference.setSummary(sharedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q="));
+                            javaScriptDisabledSearchPreference.setSummary(newJavaScriptDisabledSearchString);
 
                             // Update the javaScriptDisabledSearchURL variable.  The default is "https://duckduckgo.com/html/?q=".
-                            MainWebViewActivity.javaScriptDisabledSearchURL = sharedPreferences.getString("javascript_disabled_search", "https://duckduckgo.com/html/?q=");
+                            MainWebViewActivity.javaScriptDisabledSearchURL = newJavaScriptDisabledSearchString;
                         }
 
                         // Enable or disable javaScriptDisabledSearchCustomURLPreference.
-                        javaScriptDisabledSearchCustomURLPreference.setEnabled(javaScriptDisabledSearchPreference.getSummary().equals("Custom URL"));
+                        javaScriptDisabledSearchCustomURLPreference.setEnabled(newJavaScriptDisabledSearchString.equals("Custom URL"));
                         break;
 
                     case "javascript_disabled_search_custom_url":
@@ -263,7 +266,8 @@ public class SettingsFragment extends PreferenceFragment {
                         break;
 
                     case "javascript_enabled_search":
-                        if (sharedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=").equals("Custom URL")) {
+                        String newJavaScriptEnabledSearchString = sharedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=");
+                        if (newJavaScriptEnabledSearchString.equals("Custom URL")) {
                             // Set the summary text to R.string.custom_url, which will be translated.
                             javaScriptEnabledSearchPreference.setSummary(R.string.custom_url);
 
@@ -271,14 +275,14 @@ public class SettingsFragment extends PreferenceFragment {
                             MainWebViewActivity.javaScriptEnabledSearchURL = sharedPreferences.getString("javascript_enabled_search_custom_url", "");
                         } else { // javascript_enabled_search is not set to Custom.
                             // Set the new search URL as the summary text for the JavaScript-enabled search preference.  The default is "https://duckduckgo.com/?q=".
-                            javaScriptEnabledSearchPreference.setSummary(sharedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q="));
+                            javaScriptEnabledSearchPreference.setSummary(newJavaScriptEnabledSearchString);
 
                             // Update the javaScriptEnabledSearchURL variable.  The default is "https://duckduckgo.com/?q=".
-                            MainWebViewActivity.javaScriptEnabledSearchURL = sharedPreferences.getString("javascript_enabled_search", "https://duckduckgo.com/?q=");
+                            MainWebViewActivity.javaScriptEnabledSearchURL = newJavaScriptEnabledSearchString;
                         }
 
                         // Enable or disable javaScriptEnabledSearchCustomURLPreference.
-                        javaScriptEnabledSearchCustomURLPreference.setEnabled(javaScriptEnabledSearchPreference.getSummary().equals("Custom URL"));
+                        javaScriptEnabledSearchCustomURLPreference.setEnabled(newJavaScriptEnabledSearchString.equals("Custom URL"));
                         break;
 
                     case "javascript_enabled_search_custom_url":
