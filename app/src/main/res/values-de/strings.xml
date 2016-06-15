@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright 2016 Kalle  <buellkalle@posteo.org>.
+
+  This file is the translation in German for Privacy Browser <https://www.stoutner.com/privacy-browser>.
+
+  This translation is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This translation is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<resources>
+    <!-- Activities. -->
+    <string name="privacy_browser">Privacy Browser</string>
+    <string name="privacy_browser_settings">Privacy Browser Einstellungen</string>
+
+    <!-- MainWebViewActivity. -->
+    <string name="download_started">Download gestartet</string>
+    <string name="privacy_mode">Privater Modus</string>
+    <string name="javascript_enabled">JavaScript eingeschaltet</string>
+    <string name="javascript_disabled">JavaScript ausgeschaltet</string>
+    <string name="cookies_deleted">Cookies gelöscht</string>
+    <string name="dom_storage_deleted">DOM Speicher gelöscht</string>
+    <string name="open_navigation">Öffne Navigationsleiste</string>
+    <string name="close_navigation">Schließe Navigationsleiste</string>
+
+    <!-- Custom App Bar. -->
+    <string name="favorite_icon">Favoritensymbol</string>
+
+    <!-- Navigation Drawer. -->
+    <string name="navigation_drawer">Navigationsleiste</string>
+    <string name="navigation">Navigation</string>
+    <string name="home">Home</string>
+    <string name="back">Zurück</string>
+    <string name="forward">Vorwärts</string>
+    <string name="downloads">Downloads</string>
+    <string name="guide">Guide</string>
+    <string name="settings">Einstellungen</string>
+    <string name="about">Über</string>
+    <string name="clear_and_exit">Bereinigen und Verlassen</string>
+
+    <!-- Options Menu. -->
+    <string name="javascript">JavaScript</string>
+    <string name="first_party_cookies">First-Party Cookies</string>
+    <string name="third_party_cookies">Third-Party Cookies</string>
+    <string name="dom_storage">DOM Speicher</string>
+    <string name="clear_cookies">Lösche Cookies</string>
+    <string name="clear_dom_storage">Lösche DOM Speicher</string>
+    <string name="share">Teilen</string>
+    <string name="add_to_home_screen">Zu Startbildschirm hinzufügen</string>
+    <string name="refresh">Aktualisieren</string>
+
+    <!-- Create Home Screen Shortcut Alert Dialog. -->
+    <string name="shortcut_name">Bezeichnung Shortcut</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="create">Erstellen</string>
+
+    <!-- Preferences. -->
+    <string name="privacy">Datenschutz</string>
+    <string name="javascript_preference">JavaScript standardmäßig einschalten</string>
+    <string name="javascript_preference_summary">Erlaube Webseiten mit JavaScript, Programme (Scripte) auf dem Gerät auszuführen.</string>
+    <string name="first_party_cookies_preference">First-Party Cookies standardmäßig einschalten</string>
+    <string name="first_party_cookies_preference_summary">Erlaube Webseiten mit Cookies, Informationen auf dem Gerät zu speichern.      First-Party Cookies sind vom Server, der in der Adressleiste angezeigt wird.
+        Bei Geräten mit einer Androidversion älter als Lollipop (Version 5.0), werden mit dieser Einstellung Third-Party Cookies ebenfalls eingeschaltet.</string>
+    <string name="third_party_cookies_preference">Third-Party Cookies standardmäßig einschalten</string>
+    <string name="third_party_cookies_summary">Third-Party Cookies erlauben Teile von Webseiten, welche nicht zur Hauptseite gehören, z.B. Werbungsanzeigen, Informationen auf dem Gerät zu speichern.
+        Diese Einstellung benötigt Android Lollipop (Version 5.0) oder höher. Diese Einstellung hat keinen Einfluss, wenn die First-Party Cookies ausgeschaltet sind.</string>
+    <string name="dom_storage_preference">DOM Speicher standardmäßig einschalten</string>
+    <string name="dom_storage_preference_summary">Document Object Management Speicher, auch Web Speicher genannt, ist eine erweiterte Form 
+	    von Cookies. Dieser Speicher erlaubt Webseiten mehr und komplexere Information, wie Bilder, auf dem Gerät zu speichern.</string>
+    <string name="user_agent">User Agent</string>
+    <string-array name="user_agent_entries">
+        <item>WebView Standard</item>
+        <item>Privacy Browser 1.0</item>
+        <item>Firefox 46 auf Android 6.0.1</item>
+        <item>Chrome 50 auf Android 6.0.1</item>
+        <item>Firefox 46 auf Linux</item>
+        <item>Chromium 50 auf Linux</item>
+        <item>Konqueror 4.14 auf Linux</item>
+        <item>Firefox 46 auf Windows 10</item>
+        <item>Chrome 50 auf Windows 10</item>
+        <item>Internet Explorer 11 auf Windows 10</item>
+        <item>Edge 13 auf Windows 10</item>
+        <item>Benutzerdefiniert</item>
+    </string-array>
+    <string-array name="user_agent_entry_values">  <!-- None of the items in this string-array should be translated. -->
+        <item>Default user agent</item>  <!-- This item must not be translated into other languages because it is referenced in code.  It is never displayed on the screen. -->
+        <item>PrivacyBrowser/1.0</item>
+        <item>Mozilla/5.0 (Android 6.0.1; Mobile; rv:46.0) Gecko/46.0 Firefox/46.0</item>
+        <item>Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6P Build/MHC19Q) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.89 Mobile Safari/537.36</item>
+        <item>Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0</item>
+        <item>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.94 Safari/537.36</item>
+        <item>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.21 (KHTML, like Gecko) konqueror/4.14.14 Safari/537.21</item>
+        <item>Mozilla/5.0 (Windows NT 10.0; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0</item>
+        <item>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36</item>
+        <item>Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko</item>
+        <item>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586</item>
+        <item>Custom user agent</item>  <!-- This item must not be translated into other languages because it is referenced in code.  It is never displayed on the screen. -->
+    </string-array>
+    <string name="custom_user_agent">Benutzerdefinierter User Agent</string>
+    <string name="search">Suche</string>
+    <string name="javascript_disabled_search">JavaScript-ausgeschaltete Suche</string>
+    <string-array name="javascript_disabled_search_entries">
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Yahoo</item>
+        <item>Benutzerdefiniert</item>
+    </string-array>
+    <string-array name="javascript_disabled_search_entry_values">  <!-- None of the items in this string-array should be translated. -->
+        <item>https://duckduckgo.com/html/?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://search.yahoo.com/mobile/s?nojs=1&amp;p=</item>
+        <item>Custom URL</item>  <!-- This item must not be translated into other languages because it is referenced in code.  It is never displayed on the screen. -->
+    </string-array>
+    <string name="javascript_disabled_search_custom_url">JavaScript-ausgeschaltete Suche benutzerdefinierte URL</string>
+    <string name="javascript_enabled_search">JavaScript-eingeschaltete Suche</string>
+    <string-array name="javascript_enabled_search_entries">
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Yahoo</item>
+        <item>Benutzerdefiniert</item>
+    </string-array>
+    <string-array name="javascript_enabled_search_entry_values">  <!-- None of the items in this string-array should be translated. -->
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://www.google.com/search?q=</item>
+        <item>https://www.bing.com/search?q=</item>
+        <item>https://search.yahoo.com/mobile/s?p=</item>
+        <item>Custom URL</item>  <!-- This item must not be translated into other languages because it is referenced in code.  It is never displayed on the screen. -->
+    </string-array>
+    <string name="javascript_enabled_search_custom_url">JavaScript-eingeschaltete Suche benutzerdefinierte URL</string>
+    <string name="custom_url">Benutzerdefinierte URL</string>
+    <string name="general">Allgemein</string>
+    <string name="homepage_preference">Homepage</string>
+    <string name="swipe_to_refresh_enabled">Swipen zum Aktualisieren</string>
+    <string name="swipe_to_refresh_enabled_summary">Einige Webseiten arbeiten nicht korrekt, wenn das Swipen zum Aktualisieren eingeschaltet ist.</string>
+
+    <!-- About Activity. -->
+    <string name="about_privacy_browser">Über Privacy Browser</string>
+	<string name="version">Version</string>
+	    <string name="version_code">Versionscode</string>
+        <string name="hardware">Hardware</string>
+            <!-- Blank spaces at the end of strings are stripped out, so you have to replace them with the Unicode literal \u00A0. -->
+            <string name="brand">Marke:\u00A0</string>
+            <string name="manufacturer">Hersteller:\u00A0</string>
+            <string name="model">Modell:\u00A0</string>
+            <string name="device">Gerät:\u00A0</string>
+            <string name="bootloader">Bootloader:\u00A0</string>
+            <string name="radio">Baseband-Version:\u00A0</string>
+        <string name="software">Software</string>
+            <string name="android">Android:\u00A0</string>
+            <string name="api">API</string>
+            <string name="build">Build:\u00A0</string>
+            <string name="security_patch">Sicherheits-Patch:\u00A0</string>
+            <string name="webkit">WebKit:\u00A0</string>
+            <string name="chrome">Chrome:\u00A0</string>
+    <string name="permissions">Berechtigungen</string>
+    <string name="privacy_policy">Datenschutzbestimmungen</string>
+    <string name="changelog">Änderungsprotokoll</string>
+    <string name="license">Lizenz</string>
+    <string name="contributors">Mitwirkende</string>
+    <string name="links">Links</string>
+
+    <!-- Ad control. -->
+    <string name="ad_id">Null</string>  <!-- There are no ads in the standard flavor, but this string must exist because it is referenced in the code. -->
+</resources>
