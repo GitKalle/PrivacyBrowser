@@ -78,11 +78,6 @@
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >
-
-            <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainWebViewActivity" />
         </activity>
 
         <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.
@@ -94,11 +89,6 @@
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >
-
-            <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainWebViewActivity" />
         </activity>
 
         <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.
@@ -110,13 +100,6 @@
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >
-
-            <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainWebViewActivity" />
         </activity>
-
     </application>
-
 </manifest>

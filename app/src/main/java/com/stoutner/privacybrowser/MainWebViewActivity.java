@@ -247,19 +247,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                  * SYSTEM_UI_FLAG_FULLSCREEN hides the status bar across the top of the screen.
                  * SYSTEM_UI_FLAG_IMMERSIVE_STICKY makes the navigation and status bars ghosted overlays and automatically rehides them.
                  */
-
-                // Set the one flag supported by API >= 14.
-                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
-                // Set the two flags that are supported by API >= 16.
-                if (Build.VERSION.SDK_INT >= 16) {
-                    view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
-                }
-
-                // Set all three flags that are supported by API >= 19.
-                if (Build.VERSION.SDK_INT >= 19) {
-                    view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                }
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
             }
 
             // Exit full screen video
