@@ -27,6 +27,7 @@
     <!-- Required to create homescreen shortcuts. -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
+
     <!-- For API >= 23, app data is automatically backed up to Google cloud servers unless android:allowBackup="false" and android:fullBackupContent="false" is set. -->
     <application
         android:label="@string/privacy_browser"
@@ -34,6 +35,12 @@
         android:theme="@style/PrivacyBrowser"
         android:allowBackup="false"
         android:fullBackupContent="false" >
+
+        <!-- If android:name="android.webkit.WebView.MetricsOptOut" is not "true" then WebViews will upload metrics to Google.
+          https://developer.android.com/reference/android/webkit/WebView.html -->
+        <meta-data
+            android:name="android.webkit.WebView.MetricsOptOut"
+            android:value="true" />
 
         <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes, which preserves scroll location in the WebView.
           android:launchMode="singleTask" makes the app launch in a new task instead of inside the task of the program that sends it an intent.
@@ -65,6 +72,22 @@
         <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.
           android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
         <activity
+            android:name=".GuideActivity"
+            android:label="@string/privacy_browser_guide"
+            android:theme="@style/PrivacyBrowser.TabActivity"
+            android:parentActivityName=".MainWebViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:persistableMode="persistNever" >
+
+            <!-- android.support.PARENT_ACTIVITY is necessary for API <= 15. -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainWebViewActivity" />
+        </activity>
+
+        <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.
+          android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
+        <activity
             android:name=".SettingsActivity"
             android:label="@string/privacy_browser_settings"
             android:theme="@style/PrivacyBrowser.Settings"
@@ -83,7 +106,7 @@
         <activity
             android:name=".AboutActivity"
             android:label="@string/about_privacy_browser"
-            android:theme="@style/PrivacyBrowser.About"
+            android:theme="@style/PrivacyBrowser.TabActivity"
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >

@@ -24,14 +24,9 @@
         <item name="colorAccent">@color/blue</item>
     </style>
 
-    <!-- The default actionBarSize is 56dp.  53dp is the smallest that doesn't cause the urlTextBox to scroll vertically with a font size of Huge. -->
-    <style name="PrivacyBrowser.MainWebView">
-        <item name="android:actionBarSize">53dp</item>
-    </style>
+    <style name="PrivacyBrowser.MainWebView" />
 
-    <style name="PrivacyBrowser.About">
-        <item name="colorPrimaryDark">@color/blue</item>
-    </style>
+    <style name="PrivacyBrowser.TabActivity" />
 
     <!-- colorPrimaryDark is the color of the status bar. -->
     <style name="PrivacyBrowser.Settings" parent="Theme.AppCompat.Light.DarkActionBar">

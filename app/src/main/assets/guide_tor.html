@@ -1,0 +1,69 @@
+<!--
+  Copyright 2016 Soren Stoutner <soren@stoutner.com>.
+
+  This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
+
+  Privacy Browser is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Privacy Browser is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<html>
+<head>
+<style>
+    h3 {
+        color: 0D4781;
+    }
+
+    strong {
+        color: BF360C;
+    }
+</style>
+</head>
+
+<body>
+<h3>Masking IP Addresses</h3>
+
+<p>Although it isn't a perfect science, IP addresses can be turned into physical addresses with increasing accuracy.
+    There are <a href="https://www.whatismyip.com/">public databases</a> that show which ISP owns which IP address with a
+    good sense of which region they use it in.  There are private databases with more accurate information.  And, of course,
+    the ISP knows the exact service address of each IP address.</p>
+
+<p>VPN services can mask a device's IP address from a web server.  When a VPN service is engaged, all traffic is encrypted and routed
+    through the VPN server.  The web server only sees the IP address of the VPN server.  This is sufficient for maintaining anonymity
+    from web server operators and advertisers, but it isn't sufficient for maintaining anonymity from oppressive regimes which might
+    be able to lean on VPN operators to turn over their logs showing the original IP addresses.  Those looking for safety from such
+    regimes or desiring to blow the whistle on government agencies need something more.</p>
+
+<p>The Tor (The Onion Router) network was designed for just such purposes.  It bounces encrypted web traffic through at least three independent servers
+    that volunteer bandwidth to the project.  None of the servers have enough information to identify both the IP address of the original computer
+    and the final destination.  Therefore, any government agency wanting to access the information would have to compromise all the machines in the
+    link, which are dispersed over the globe.  This doesn't provide perfect privacy, but it gets pretty close.</p>
+
+<p>The Tor project has an app for Android called Orbot, which is available on <a href="https://f-droid.org/repository/browse/?fdfilter=orbot&fdid=org.torproject.android">F-Droid</a>
+    and everywhere else Privacy Browser is distributed.  Orbot can operate in three modes.</p>
+
+<ul>
+    <li><strong>Proxy mode</strong> Apps have to request to proxy their traffic through Orbot, meaning that each app developer has to add code to
+        their project to make it work.</li>
+    <li><strong>Transparent proxy mode</strong> Orbot intercepts traffic from other apps as it heads out onto the network and redirects it to the
+        Tor network.  Apps do not need to be modified by their developer to work with transparent proxy mode, but it does require that Orbot have
+        root access on the device.</li>
+    <li><strong>VPN mode</strong> Orbot registers itself as a VPN using Android's builtin VPN interface.  Apps do not need to be modified by the
+        developer to work with Orbot in VPN mode and root is not required.</li>
+</ul>
+
+<p>Currently, Privacy Browser works with Orbot in transparent proxy and VPN modes. Support for the standard proxy mode will be added in a
+    <a href="https://redmine.stoutner.com/issues/26">future release</a>.</p>
+
+<p>Because traffic is being routed through several Tor nodes, using Tor is often much slower than going straight to the internet.</p>
+</body>
+</html>

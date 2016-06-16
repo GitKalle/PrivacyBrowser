@@ -35,13 +35,14 @@ public class AboutTabFragment extends Fragment {
     public static AboutTabFragment createTab(int tab) {
         Bundle thisTabArguments = new Bundle();
         thisTabArguments.putInt("Tab", tab);
+
         AboutTabFragment thisTab = new AboutTabFragment();
         thisTab.setArguments(thisTabArguments);
         return thisTab;
     }
 
     @Override
-    public void onCreate (Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Store the tab number in tabNumber.
@@ -159,6 +160,7 @@ public class AboutTabFragment extends Fragment {
 
                 case 6:
                     tabWebView.loadUrl("file:///android_asset/about_links.html");
+                    break;
 
                 default:
                     break;

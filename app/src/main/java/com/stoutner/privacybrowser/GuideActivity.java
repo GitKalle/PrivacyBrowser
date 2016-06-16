@@ -29,14 +29,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-public class AboutActivity extends AppCompatActivity {
+public class GuideActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about_coordinatorlayout);
+        setContentView(R.layout.guide_coordinatorlayout);
 
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
-        Toolbar supportAppBar = (Toolbar) findViewById(R.id.about_toolbar);
+        Toolbar supportAppBar = (Toolbar) findViewById(R.id.guide_toolbar);
         setSupportActionBar(supportAppBar);
 
         // Display the home arrow on supportAppBar.
@@ -45,25 +45,25 @@ public class AboutActivity extends AppCompatActivity {
         appBar.setDisplayHomeAsUpEnabled(true);
 
         //  Setup the ViewPager.
-        ViewPager aboutViewPager = (ViewPager) findViewById(R.id.about_viewpager);
+        ViewPager aboutViewPager = (ViewPager) findViewById(R.id.guide_viewpager);
         assert aboutViewPager != null; // This assert removes the incorrect warning in Android Studio on the following line that aboutViewPager might be null.
-        aboutViewPager.setAdapter(new aboutPagerAdapter(getSupportFragmentManager()));
+        aboutViewPager.setAdapter(new guidePagerAdapter(getSupportFragmentManager()));
 
         // Setup the TabLayout and connect it to the ViewPager.
-        TabLayout aboutTabLayout = (TabLayout) findViewById(R.id.about_tablayout);
+        TabLayout aboutTabLayout = (TabLayout) findViewById(R.id.guide_tablayout);
         assert aboutTabLayout != null; // This assert removes the incorrect warning in Android Studio on the following line that aboutTabLayout might be null.
         aboutTabLayout.setupWithViewPager(aboutViewPager);
     }
 
-    public class aboutPagerAdapter extends FragmentPagerAdapter {
-        public aboutPagerAdapter(FragmentManager fm) {
+    public class guidePagerAdapter extends FragmentPagerAdapter {
+        public guidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         // Get the count of the number of tabs.
         public int getCount() {
-            return 7;
+            return 8;
         }
 
         @Override
@@ -71,25 +71,28 @@ public class AboutActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int tab) {
             switch (tab) {
                 case 0:
-                    return getString(R.string.version);
+                    return getString(R.string.overview);
 
                 case 1:
-                    return getString(R.string.permissions);
+                    return getString(R.string.javascript);
 
                 case 2:
-                    return getString(R.string.privacy_policy);
+                    return getString(R.string.local_storage);
 
                 case 3:
-                    return getString(R.string.changelog);
+                    return getString(R.string.user_agent);
 
                 case 4:
-                    return getString(R.string.license);
+                    return getString(R.string.tor);
 
                 case 5:
-                    return getString(R.string.contributors);
+                    return getString(R.string.tracking_uids);
 
                 case 6:
-                    return getString(R.string.links);
+                    return getString(R.string.clear_and_exit);
+
+                case 7:
+                    return getString(R.string.planned_features);
 
                 default:
                     return "";
@@ -99,7 +102,8 @@ public class AboutActivity extends AppCompatActivity {
         @Override
         // Setup each tab.
         public Fragment getItem(int tab) {
-            return AboutTabFragment.createTab(tab);
+            return GuideTabFragment.createTab(tab);
         }
     }
+
 }

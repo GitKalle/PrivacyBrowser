@@ -1,0 +1,66 @@
+<!--
+  Copyright 2016 Soren Stoutner <soren@stoutner.com>.
+
+  This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
+
+  Privacy Browser is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Privacy Browser is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<html>
+<head>
+<!-- We have to make an image into its own block to center it. -->
+<style>
+    h3 {
+        color: 0D4781;
+    }
+
+    img.center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+</head>
+
+<body>
+<h3>JavaScript Is Powerful</h3>
+
+<p>Back in the early days of the internet, web pages were static, meaning they they contained text and images that displayed on the screen
+    but didn't change or interact with the user. Of course, only so much that is interesting can happen with static content.
+    Several different technologies were developed to facilitate dynamic web pages.  JavaScript was one of these technologies.</p>
+
+<p>JavaScript is a programming language.  Many web servers host programs written in JavaScript, which are sent to devices as part of the web page.
+    The device runs the JavaScript on its local processor and follows the commands of the program, which can animate images on the website,
+    popup a menu, and do many other useful things.</p>
+
+<h3>JavaScript Is Dangerous</h3>
+<p>Of course, the concept of running arbitrary programs from a website is potentially dangerous.  So there are limitations placed on JavaScript
+    to keep it from doing things like installing viruses on the device.  However, it turns out that these limitations are overly broad.
+    Below is a screenshot from <a href="http://webkay.robinlinus.com">webkay</a>, which is a website that demonstrates the type of information that
+    JavaScript can produce about a device.</p>
+
+<p><img class="center" src="images/webkay.png" height="640" width="360"></p>
+
+<p>For privacy purposes, the ideal would be to browse the internet with JavaScript disabled.  However, there are some websites that legitimately require
+    JavaScript to accomplish their purposes and others that don't work correctly without JavaScript even though they could be programmed to do so.
+    Privacy Browser addresses this by making it easy to toggle JavaScript on and off.  Tapping the privacy shield will toggle it between blue
+    <img src="images/privacy_browser.png" height="16" width="16"> or yellow <img src="images/warning.png" height="16" width="16"> (both of which indicate
+    that JavaScript is disabled) and red <img src="images/javascript_enabled.png" height="16" width="16"> (JavaScript enabled) and and reload the website.
+    Looking at the different information <a href="http://webkay.robinlinus.com">webkay</a> can collect with JavaScript enabled and disabled is informative.</p>
+
+<p>Browsing the internet with JavaScript disabled, and only enabling it if needed, goes a long way to protecting user privacy.  In addition, JavaScript
+    is used to load much of the annoying advertisements and extra cruft that comes along with most modern websites.  With it disabled, websites will
+    load faster, consume less network traffic, and only contain less annoying advertisements, instead of those that do things like cover up the text of the
+    entire web page.</p>
+</body>
+</html>

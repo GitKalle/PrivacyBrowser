@@ -204,18 +204,15 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
             // Update the progress bar when a page is loading.
             @Override
             public void onProgressChanged(WebView view, int progress) {
-                // Make sure that appBar is not null.
-                if (appBar != null) {
-                    ProgressBar progressBar = (ProgressBar) appBar.getCustomView().findViewById(R.id.progressBar);
-                    progressBar.setProgress(progress);
-                    if (progress < 100) {
-                        progressBar.setVisibility(View.VISIBLE);
-                    } else {
-                        progressBar.setVisibility(View.GONE);
+                ProgressBar progressBar = (ProgressBar) appBar.getCustomView().findViewById(R.id.progressBar);
+                progressBar.setProgress(progress);
+                if (progress < 100) {
+                    progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    progressBar.setVisibility(View.GONE);
 
-                        //Stop the SwipeToRefresh indicator if it is running
-                        swipeToRefresh.setRefreshing(false);
-                    }
+                    //Stop the SwipeToRefresh indicator if it is running
+                    swipeToRefresh.setRefreshing(false);
                 }
             }
 
@@ -225,19 +222,15 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 // Save a copy of the favorite icon for use if a shortcut is added to the home screen.
                 favoriteIcon = icon;
 
-                // Place the favorite icon in the appBar if it is not null.
-                if (appBar != null) {
-                    ImageView imageViewFavoriteIcon = (ImageView) appBar.getCustomView().findViewById(R.id.favoriteIcon);
-                    imageViewFavoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
-                }
+                // Place the favorite icon in the appBar.
+                ImageView imageViewFavoriteIcon = (ImageView) appBar.getCustomView().findViewById(R.id.favoriteIcon);
+                imageViewFavoriteIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, 64, 64, true));
             }
 
             // Enter full screen video
             @Override
             public void onShowCustomView(View view, CustomViewCallback callback) {
-                if (appBar != null) {
-                    appBar.hide();
-                }
+                appBar.hide();
 
                 // Show the fullScreenVideoFrameLayout.
                 assert fullScreenVideoFrameLayout != null; //This assert removes the incorrect warning on the following line that fullScreenVideoFrameLayout might be null.
@@ -271,9 +264,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
             // Exit full screen video
             public void onHideCustomView() {
-                if (appBar != null) {
-                    appBar.show();
-                }
+                appBar.show();
 
                 // Show the mainWebView.
                 mainWebView.setVisibility(View.VISIBLE);
@@ -474,6 +465,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         MenuItem clearCookies = menu.findItem(R.id.clearCookies);
         clearCookies.setEnabled(cookieManager.hasCookies());
 
+        // Enable DOM Storage if JavaScript is enabled.
+        MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
+        toggleDomStorage.setEnabled(javaScriptEnabled);
+
         // Run all the other default commands.
         super.onPrepareOptionsMenu(menu);
 
@@ -505,7 +500,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 if (javaScriptEnabled) {
                     Snackbar.make(findViewById(R.id.mainWebView), R.string.javascript_enabled, Snackbar.LENGTH_SHORT).show();
                 } else {
-                    if (domStorageEnabled || firstPartyCookiesEnabled) {
+                    if (firstPartyCookiesEnabled) {
                         Snackbar.make(findViewById(R.id.mainWebView), R.string.javascript_disabled, Snackbar.LENGTH_SHORT).show();
                     } else {
                         Snackbar.make(findViewById(R.id.mainWebView), R.string.privacy_mode, Snackbar.LENGTH_SHORT).show();
@@ -558,9 +553,6 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
                 // Apply the new DOM Storage status.
                 mainWebView.getSettings().setDomStorageEnabled(domStorageEnabled);
-
-                // Update the privacy icon.
-                updatePrivacyIcon();
 
                 // Reload the WebView.
                 mainWebView.reload();
@@ -640,6 +632,12 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 startActivity(downloadManagerIntent);
                 break;
 
+            case R.id.guide:
+                // Launch GuideActivity.
+                Intent guideIntent = new Intent(this, GuideActivity.class);
+                startActivity(guideIntent);
+                break;
+
             case R.id.settings:
                 // Launch SettingsActivity.
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
@@ -653,16 +651,16 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 break;
 
             case R.id.clearAndExit:
-                // Clear DOM storage.
-                WebStorage domStorage = WebStorage.getInstance();
-                domStorage.deleteAllData();
-
                 // Clear cookies.  The commands changed slightly in API 21.
                 if (Build.VERSION.SDK_INT >= 21) {
                     cookieManager.removeAllCookies(null);
                 } else {
                     cookieManager.removeAllCookie();
                 }
+
+                // Clear DOM storage.
+                WebStorage domStorage = WebStorage.getInstance();
+                domStorage.deleteAllData();
 
                 // Clear cache.  The argument of "true" includes disk files.
                 mainWebView.clearCache(true);
@@ -743,7 +741,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             // Load the previous URL if available.
-            assert mainWebView != null; //This assert removes the incorrect warning on the following line that mainWebView might be null.
+            assert mainWebView != null; //This assert removes the incorrect warning in Android Studio on the following line that mainWebView might be null.
             if (mainWebView.canGoBack()) {
                 mainWebView.goBack();
             } else {
@@ -821,7 +819,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         if (javaScriptEnabled) {
             privacyIcon.setIcon(R.drawable.javascript_enabled);
         } else {
-            if (domStorageEnabled || firstPartyCookiesEnabled) {
+            if (firstPartyCookiesEnabled) {
                 privacyIcon.setIcon(R.drawable.warning);
             } else {
                 privacyIcon.setIcon(R.drawable.privacy_mode);

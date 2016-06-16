@@ -39,6 +39,13 @@ public class SettingsFragment extends PreferenceFragment {
         // Initialize savedPreferences.
         savedPreferences = getPreferenceScreen().getSharedPreferences();
 
+        // Allow the user to access "dom_storage_enabled" if "javascript_enabled" is enabled.  The default is false.
+        final Preference domStorageEnabled = findPreference("dom_storage_enabled");
+        domStorageEnabled.setEnabled(savedPreferences.getBoolean("javascript_enabled", false));
+
+        // Allow the user to access "third_party_cookies_enabled" if "first_party_cookies_enabled" is enabled.  The default is false.
+        final Preference thirdPartyCookiesEnabled = findPreference("third_party_cookies_enabled");
+        thirdPartyCookiesEnabled.setEnabled(savedPreferences.getBoolean("first_party_cookies_enabled", false));
 
         // Set the current user-agent as the summary text for the "user_agent" preference when the preference screen is loaded.
         final Preference userAgentPreference = findPreference("user_agent");
@@ -110,56 +117,45 @@ public class SettingsFragment extends PreferenceFragment {
         // Listen for preference changes.
         preferencesListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
-            // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.
+            // Remove Android Studio's warning about the dangers of using SetJavaScriptEnabled.  We know.
             @SuppressLint("SetJavaScriptEnabled")
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-                // Several keys need to update the toggleJavaScript icon.
-                MenuItem toggleJavaScript = MainWebViewActivity.mainMenu.findItem(R.id.toggleJavaScript);
 
                 switch (key) {
                     case "javascript_enabled":
                         // Set javaScriptEnabled to the new state.  The default is false.
                         MainWebViewActivity.javaScriptEnabled = sharedPreferences.getBoolean("javascript_enabled", false);
 
+                        // Toggle the state of the "dom_storage_enabled" preference.  The default is false.
+                        final Preference domStorageEnabled = findPreference("dom_storage_enabled");
+                        domStorageEnabled.setEnabled(sharedPreferences.getBoolean("javascript_enabled", false));
+
                         // Update mainWebView and reload the website.
                         MainWebViewActivity.mainWebView.getSettings().setJavaScriptEnabled(MainWebViewActivity.javaScriptEnabled);
                         MainWebViewActivity.mainWebView.reload();
 
-                        // Update the toggleJavaScript icon.
-                        if (MainWebViewActivity.javaScriptEnabled) {
-                            toggleJavaScript.setIcon(R.drawable.javascript_enabled);
-                        } else {
-                            if (MainWebViewActivity.firstPartyCookiesEnabled || MainWebViewActivity.domStorageEnabled) {
-                                toggleJavaScript.setIcon(R.drawable.warning);
-                            } else {
-                                toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                            }
-                        }
+                        // Update the privacy icon.
+                        updatePrivacyIcon();
                         break;
 
                     case "first_party_cookies_enabled":
                         // Set firstPartyCookiesEnabled to the new state.  The default is false.
                         MainWebViewActivity.firstPartyCookiesEnabled = sharedPreferences.getBoolean("first_party_cookies_enabled", false);
 
-                        // Update the checkbox in the options menu.
-                        MenuItem firstPartyCookiesMenuItem = MainWebViewActivity.mainMenu.findItem(R.id.toggleFirstPartyCookies);
-                        firstPartyCookiesMenuItem.setChecked(MainWebViewActivity.firstPartyCookiesEnabled);
+                        // Toggle the state of the "third_party_cookies_enabled" preference.  The default is false.
+                        final Preference thirdPartyCookiesEnabled = findPreference("third_party_cookies_enabled");
+                        thirdPartyCookiesEnabled.setEnabled(sharedPreferences.getBoolean("first_party_cookies_enabled", false));
 
                         // Update mainWebView and reload the website.
                         MainWebViewActivity.cookieManager.setAcceptCookie(MainWebViewActivity.firstPartyCookiesEnabled);
                         MainWebViewActivity.mainWebView.reload();
 
-                        // Update the toggleJavaScript icon.
-                        if (MainWebViewActivity.javaScriptEnabled) {
-                            toggleJavaScript.setIcon(R.drawable.javascript_enabled);
-                        } else {
-                            if (MainWebViewActivity.firstPartyCookiesEnabled || MainWebViewActivity.domStorageEnabled) {
-                                toggleJavaScript.setIcon(R.drawable.warning);
-                            } else {
-                                toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                            }
-                        }
+                        // Update the checkbox in the options menu.
+                        MenuItem firstPartyCookiesMenuItem = MainWebViewActivity.mainMenu.findItem(R.id.toggleFirstPartyCookies);
+                        firstPartyCookiesMenuItem.setChecked(MainWebViewActivity.firstPartyCookiesEnabled);
+
+                        // Update the privacy icon.
+                        updatePrivacyIcon();
                         break;
 
                     case "third_party_cookies_enabled":
@@ -189,16 +185,8 @@ public class SettingsFragment extends PreferenceFragment {
                         MainWebViewActivity.mainWebView.getSettings().setDomStorageEnabled(MainWebViewActivity.domStorageEnabled);
                         MainWebViewActivity.mainWebView.reload();
 
-                        // Update the toggleJavaScript icon.
-                        if (MainWebViewActivity.javaScriptEnabled) {
-                            toggleJavaScript.setIcon(R.drawable.javascript_enabled);
-                        } else {
-                            if (MainWebViewActivity.firstPartyCookiesEnabled || MainWebViewActivity.domStorageEnabled) {
-                                toggleJavaScript.setIcon(R.drawable.warning);
-                            } else {
-                                toggleJavaScript.setIcon(R.drawable.privacy_mode);
-                            }
-                        }
+                        // Update the privacy icon.
+                        updatePrivacyIcon();
                         break;
 
                     case "user_agent":
@@ -332,5 +320,20 @@ public class SettingsFragment extends PreferenceFragment {
     public void onResume() {
         super.onResume();
         savedPreferences.registerOnSharedPreferenceChangeListener(preferencesListener);
+    }
+
+    private void updatePrivacyIcon() {
+        // Define a reference to the toggleJavaScript icon.
+        MenuItem toggleJavaScript = MainWebViewActivity.mainMenu.findItem(R.id.toggleJavaScript);
+
+        if (MainWebViewActivity.javaScriptEnabled) {
+            toggleJavaScript.setIcon(R.drawable.javascript_enabled);
+        } else {
+            if (MainWebViewActivity.firstPartyCookiesEnabled) {
+                toggleJavaScript.setIcon(R.drawable.warning);
+            } else {
+                toggleJavaScript.setIcon(R.drawable.privacy_mode);
+            }
+        }
     }
 }

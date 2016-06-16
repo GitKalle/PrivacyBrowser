@@ -1,0 +1,87 @@
+<!--
+  Copyright 2016 Soren Stoutner <soren@stoutner.com>.
+
+  This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
+
+  Privacy Browser is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Privacy Browser is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<html>
+<head>
+<style>
+    h3 {
+        color: 0D4781;
+    }
+</style>
+</head>
+
+<body>
+<h3>First-Party Cookies</h3>
+
+<p>Cookies can be divided into two types.  First-party cookies are cookies set by the website in the URL bar at the top of the page.</p>
+
+<p>From the early days of the internet, it became obvious that it would be advantageous for websites to be able to store
+    information on a computer for future access.  For example, a website that displays weather information could ask the
+    user for a zip code, and then store it in a cookie.  The next time the user visited the website, weather information
+    would automatically load for that zip code, without the user having to enter the zip code, and without the need for
+    the user to create an account on the website (which would be overkill for such a simple task).</p>
+
+<p>Like everything else on the web, clever people figured out all types of ways to abuse cookies to do things that users
+    would not approve of if they knew they were happening.  For example, a website can set a cookie with a unique serial
+    number on a device.  Then, every time a user visits the website on that device, it can be linked to a unique profile
+    the server maintains for that serial number, even if the device connects from different IP addresses, as cell phones often do.</p>
+
+<p>Some websites with logins require first-party cookies to be enabled for a user to stay logged in.  Cookies aren't the only only way
+    a website can maintain a user logged in as they move from page to page on the site, but if a particular website has chosen to
+    implement logins in that way, enabling first-party cookies on that site will be the only way to use the functionality.</p>
+
+<p>If first-party cookies are enabled but JavaScript is disabled, the privacy icon will be yellow <img src="images/warning.png" height="16" width="16">
+    as a warning.</p>
+
+
+<h3>Third-Party Cookies</h3>
+
+<p>Third-party cookies are set by portions of a website that are loaded from servers different from the URL at the top of the page.
+    For example, most website that have advertisements load them from a third-party ad broker, like Google's
+    <a href="https://www.google.com/adsense/start/#?modal_active=none">Ad Sense</a>. Every time the website loads, it requests the ad
+    broker to display some ads.  The ad broker analyzes any information they may have about the user, looks at the current
+    rate advertisers are willing to pay for their ads, and selects those to display. The section of the website that displays
+    the ads is loaded from the third-party broker's server instead of the main server.</p>
+
+<p>Because most of the advertisements on the internet are displayed from only a few brokers, it didn't take long for them to realize
+    that they could set a tracking cookie on the user's device and know every place that user goes.  Every time an ad loads from a broker,
+    the first thing it does it check to see if if the device already has a unique serial number in a tracking cookie.  If it does, it looks up
+    the profile for that serial number and makes a note of the new site.  This is why a user can do a search on one website for a
+    product that they typically don't look for, like walnuts, and then suddenly start seeing advertisements for walnuts on every
+    website they visit.</p>
+
+<p>In addition to ad brokers, social media sites discovered they could get in on the action.  A few years ago, the major social media sites
+    like Facebook and Twitter convinced a large number of websites that it would be in there best interest to place little social media
+    icons on their pages.  These are not just images.  They contain <a href="https://developers.facebook.com/docs/plugins/like-button/">imbedded code</a> that
+    links back to the social media site, and, among other things, loads a third-party cookie on the device.  These cookies are placed even if the user does
+    not have an account with the social media platform. Over time, companies like Facebook (which also run an ad network) have built up quite a large number
+    of detailed profiles about people who have <a href="http://www.theverge.com/2016/5/27/11795248/facebook-ad-network-non-users-cookies-plug-ins">never even
+    created an account on their site</a>.</p>
+
+<p>There is almost no good reason to ever enable third-party cookies.  On devices with Android KitKat or older (version <= 4.4.4 or API <= 20), WebView
+    does not <a href="https://developer.android.com/reference/android/webkit/CookieManager.html#acceptThirdPartyCookies(android.webkit.WebView)">differentiate
+    between first-party and third-party cookies</a>. Thus, enabling first-party cookies will also enable third-party cookies.</p>
+
+
+<h3>DOM Storage</h3>
+
+<p>Document Object Model storage, also known as web storage, is like cookies on steroids.  Whereas the maximum combined storage size for all cookies from
+    a single URL is 4 kilobytes, DOM storage can hold between <a href="https://en.wikipedia.org/wiki/Web_storage#Storage_size">5-25 megabytes per site</a>.
+    Because DOM storage uses JavaScript to read and write data, enabling it will do nothing unless JavaScript is also enabled.</p>
+</body>
+</html>

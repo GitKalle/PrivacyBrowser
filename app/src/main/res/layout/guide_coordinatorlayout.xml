@@ -22,7 +22,7 @@
   When it is specified the theme should include <item name="android:windowTranslucentStatus">true</item>
   to make the status bar a transparent, darkened overlay. -->
 <android.support.design.widget.CoordinatorLayout
-    android:id="@+id/about_coordinatorlayout"
+    android:id="@+id/guide_coordinatorlayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
@@ -37,7 +37,7 @@
 
         <!-- We need to set android:background="@color/blue" here or any space to the right of the TabLayout on large devices will be white. -->
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/about_appbarlayout"
+            android:id="@+id/guide_appbarlayout"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="@color/blue"
@@ -45,7 +45,7 @@
 
             <!-- android:theme="@style/PrivacyBrowser.DarkAppBar" makes the text and icons in the AppBar white. -->
             <android.support.v7.widget.Toolbar
-                android:id="@+id/about_toolbar"
+                android:id="@+id/guide_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/blue"
@@ -53,7 +53,7 @@
                 app:popupTheme="@style/PrivacyBrowser.PopupOverlay" />
 
             <android.support.design.widget.TabLayout
-                android:id="@+id/about_tablayout"
+                android:id="@+id/guide_tablayout"
                 xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
 
         <!-- android:layout_weight="1" makes about_viewpager fill the rest of the screen. -->
         <android.support.v4.view.ViewPager
-            android:id="@+id/about_viewpager"
+            android:id="@+id/guide_viewpager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
