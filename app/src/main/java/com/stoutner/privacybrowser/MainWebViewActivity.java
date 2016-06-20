@@ -756,8 +756,9 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     }
 
     private void loadUrlFromTextBox() throws UnsupportedEncodingException {
-        // Get the text from urlTextBox and convert it to a string.
-        String unformattedUrlString = urlTextBox.getText().toString();
+        // Get the text from urlTextBox and convert it to a string.  trim() removes white spaces from the beginning and end of the string.
+        String unformattedUrlString = urlTextBox.getText().toString().trim();
+
         URL unformattedUrl = null;
         Uri.Builder formattedUri = new Uri.Builder();
 
