@@ -47,6 +47,12 @@
             android:summary="@string/dom_storage_preference_summary"
             android:defaultValue="false" />
 
+        <SwitchPreference
+            android:key="save_form_data_enabled"
+            android:title="@string/save_form_data_preference"
+            android:summary="@string/save_form_data_preference_summary"
+            android:defaultValue="false" />
+
         <ListPreference
             android:key="user_agent"
             android:title="@string/user_agent"

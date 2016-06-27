@@ -52,32 +52,45 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/toggleSaveFormData"
+        android:title="@string/form_data"
+        android:orderInCategory="50"
+        android:checkable="true"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/clearCookies"
         android:title="@string/clear_cookies"
-        android:orderInCategory="50"
+        android:orderInCategory="60"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/clearDomStorage"
         android:title="@string/clear_dom_storage"
-        android:orderInCategory="60"
+        android:orderInCategory="70"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/clearFormData"
+        android:title="@string/clear_form_data"
+        android:orderInCategory="80"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/share"
         android:title="@string/share"
-        android:orderInCategory="70"
+        android:orderInCategory="90"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/addToHomescreen"
         android:title="@string/add_to_home_screen"
-        android:orderInCategory="80"
+        android:orderInCategory="100"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/refresh"
         android:title="@string/refresh"
-        android:orderInCategory="90"
+        android:orderInCategory="110"
         app:showAsAction="never" />
 </menu>

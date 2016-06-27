@@ -59,15 +59,15 @@
     the ads is loaded from the third-party broker's server instead of the main server.</p>
 
 <p>Because most of the advertisements on the internet are displayed from only a few brokers, it didn't take long for them to realize
-    that they could set a tracking cookie on the user's device and know every place that user goes.  Every time an ad loads from a broker,
-    the first thing it does it check to see if if the device already has a unique serial number in a tracking cookie.  If it does, it looks up
-    the profile for that serial number and makes a note of the new site.  This is why a user can do a search on one website for a
+    that they could set a tracking cookie on the user's device and know every place that user goes. Every time an ad loads from a broker,
+    the first thing it does it check to see if if the device already has a unique serial number in a tracking cookie. If it does, it looks up
+    the profile for that serial number and makes a note of the new site. This is why a user can do a search on one website for a
     product that they typically don't look for, like walnuts, and then suddenly start seeing advertisements for walnuts on every
     website they visit.</p>
 
-<p>In addition to ad brokers, social media sites discovered they could get in on the action.  A few years ago, the major social media sites
+<p>In addition to ad brokers, social media sites discovered they could get in on the action. A few years ago, the major social media sites
     like Facebook and Twitter convinced a large number of websites that it would be in there best interest to place little social media
-    icons on their pages.  These are not just images.  They contain <a href="https://developers.facebook.com/docs/plugins/like-button/">imbedded code</a> that
+    icons on their pages. These are not just images. They contain <a href="https://developers.facebook.com/docs/plugins/like-button/">imbedded code</a> that
     links back to the social media site, and, among other things, loads a third-party cookie on the device.  These cookies are placed even if the user does
     not have an account with the social media platform. Over time, companies like Facebook (which also run an ad network) have built up quite a large number
     of detailed profiles about people who have <a href="http://www.theverge.com/2016/5/27/11795248/facebook-ad-network-non-users-cookies-plug-ins">never even
@@ -80,8 +80,14 @@
 
 <h3>DOM Storage</h3>
 
-<p>Document Object Model storage, also known as web storage, is like cookies on steroids.  Whereas the maximum combined storage size for all cookies from
+<p>Document Object Model storage, also known as web storage, is like cookies on steroids. Whereas the maximum combined storage size for all cookies from
     a single URL is 4 kilobytes, DOM storage can hold between <a href="https://en.wikipedia.org/wiki/Web_storage#Storage_size">5-25 megabytes per site</a>.
     Because DOM storage uses JavaScript to read and write data, enabling it will do nothing unless JavaScript is also enabled.</p>
+
+
+<h3>Form Data</h3>
+
+<p>Form data contains information typed into web forms, like user names, addresses, phone numbers, etc., and lists them in a drop-down box on future visits.
+    Unlike the other forms of local storage, form data is not sent to the web server without specific user interaction.</p>
 </body>
 </html>

@@ -53,8 +53,10 @@
     <string name="first_party_cookies">First-Party Cookies</string>
     <string name="third_party_cookies">Third-Party Cookies</string>
     <string name="dom_storage">DOM Storage</string>
+    <string name="form_data">Form Data</string>
     <string name="clear_cookies">Clear Cookies</string>
     <string name="clear_dom_storage">Clear DOM Storage</string>
+    <string name="clear_form_data">Clear Form Data</string>
     <string name="share">Share</string>
     <string name="add_to_home_screen">Add to Home Screen</string>
     <string name="refresh">Refresh</string>
@@ -82,6 +84,8 @@
     <string name="third_party_cookies_summary">This setting requires Android Lollipop (version 5.0) or higher.  It has no effect if first-party cookies are disabled.</string>
     <string name="dom_storage_preference">Enable DOM storage by default</string>
     <string name="dom_storage_preference_summary">JavaScript must be enabled for DOM storage to function.</string>
+    <string name="save_form_data_preference">Enable saving of form data by default</string>
+    <string name="save_form_data_preference_summary">Saved form data can auto-populate fields on websites.</string>
     <string name="user_agent">User agent</string>
     <string-array name="user_agent_entries">
         <item>WebView Default</item>

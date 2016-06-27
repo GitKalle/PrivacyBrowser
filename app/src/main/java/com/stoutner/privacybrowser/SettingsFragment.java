@@ -189,6 +189,19 @@ public class SettingsFragment extends PreferenceFragment {
                         updatePrivacyIcon();
                         break;
 
+                    case "save_form_data_enabled":
+                        // Set saveFormDataEnabled to the new state.  The default is false.
+                        MainWebViewActivity.saveFormDataEnabled = sharedPreferences.getBoolean("save_form_data_enabled", false);
+
+                        // Update the checkbox in the options menu.
+                        MenuItem saveFormDataMenuItem = MainWebViewActivity.mainMenu.findItem(R.id.toggleSaveFormData);
+                        saveFormDataMenuItem.setChecked(MainWebViewActivity.saveFormDataEnabled);
+
+                        // Update mainWebView and reload the website.
+                        MainWebViewActivity.mainWebView.getSettings().setSaveFormData(MainWebViewActivity.saveFormDataEnabled);
+                        MainWebViewActivity.mainWebView.reload();
+                        break;
+
                     case "user_agent":
                         String userAgentString = sharedPreferences.getString("user_agent", "Default user agent");
 

@@ -53,6 +53,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebViewDatabase;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -82,6 +83,8 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     public static boolean thirdPartyCookiesEnabled;
     // domStorageEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
     public static boolean domStorageEnabled;
+    // saveFormDataEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
+    public static boolean saveFormDataEnabled;
     // javaScriptDisabledSearchURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
     public static String javaScriptDisabledSearchURL;
     // javaScriptEnabledSearchURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
@@ -321,6 +324,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         domStorageEnabled = savedPreferences.getBoolean("dom_storage_enabled", false);
         mainWebView.getSettings().setDomStorageEnabled(domStorageEnabled);
 
+        // Set the saved form data initial status.  The default is false.
+        saveFormDataEnabled = savedPreferences.getBoolean("save_form_data_enabled", false);
+        mainWebView.getSettings().setSaveFormData(saveFormDataEnabled);
+
         // Set the user agent initial status.
         String userAgentString = savedPreferences.getString("user_agent", "Default user agent");
         switch (userAgentString) {
@@ -427,6 +434,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         MenuItem toggleFirstPartyCookies = menu.findItem(R.id.toggleFirstPartyCookies);
         MenuItem toggleThirdPartyCookies = menu.findItem(R.id.toggleThirdPartyCookies);
         MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
+        MenuItem toggleSaveFormData = menu.findItem(R.id.toggleSaveFormData);
 
         // Set the initial status of the privacy icon.
         updatePrivacyIcon();
@@ -435,6 +443,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         toggleFirstPartyCookies.setChecked(firstPartyCookiesEnabled);
         toggleThirdPartyCookies.setChecked(thirdPartyCookiesEnabled);
         toggleDomStorage.setChecked(domStorageEnabled);
+        toggleSaveFormData.setChecked(saveFormDataEnabled);
 
         return true;
     }
@@ -449,13 +458,18 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
             toggleThirdPartyCookies.setEnabled(false);
         }
 
+        // Enable DOM Storage if JavaScript is enabled.
+        MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
+        toggleDomStorage.setEnabled(javaScriptEnabled);
+
         // Enable Clear Cookies if there are any.
         MenuItem clearCookies = menu.findItem(R.id.clearCookies);
         clearCookies.setEnabled(cookieManager.hasCookies());
 
-        // Enable DOM Storage if JavaScript is enabled.
-        MenuItem toggleDomStorage = menu.findItem(R.id.toggleDomStorage);
-        toggleDomStorage.setEnabled(javaScriptEnabled);
+        // Enable Clear Form Data is there is any.
+        MenuItem clearFormData = menu.findItem(R.id.clearFormData);
+        WebViewDatabase mainWebViewDatabase = WebViewDatabase.getInstance(this);
+        clearFormData.setEnabled(mainWebViewDatabase.hasFormData());
 
         // Run all the other default commands.
         super.onPrepareOptionsMenu(menu);
@@ -546,6 +560,20 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 mainWebView.reload();
                 return true;
 
+            case R.id.toggleSaveFormData:
+                // Switch the status of saveFormDataEnabled.
+                saveFormDataEnabled = !saveFormDataEnabled;
+
+                // Update the menu checkbox.
+                menuItem.setChecked(saveFormDataEnabled);
+
+                // Apply the new form data status.
+                mainWebView.getSettings().setSaveFormData(saveFormDataEnabled);
+
+                // Reload the WebView.
+                mainWebView.reload();
+                return true;
+
             case R.id.clearCookies:
                 if (Build.VERSION.SDK_INT < 21) {
                     cookieManager.removeAllCookie();
@@ -559,6 +587,12 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 WebStorage webStorage = WebStorage.getInstance();
                 webStorage.deleteAllData();
                 Snackbar.make(findViewById(R.id.mainWebView), R.string.dom_storage_deleted, Snackbar.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.clearFormData:
+                WebViewDatabase mainWebViewDatabase = WebViewDatabase.getInstance(this);
+                mainWebViewDatabase.clearFormData();
+                mainWebView.reload();
                 return true;
 
             case R.id.share:
