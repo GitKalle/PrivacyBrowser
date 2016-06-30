@@ -42,17 +42,20 @@
     <group
         android:id="@+id/navigationGroup1" >
         <item
-            android:id="@+id/downloads"
-            android:title="@string/downloads"
-            android:icon="@drawable/downloads"
+            android:id="@+id/bookmarks"
+            android:title="@string/bookmarks"
+            android:icon="@drawable/bookmarks"
             android:orderInCategory="40" />
 
         <item
-            android:id="@+id/guide"
-            android:title="@string/guide"
-            android:icon="@drawable/guide"
+            android:id="@+id/downloads"
+            android:title="@string/downloads"
+            android:icon="@drawable/downloads"
             android:orderInCategory="50" />
+    </group>
 
+    <group
+        android:id="@+id/navigationGroup2" >
         <item
             android:id="@+id/settings"
             android:title="@string/settings"
@@ -60,19 +63,25 @@
             android:orderInCategory="60" />
 
         <item
+            android:id="@+id/guide"
+            android:title="@string/guide"
+            android:icon="@drawable/guide"
+            android:orderInCategory="70" />
+
+        <item
             android:id="@+id/about"
             android:title="@string/about"
             android:icon="@drawable/about"
-            android:orderInCategory="70" />
+            android:orderInCategory="80" />
     </group>
 
     <!-- If a group has an id, a line is drawn above it in the navigation view. -->
     <group
-        android:id="@+id/navigationGroup2" >
+        android:id="@+id/navigationGroup3" >
         <item
             android:id="@+id/clearAndExit"
             android:title="@string/clear_and_exit"
             android:icon="@drawable/exit"
-            android:orderInCategory="80" />
+            android:orderInCategory="90" />
     </group>
 </menu>

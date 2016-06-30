@@ -26,7 +26,7 @@
 
     <style name="PrivacyBrowser.MainWebView" />
 
-    <style name="PrivacyBrowser.TabActivity" />
+    <style name="PrivacyBrowser.SecondaryActivity" />
 
     <!-- colorPrimaryDark is the color of the status bar. -->
     <style name="PrivacyBrowser.Settings" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -41,5 +41,9 @@
     <style name="PrivacyBrowser.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
 
     <style name="PrivacyBrowser.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="PrivacyBrowser.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/blue</item>
+    </style>
 
 </resources>

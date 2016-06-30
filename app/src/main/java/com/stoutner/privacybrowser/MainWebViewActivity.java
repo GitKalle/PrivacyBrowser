@@ -21,6 +21,7 @@ package com.stoutner.privacybrowser;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.DownloadManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,14 +33,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.KeyEvent;
@@ -66,46 +65,70 @@ import java.net.URLEncoder;
 
 // We need to use AppCompatActivity from android.support.v7.app.AppCompatActivity to have access to the SupportActionBar until the minimum API is >= 21.
 public class MainWebViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
-    // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut.
+    // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut and BookmarksActivity.
+    // It is also used in onCreate() and onCreateHomeScreenShortcutCreate().
     public static Bitmap favoriteIcon;
-    // mainWebView is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onOptionsItemSelected(), onNavigationItemSelected(), and loadUrlFromTextBox().
+
+    // mainWebView is public static so it can be accessed from SettingsFragment.
+    // It is also used in onCreate(), onOptionsItemSelected(), onNavigationItemSelected(), and loadUrlFromTextBox().
     public static WebView mainWebView;
+
+    // formattedUrlString is public static so it can be accessed from BookmarksActivity.
+    // It is also used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
+    public static String formattedUrlString;
 
     // mainMenu is public static so it can be accessed from SettingsFragment.  It is also used in onCreateOptionsMenu() and onOptionsItemSelected().
     public static Menu mainMenu;
+
     // cookieManager is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onOptionsItemSelected(), and onNavigationItemSelected().
     public static CookieManager cookieManager;
-    // javaScriptEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), onOptionsItemSelected(), and loadUrlFromTextBox().
+
+    // javaScriptEnabled is public static so it can be accessed from SettingsFragment.
+    // It is also used in onCreate(), onCreateOptionsMenu(), onOptionsItemSelected(), and loadUrlFromTextBox().
     public static boolean javaScriptEnabled;
-    // firstPartyCookiesEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
+
+    // firstPartyCookiesEnabled is public static so it can be accessed from SettingsFragment.
+    // It is also used in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
     public static boolean firstPartyCookiesEnabled;
+
     // thirdPartyCookiesEnabled is used in onCreate(), onCreateOptionsMenu(), onPrepareOptionsMenu(), and onOptionsItemSelected().
     public static boolean thirdPartyCookiesEnabled;
+
     // domStorageEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
     public static boolean domStorageEnabled;
+
     // saveFormDataEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate(), onCreateOptionsMenu(), and onOptionsItemSelected().
     public static boolean saveFormDataEnabled;
+
     // javaScriptDisabledSearchURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
     public static String javaScriptDisabledSearchURL;
+
     // javaScriptEnabledSearchURL is public static so it can be accessed from SettingsFragment.  It is also used in onCreate() and loadURLFromTextBox().
     public static String javaScriptEnabledSearchURL;
+
     // homepage is public static so it can be accessed from  SettingsFragment.  It is also used in onCreate() and onOptionsItemSelected().
     public static String homepage;
+
     // swipeToRefresh is public static so it can be accessed from SettingsFragment.  It is also used in onCreate().
     public static SwipeRefreshLayout swipeToRefresh;
+
     // swipeToRefreshEnabled is public static so it can be accessed from SettingsFragment.  It is also used in onCreate().
     public static boolean swipeToRefreshEnabled;
 
+
+
     // drawerToggle is used in onCreate(), onPostCreate(), onConfigurationChanged(), onNewIntent(), and onNavigationItemSelected().
     private ActionBarDrawerToggle drawerToggle;
+
     // drawerLayout is used in onCreate(), onNewIntent(), and onBackPressed().
     private DrawerLayout drawerLayout;
-    // formattedUrlString is used in onCreate(), onOptionsItemSelected(), onCreateHomeScreenShortcutCreate(), and loadUrlFromTextBox().
-    private String formattedUrlString;
+
     // privacyIcon is used in onCreateOptionsMenu() and updatePrivacyIcon().
     private MenuItem privacyIcon;
+
     // urlTextBox is used in onCreate(), onOptionsItemSelected(), and loadUrlFromTextBox().
     private EditText urlTextBox;
+
     // adView is used in onCreate() and onConfigurationChanged().
     private View adView;
 
@@ -604,9 +627,9 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 return true;
 
             case R.id.addToHomescreen:
-                // Show the CreateHomeScreenShortcut AlertDialog and name this instance createShortcut.
-                AppCompatDialogFragment shortcutDialog = new CreateHomeScreenShortcut();
-                shortcutDialog.show(getSupportFragmentManager(), "createShortcut");
+                // Show the CreateHomeScreenShortcut AlertDialog and name this instance "@string/create_shortcut".
+                DialogFragment createHomeScreenShortcutDialogFragment = new CreateHomeScreenShortcut();
+                createHomeScreenShortcutDialogFragment.show(getFragmentManager(), "@string/create_shortcut");
 
                 //Everything else will be handled by CreateHomeScreenShortcut and the associated listeners below.
                 return true;
@@ -644,6 +667,12 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 }
                 break;
 
+            case R.id.bookmarks:
+                // Launch BookmarksActivity.
+                Intent bookmarksIntent = new Intent(this, BookmarksActivity.class);
+                startActivity(bookmarksIntent);
+                break;
+
             case R.id.downloads:
                 // Launch the system Download Manager.
                 Intent downloadManagerIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
@@ -654,16 +683,16 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 startActivity(downloadManagerIntent);
                 break;
 
-            case R.id.guide:
-                // Launch GuideActivity.
-                Intent guideIntent = new Intent(this, GuideActivity.class);
-                startActivity(guideIntent);
-                break;
-
             case R.id.settings:
                 // Launch SettingsActivity.
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
+                break;
+
+            case R.id.guide:
+                // Launch GuideActivity.
+                Intent guideIntent = new Intent(this, GuideActivity.class);
+                startActivity(guideIntent);
                 break;
 
             case R.id.about:
@@ -683,6 +712,10 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 // Clear DOM storage.
                 WebStorage domStorage = WebStorage.getInstance();
                 domStorage.deleteAllData();
+
+                // Clear form data.
+                WebViewDatabase formData = WebViewDatabase.getInstance(this);
+                formData.clearFormData();
 
                 // Clear cache.  The argument of "true" includes disk files.
                 mainWebView.clearCache(true);
@@ -730,14 +763,14 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     }
 
     @Override
-    public void onCreateHomeScreenShortcutCancel(DialogFragment dialog) {
+    public void onCreateHomeScreenShortcutCancel(DialogFragment dialogFragment) {
         // Do nothing because the user selected "Cancel".
     }
 
     @Override
-    public void onCreateHomeScreenShortcutCreate(DialogFragment dialog) {
+    public void onCreateHomeScreenShortcutCreate(DialogFragment dialogFragment) {
         // Get shortcutNameEditText from the alert dialog.
-        EditText shortcutNameEditText = (EditText) dialog.getDialog().findViewById(R.id.shortcutNameEditText);
+        EditText shortcutNameEditText = (EditText) dialogFragment.getDialog().findViewById(R.id.shortcut_name_edittext);
 
         // Create the bookmark shortcut based on formattedUrlString.
         Intent bookmarkShortcut = new Intent();

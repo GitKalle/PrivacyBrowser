@@ -22,53 +22,46 @@
   When it is specified the theme should include <item name="android:windowTranslucentStatus">true</item>
   to make the status bar a transparent, darkened overlay. -->
 <android.support.design.widget.CoordinatorLayout
-    android:id="@+id/about_coordinatorlayout"
+    android:id="@+id/bookmarks_coordinatorlayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true" >
 
-    <!-- the LinearLayout with orientation="vertical" moves the ViewPager below the AppBarLayout. -->
+    <!-- the LinearLayout with orientation="vertical" moves the content below the AppBarLayout. -->
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical" >
 
-        <!-- We need to set android:background="@color/blue" here or any space to the right of the TabLayout on large devices will be white. -->
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/about_appbarlayout"
+            android:id="@+id/bookmarks_appbarlayout"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:background="@color/blue"
             android:theme="@style/PrivacyBrowser.AppBarOverlay" >
 
             <!-- android:theme="@style/PrivacyBrowser.DarkAppBar" makes the text and icons in the AppBar white. -->
             <android.support.v7.widget.Toolbar
-                android:id="@+id/about_toolbar"
+                android:id="@+id/bookmarks_toolbar"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:background="@color/blue"
                 android:theme="@style/PrivacyBrowser.DarkAppBar"
                 app:popupTheme="@style/PrivacyBrowser.PopupOverlay" />
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/about_tablayout"
-                xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android.support.design:tabBackground="@color/blue"
-                android.support.design:tabTextColor="@color/light_blue"
-                android.support.design:tabSelectedTextColor="@color/white"
-                android.support.design:tabIndicatorColor="@color/white"
-                android.support.design:tabMode="scrollable" />
         </android.support.design.widget.AppBarLayout>
 
-        <!-- android:layout_weight="1" makes about_viewpager fill the rest of the screen. -->
-        <android.support.v4.view.ViewPager
-            android:id="@+id/about_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+        <ListView
+            android:id="@+id/bookmarks_listview"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/create_bookmark_fab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/add" />
 </android.support.design.widget.CoordinatorLayout>

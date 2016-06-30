@@ -69,12 +69,13 @@
             </intent-filter>
         </activity>
 
+
         <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.
           android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
         <activity
-            android:name=".GuideActivity"
-            android:label="@string/privacy_browser_guide"
-            android:theme="@style/PrivacyBrowser.TabActivity"
+            android:name=".BookmarksActivity"
+            android:label="@string/bookmarks"
+            android:theme="@style/PrivacyBrowser.SecondaryActivity"
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >
@@ -94,9 +95,20 @@
         <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.
           android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
         <activity
+            android:name=".GuideActivity"
+            android:label="@string/privacy_browser_guide"
+            android:theme="@style/PrivacyBrowser.SecondaryActivity"
+            android:parentActivityName=".MainWebViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:persistableMode="persistNever" >
+        </activity>
+
+        <!-- android:configChanges="orientation|screenSize" makes the activity not reload when the orientation changes.
+          android:persistableMode="persistNever" removes Privacy Browser from the recents screen on a device reboot. -->
+        <activity
             android:name=".AboutActivity"
             android:label="@string/about_privacy_browser"
-            android:theme="@style/PrivacyBrowser.TabActivity"
+            android:theme="@style/PrivacyBrowser.SecondaryActivity"
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >

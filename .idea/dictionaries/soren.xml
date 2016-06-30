@@ -7,24 +7,32 @@
       <w>appbarlayout</w>
       <w>aren</w>
       <w>bebdb</w>
+      <w>bookmarkname</w>
+      <w>bookmarkurl</w>
       <w>buildapi</w>
       <w>buildversion</w>
       <w>chromeversion</w>
       <w>commitdiff</w>
       <w>coordinatorlayout</w>
+      <w>displayorder</w>
       <w>eadd</w>
+      <w>edittext</w>
       <w>exynos</w>
+      <w>favoriteicon</w>
       <w>imbedded</w>
       <w>imbedding</w>
       <w>intl</w>
+      <w>isfolder</w>
       <w>khtml</w>
       <w>konqueror</w>
       <w>linearlayout</w>
+      <w>listview</w>
       <w>logins</w>
       <w>mozilla</w>
       <w>nojs</w>
       <w>orbot</w>
       <w>panopticlick</w>
+      <w>parentfolder</w>
       <w>redmine</w>
       <w>referer</w>
       <w>relativelayout</w>
@@ -36,6 +44,7 @@
       <w>tablayout</w>
       <w>techrepublic</w>
       <w>textview</w>
+      <w>uids</w>
       <w>webkay</w>
       <w>webkitversion</w>
       <w>whatismyip</w>

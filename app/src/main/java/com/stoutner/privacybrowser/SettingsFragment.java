@@ -235,7 +235,7 @@ public class SettingsFragment extends PreferenceFragment {
                         customUserAgent.setSummary(sharedPreferences.getString("custom_user_agent", "PrivacyBrowser/1.0"));
 
                         // Update mainWebView's user agent.  The default is "PrivacyBrowser/1.0".
-                        MainWebViewActivity.mainWebView.getSettings().setUserAgentString(sharedPreferences.getString("user_agent", "PrivacyBrowser/1.0"));
+                        MainWebViewActivity.mainWebView.getSettings().setUserAgentString(sharedPreferences.getString("custom_user_agent", "PrivacyBrowser/1.0"));
                         break;
 
                     case "javascript_disabled_search":

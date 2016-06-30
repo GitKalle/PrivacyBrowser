@@ -28,7 +28,7 @@
     <!-- android:windowTranslucentStatus requires API >= 19.  It makes the system status bar transparent.
       When it is specified the root layout should include android:fitsSystemWindows="true".
       colorPrimaryDark goes behind the status bar, which is then darkened by the overlay. -->
-    <style name="PrivacyBrowser.TabActivity">
+    <style name="PrivacyBrowser.SecondaryActivity">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimaryDark">@color/blue</item>
     </style>

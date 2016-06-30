@@ -42,9 +42,10 @@
     <string name="home">Home</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
+    <string name="bookmarks">Bookmarks</string>
     <string name="downloads">Downloads</string>
-    <string name="guide">Guide</string>
     <string name="settings">Settings</string>
+    <string name="guide">Guide</string>
     <string name="about">About</string>
     <string name="clear_and_exit">Clear and Exit</string>
 
@@ -62,9 +63,15 @@
     <string name="refresh">Refresh</string>
 
     <!-- Create Home Screen Shortcut Alert Dialog. -->
+    <string name="create_shortcut">Create shortcut</string>
     <string name="shortcut_name">Shortcut name</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+
+    <!-- Bookmarks. -->
+    <string name="create_bookmark">Create bookmark</string>
+    <string name="bookmark_name">Bookmark name</string>
+    <string name="bookmark_url">Bookmark URL</string>
 
     <!-- Guide. -->
     <string name="privacy_browser_guide">Privacy Browser Guide</string>

@@ -36,8 +36,8 @@ public class GuideActivity extends AppCompatActivity {
         setContentView(R.layout.guide_coordinatorlayout);
 
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
-        Toolbar supportAppBar = (Toolbar) findViewById(R.id.guide_toolbar);
-        setSupportActionBar(supportAppBar);
+        Toolbar guideAppBar = (Toolbar) findViewById(R.id.guide_toolbar);
+        setSupportActionBar(guideAppBar);
 
         // Display the home arrow on supportAppBar.
         final ActionBar appBar = getSupportActionBar();

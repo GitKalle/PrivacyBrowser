@@ -36,8 +36,8 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.about_coordinatorlayout);
 
         // We need to use the SupportActionBar from android.support.v7.app.ActionBar until the minimum API is >= 21.
-        Toolbar supportAppBar = (Toolbar) findViewById(R.id.about_toolbar);
-        setSupportActionBar(supportAppBar);
+        Toolbar aboutAppBar = (Toolbar) findViewById(R.id.about_toolbar);
+        setSupportActionBar(aboutAppBar);
 
         // Display the home arrow on supportAppBar.
         final ActionBar appBar = getSupportActionBar();
