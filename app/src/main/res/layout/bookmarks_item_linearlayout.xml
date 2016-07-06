@@ -24,6 +24,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="horizontal"
+    android:background="@drawable/bookmarks_list_selector"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView

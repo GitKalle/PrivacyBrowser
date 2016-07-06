@@ -19,23 +19,35 @@
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
 <resources>
-
+    <!-- `android:windowTranslucentStatus` makes the system status bar transparent.
+        When it is specified the root layout should include android:fitsSystemWindows="true". -->
     <style name="PrivacyBrowser" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="colorAccent">@color/blue</item>
     </style>
 
     <style name="PrivacyBrowser.MainWebView" />
 
-    <style name="PrivacyBrowser.SecondaryActivity" />
+    <!-- `android:windowTranslucentStatus` makes the system status bar transparent.
+        When it is specified the root layout should include android:fitsSystemWindows="true".
+        `colorPrimaryDark` goes behind the status bar, which is then darkened by the overlay.
+        `windowActionModeOverlay` makes the contextual app bar cover the support app bar.
+        `actionModeStyle` sets the style of the contextual app bar. -->
+    <style name="PrivacyBrowser.SecondaryActivity">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimaryDark">@color/blue</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">@color/blue</item>
+    </style>
 
-    <!-- colorPrimaryDark is the color of the status bar. -->
+    <!-- `colorPrimaryDark` is the color of the status bar. -->
     <style name="PrivacyBrowser.Settings" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">@color/dark_blue</item>
         <item name="colorAccent">@color/blue</item>
     </style>
 
-    <!-- ThemeOverlay.AppCompat.Dark.ActionBar" makes the text and the icons in the AppBar white. -->
+    <!-- `ThemeOverlay.AppCompat.Dark.ActionBar` makes the text and the icons in the AppBar white.-->
     <style name="PrivacyBrowser.DarkAppBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="PrivacyBrowser.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
@@ -45,5 +57,4 @@
     <style name="PrivacyBrowser.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/blue</item>
     </style>
-
 </resources>

@@ -30,7 +30,7 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
     private static final String BOOKMARKS_DATABASE = "bookmarks.db";
     private static final String BOOKMARKS_TABLE = "bookmarks";
 
-    public static final String ID = "_id";
+    public static final String _ID = "_id";
     public static final String DISPLAYORDER = "displayorder";
     public static final String BOOKMARK_NAME = "bookmarkname";
     public static final String BOOKMARK_URL = "bookmarkurl";
@@ -46,7 +46,7 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase bookmarksDatabase) {
         // Create the database if it doesn't exist.
         String CREATE_BOOKMARKS_TABLE = "CREATE TABLE " + BOOKMARKS_TABLE + " (" +
-                ID + " integer primary key, " +
+                _ID + " integer primary key, " +
                 DISPLAYORDER + " integer, " +
                 BOOKMARK_NAME + " text, " +
                 BOOKMARK_URL + " text, " +
@@ -87,20 +87,45 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
 
         // Get everything in the BOOKMARKS_TABLE.
-        String GET_ALL_BOOKMARKS = "Select * FROM " + BOOKMARKS_TABLE;
+        final String GET_ALL_BOOKMARKS = "Select * FROM " + BOOKMARKS_TABLE;
 
-        // Return the results as a Cursor.  The second argument is "null" because there are no selectionArgs.
+        // Return the results as a Cursor.  The second argument is `null` because there are no selectionArgs.
         // We can't close the Cursor because we need to use it in the parent activity.
         return bookmarksDatabase.rawQuery(GET_ALL_BOOKMARKS, null);
     }
 
-    public String getBookmarkURL(int databaseID) {
+    public Cursor getBookmarksCursorExcept(long[] exceptIdLongArray) {
         // Get a readable database handle.
         SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
 
-        // Get the row for the selected databaseID.
-        String GET_BOOKMARK_URL = "Select * FROM " + BOOKMARKS_TABLE +
-                " WHERE " + ID + " = " + databaseID;
+        // Prepare a string that contains the comma-separated list of IDs not to get.
+        String doNotGetIdsString = "";
+        // Extract the array to `doNotGetIdsString`.
+        for (long databaseIdLong : exceptIdLongArray) {
+            // If this is the first number, only add the number.
+            if (doNotGetIdsString.isEmpty()) {
+                doNotGetIdsString = String.valueOf(databaseIdLong);
+            } else {  // If there already is a number in the string, place a `,` before the number.
+                doNotGetIdsString = doNotGetIdsString + "," + databaseIdLong;
+            }
+        }
+
+        // Prepare the SQL statement to select all items except those with the specified IDs.
+        final String GET_All_BOOKMARKS_EXCEPT_SPECIFIED = "Select * FROM " + BOOKMARKS_TABLE +
+                " WHERE " + _ID + " NOT IN (" + doNotGetIdsString + ")";
+
+        // Return the results as a Cursor.  The second argument is `null` because there are no selectionArgs.
+        // We can't close the Cursor because we need to use it in the parent activity.
+        return bookmarksDatabase.rawQuery(GET_All_BOOKMARKS_EXCEPT_SPECIFIED, null);
+    }
+
+    public String getBookmarkURL(int databaseId) {
+        // Get a readable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
+
+        // Prepare the SQL statement to get the row for the selected databaseId.
+        final String GET_BOOKMARK_URL = "Select * FROM " + BOOKMARKS_TABLE +
+                " WHERE " + _ID + " = " + databaseId;
 
         // Save the results as Cursor and move it to the first (only) row.  The second argument is "null" because there are no selectionArgs.
         Cursor bookmarksCursor = bookmarksDatabase.rawQuery(GET_BOOKMARK_URL, null);
@@ -116,5 +141,16 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
 
         // Return the bookmarkURLString.
         return bookmarkURLString;
+    }
+
+    public void deleteBookmark(int databaseId) {
+        // Get a writable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();
+
+        // Deletes the row with the given databaseId.  The last argument is null because we don't need additional parameters.
+        bookmarksDatabase.delete(BOOKMARKS_TABLE, _ID + " = " + databaseId, null);
+
+        // Close the database handle.
+        bookmarksDatabase.close();
     }
 }

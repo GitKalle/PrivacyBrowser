@@ -18,18 +18,9 @@
   You should have received a copy of the GNU General Public License
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
-<resources>
-    <!-- android:windowTranslucentStatus requires API >= 19.  It makes the system status bar transparent.
-      When it is specified the root layout should include android:fitsSystemWindows="true". -->
-    <style name="PrivacyBrowser.MainWebView">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
-    <!-- android:windowTranslucentStatus requires API >= 19.  It makes the system status bar transparent.
-      When it is specified the root layout should include android:fitsSystemWindows="true".
-      colorPrimaryDark goes behind the status bar, which is then darkened by the overlay. -->
-    <style name="PrivacyBrowser.SecondaryActivity">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="colorPrimaryDark">@color/blue</item>
-    </style>
-</resources>
+<!-- This selector changes the background of activated items in the bookmarks list view. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_activated="true"
+        android:drawable="@color/light_blue" />
+</selector>

@@ -445,7 +445,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_options, menu);
+        getMenuInflater().inflate(R.menu.webview_options_menu, menu);
 
         // Set mainMenu so it can be used by onOptionsItemSelected.
         mainMenu = menu;
@@ -497,7 +497,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
         // Run all the other default commands.
         super.onPrepareOptionsMenu(menu);
 
-        // return true displays the menu.
+        // `return true` displays the menu.
         return true;
     }
 
@@ -722,6 +722,8 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
 
                 // Clear the back/forward history.
                 mainWebView.clearHistory();
+
+                formattedUrlString = null;
 
                 // Destroy the internal state of the webview.
                 mainWebView.destroy();

@@ -51,10 +51,16 @@
                 app:popupTheme="@style/PrivacyBrowser.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
+        <!-- android:choiceMode="multipleChoiceModal" allows the contextual action menu to select more than one item at a time.
+            android:dividerHeight must be specified with android:divider or the height will be 0dp.
+            In our case we want the height to be 0dp. -->
         <ListView
             android:id="@+id/bookmarks_listview"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"
+            android:choiceMode="multipleChoiceModal"
+            android:divider="@color/white"
+            android:dividerHeight="0dp" />
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

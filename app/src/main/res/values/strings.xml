@@ -36,7 +36,7 @@
     <!-- Custom App Bar. -->
     <string name="favorite_icon">Favorite Icon</string>
 
-    <!-- Navigation Drawer. -->
+    <!-- Main WebView Navigation Drawer. -->
     <string name="navigation_drawer">Navigation Drawer</string>
     <string name="navigation">Navigation</string>
     <string name="home">Home</string>
@@ -49,7 +49,7 @@
     <string name="about">About</string>
     <string name="clear_and_exit">Clear and Exit</string>
 
-    <!-- Options Menu. -->
+    <!-- Main WebView Options Menu. -->
     <string name="javascript">JavaScript</string>
     <string name="first_party_cookies">First-Party Cookies</string>
     <string name="third_party_cookies">Third-Party Cookies</string>
@@ -72,6 +72,13 @@
     <string name="create_bookmark">Create bookmark</string>
     <string name="bookmark_name">Bookmark name</string>
     <string name="bookmark_url">Bookmark URL</string>
+
+    <!-- Bookmarks Contextual App Bar. -->
+    <string name="selected">Selected</string>
+    <string name="delete">Delete</string>
+    <string name="one_bookmark_deleted">1 Bookmark Deleted</string>
+    <string name="bookmarks_deleted">Bookmarks Deleted</string>
+    <string name="undo">Undo</string>
 
     <!-- Guide. -->
     <string name="privacy_browser_guide">Privacy Browser Guide</string>
