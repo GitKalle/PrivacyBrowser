@@ -23,9 +23,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/edit_bookmark"
+        android:title="@string/edit"
+        android:orderInCategory="10"
+        android:icon="@drawable/edit"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/delete_bookmark"
         android:title="@string/delete"
-        android:orderInCategory="10"
+        android:orderInCategory="20"
         android:icon="@drawable/delete"
         app:showAsAction="ifRoom" />
 </menu>

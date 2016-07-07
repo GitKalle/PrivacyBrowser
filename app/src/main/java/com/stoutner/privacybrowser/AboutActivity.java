@@ -83,7 +83,7 @@ public class AboutActivity extends AppCompatActivity {
                     return getString(R.string.changelog);
 
                 case 4:
-                    return getString(R.string.license);
+                    return getString(R.string.licenses);
 
                 case 5:
                     return getString(R.string.contributors);

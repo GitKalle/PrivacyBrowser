@@ -26,7 +26,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 // If we don't use android.support.v7.app.AlertDialog instead of android.app.AlertDialog then the dialog will be covered by the keyboard.
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
@@ -56,9 +55,7 @@ public class CreateHomeScreenShortcut extends DialogFragment {
         }
     }
 
-    // onCreateDialog requires @NonNull.
     @Override
-    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Create a drawable version of the favorite icon.
         Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), MainWebViewActivity.favoriteIcon);

@@ -65,8 +65,8 @@ import java.net.URLEncoder;
 
 // We need to use AppCompatActivity from android.support.v7.app.AppCompatActivity to have access to the SupportActionBar until the minimum API is >= 21.
 public class MainWebViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
-    // favoriteIcon is public static so it can be accessed from CreateHomeScreenShortcut and BookmarksActivity.
-    // It is also used in onCreate() and onCreateHomeScreenShortcutCreate().
+    // `favoriteIcon` is public static so it can be accessed from `CreateHomeScreenShortcut`, `BookmarksActivity`, and `EditBookmark`.
+    // It is also used in `onCreate()` and `onCreateHomeScreenShortcutCreate()`.
     public static Bitmap favoriteIcon;
 
     // mainWebView is public static so it can be accessed from SettingsFragment.

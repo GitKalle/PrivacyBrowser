@@ -71,7 +71,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/webview_navigation_menu"/>
+        app:menu="@menu/webview_navigation_menu"
+        app:itemIconTint="@color/blue_gray" />
 
     <!-- fullScreenVideoFrameLayout is used to display full screen videos.  It is initially android:visibility="gone" to hide it from view. -->
     <FrameLayout

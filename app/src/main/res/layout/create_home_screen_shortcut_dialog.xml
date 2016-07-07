@@ -21,23 +21,22 @@
 <RelativeLayout
     android:id="@+id/create_home_screen_shortcut_dialog_relativelayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent" >
 
-    <!-- android:imeOptions="actionGo" sets the keyboard to have a "go" key instead of a "new line" key.
-        android:imeOptions=flagNoExtractUi" doesn't cover up the entire UI when typing in landscape orientation.
-        android:inputType="textUri" disables spell check in the EditText.
-        android:singleLine="true" is not needed in a Dialog.-->
+    <!-- `android:imeOptions="actionGo"` sets the keyboard to have a "go" key instead of a "new line" key.
+        `android:inputType="textUri"` disables spell check in the EditText.
+        `android:singleLine="true"` is not needed in a Dialog.
+        We can't use `android:imeOptions=flagNoExtractUi"` because it disables tapping to select in landscape orientation on small devices.-->
     <EditText
         android:id="@+id/shortcut_name_edittext"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:hint="@string/shortcut_name"
-        android:imeOptions="actionGo|flagNoExtractUi"
+        android:imeOptions="actionGo"
         android:inputType="textUri" />
-
 </RelativeLayout>

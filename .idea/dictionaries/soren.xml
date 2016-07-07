@@ -11,6 +11,7 @@
       <w>bookmarkurl</w>
       <w>buildapi</w>
       <w>buildversion</w>
+      <w>checkedtextview</w>
       <w>chromeversion</w>
       <w>commitdiff</w>
       <w>coordinatorlayout</w>
@@ -28,6 +29,7 @@
       <w>linearlayout</w>
       <w>listview</w>
       <w>logins</w>
+      <w>lossless</w>
       <w>mozilla</w>
       <w>nojs</w>
       <w>orbot</w>
@@ -36,6 +38,7 @@
       <w>redmine</w>
       <w>referer</w>
       <w>relativelayout</w>
+      <w>requery</w>
       <w>robinlinus</w>
       <w>samsung</w>
       <w>securitypatch</w>

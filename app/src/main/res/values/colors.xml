@@ -22,7 +22,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="blue">#FF1976D2</color>
-    <color name="dark_blue">#FF0D4781</color>
+    <color name="dark_blue">#FF0D47A1</color>
+    <color name="blue_gray">#FF607d8b</color>
     <color name="green">#FF64DD17</color>
     <color name="light_blue">#FFBBDEFB</color>
     <color name="red">#FFD50000</color>

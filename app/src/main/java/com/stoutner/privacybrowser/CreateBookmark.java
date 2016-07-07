@@ -26,11 +26,9 @@ import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-// If we don't use android.support.v7.app.AlertDialog instead of android.app.AlertDialog then the dialog will be covered by the keyboard.
+// If we don't use `android.support.v7.app.AlertDialog` instead of `android.app.AlertDialog` then the dialog will be covered by the keyboard.
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -43,12 +41,14 @@ public class CreateBookmark extends DialogFragment {
         void onCreateBookmarkCreate(DialogFragment createBookmarkDialogFragment);
     }
 
-    // createBookmarkListener is used in onAttach() and onCreateDialog()
+    // `createBookmarkListener` is used in `onAttach()` and `onCreateDialog()`
     private CreateBookmarkListener createBookmarkListener;
 
-    // Check to make sure the parent activity implements the listener.
+
     public void onAttach(Activity parentActivity) {
         super.onAttach(parentActivity);
+
+        // Get a handle for `CreateBookmarkListener` from the `parentActivity`.
         try {
             createBookmarkListener = (CreateBookmarkListener) parentActivity;
         } catch(ClassCastException exception) {
@@ -56,62 +56,57 @@ public class CreateBookmark extends DialogFragment {
         }
     }
 
-    // onCreateDialog requires @NonNull.
     @Override
-    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Create a drawable version of the favorite icon.
         Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), MainWebViewActivity.favoriteIcon);
 
-        // Get the activity's layout inflater.
-        LayoutInflater customDialogInflater = getActivity().getLayoutInflater();
-
-        // Use AlertDialog.Builder to create the AlertDialog.  The style formats the color of the button text.
+        // Use `AlertDialog.Builder` to create the `AlertDialog`.  The style formats the color of the button text.
         AlertDialog.Builder createBookmarkDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.PrivacyBrowser_AlertDialog);
         createBookmarkDialogBuilder.setTitle(R.string.create_bookmark);
         createBookmarkDialogBuilder.setIcon(favoriteIconDrawable);
-        // The parent view is "null" because it will be assigned by AlertDialog.
-        createBookmarkDialogBuilder.setView(customDialogInflater.inflate(R.layout.create_bookmark_dialog, null));
+        // The parent view is `null` because it will be assigned by `AlertDialog`.
+        createBookmarkDialogBuilder.setView(getActivity().getLayoutInflater().inflate(R.layout.create_bookmark_dialog, null));
 
-        // Set an onClick listener on the negative button.
+        // Set an `onClick()` listener for the negative button.
         createBookmarkDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Return the `DialogFragment` to the parent activity on cancel.
                 createBookmarkListener.onCreateBookmarkCancel(CreateBookmark.this);
             }
         });
 
-        // Set an onClick listener on the positive button.
+        // Set an `onClick()` listener for the positive button.
         createBookmarkDialogBuilder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Return the `DialogFragment` to the parent activity on create.
                 createBookmarkListener.onCreateBookmarkCreate(CreateBookmark.this);
             }
         });
 
 
-        // Create an AlertDialog from the AlertDialog.Builder.
+        // Create an `AlertDialog` from the `AlertDialog.Builder`.
         final AlertDialog createBookmarkDialog = createBookmarkDialogBuilder.create();
 
-        // Show the keyboard when the Dialog is displayed on the screen.
+        // Show the keyboard when the `Dialog` is displayed on the screen.
         createBookmarkDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
-        // We need to show the AlertDialog before we can call setOnKeyListener() below.
+        // We need to show the `AlertDialog` before we can call `setOnKeyListener()` below.
         createBookmarkDialog.show();
 
-        // Allow the "enter" key on the keyboard to create the bookmark from "create_bookmark_name_edittext".
+        // Allow the `enter` key on the keyboard to create the bookmark from `create_bookmark_name_edittext`.
         EditText createBookmarkNameEditText = (EditText) createBookmarkDialog.findViewById(R.id.create_bookmark_name_edittext);
         assert createBookmarkNameEditText != null;  // Remove the warning below that createBookmarkNameEditText might be null.
         createBookmarkNameEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down on the "enter" button, select the PositiveButton "Create".
+                // If the event is a key-down on the `enter` button, select the PositiveButton `Create`.
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Trigger the createBookmarkListener.
+                    // Trigger `createBookmarkListener` and return the DialogFragment to the parent activity.
                     createBookmarkListener.onCreateBookmarkCreate(CreateBookmark.this);
-
-                    // Manually dismiss the AlertDialog.
+                    // Manually dismiss the `AlertDialog`.
                     createBookmarkDialog.dismiss();
-
                     // Consume the event.
                     return true;
                 } else {  // If any other key was pressed, do not consume the event.
@@ -120,22 +115,20 @@ public class CreateBookmark extends DialogFragment {
             }
         });
 
-        // Set the formattedUrlString as the initial text of "create_bookmark_url_edittext".
+        // Set the formattedUrlString as the initial text of `create_bookmark_url_edittext`.
         EditText createBookmarkUrlEditText = (EditText) createBookmarkDialog.findViewById(R.id.create_bookmark_url_edittext);
-        assert createBookmarkUrlEditText != null;// Remove the warning below that createBookmarkUrlEditText might be null.
+        assert createBookmarkUrlEditText != null;// Remove the warning below that `createBookmarkUrlEditText` might be null.
         createBookmarkUrlEditText.setText(MainWebViewActivity.formattedUrlString);
 
-        // Allow the "enter" key on the keyboard to create the bookmark from "create_bookmark_url_edittext".
+        // Allow the `enter` key on the keyboard to create the bookmark from `create_bookmark_url_edittext`.
         createBookmarkUrlEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down on the "enter" button, select the PositiveButton "Create".
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Trigger the create listener.
+                    // Trigger `createBookmarkListener` and return the DialogFragment to the parent activity.
                     createBookmarkListener.onCreateBookmarkCreate(CreateBookmark.this);
-
-                    // Manually dismiss the AlertDialog.
+                    // Manually dismiss the `AlertDialog`.
                     createBookmarkDialog.dismiss();
-
                     // Consume the event.
                     return true;
                 } else { // If any other key was pressed, do not consume the event.
@@ -144,7 +137,7 @@ public class CreateBookmark extends DialogFragment {
             }
         });
 
-        // onCreateDialog requires the return of an AlertDialog
+        // `onCreateDialog()` requires the return of an `AlertDialog`.
         return createBookmarkDialog;
     }
 }

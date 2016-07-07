@@ -25,6 +25,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,6 +42,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -47,12 +50,17 @@ import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 
-public class BookmarksActivity extends AppCompatActivity implements CreateBookmark.CreateBookmarkListener {
-    private BookmarksDatabaseHandler bookmarksDatabaseHandler;
-    private ListView bookmarksListView;
+public class BookmarksActivity extends AppCompatActivity implements CreateBookmark.CreateBookmarkListener, EditBookmark.EditBookmarkListener {
+    // `bookmarksDatabaseHandler` is public static so it can be accessed from EditBookmark.  It is also used in `onCreate()`,
+    // `onCreateBookmarkCreate()`, `updateBookmarksListView()`, and `updateBookmarksListViewExcept()`.
+    public static BookmarksDatabaseHandler bookmarksDatabaseHandler;
 
-    // deleteBookmarkMenuItem is used in onCreate() and onPrepareOptionsMenu().
-    private MenuItem deleteBookmarkMenuItem;
+    // `bookmarksListView` is public static so it can be accessed from EditBookmark.
+    // It is also used in `onCreate()`, `updateBookmarksListView()`, and `updateBookmarksListViewExcept()`.
+    public static ListView bookmarksListView;
+
+    // `contextualActionMode` is used in `onCreate()` and `onEditBookmarkSave()`.
+    private ActionMode contextualActionMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +77,16 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
         appBar.setDisplayHomeAsUpEnabled(true);
 
         // Initialize the database handler and the ListView.
+        // `this` specifies the context.  The two `null`s do not specify the database name or a `CursorFactory`.
+        // The `0` is to specify a database version, but that is set instead using a constant in BookmarksDatabaseHandler.
         bookmarksDatabaseHandler = new BookmarksDatabaseHandler(this, null, null, 0);
         bookmarksListView = (ListView) findViewById(R.id.bookmarks_listview);
 
         // Display the bookmarks in the ListView.
         updateBookmarksListView();
 
-        // Set a listener so that tapping a list item loads the URL.  We need to store the activity in a variable so that we can return to the parent activity after loading the URL.
+        // Set a listener so that tapping a list item loads the URL.  We need to store the activity
+        // in a variable so that we can return to the parent activity after loading the URL.
         final Activity bookmarksActivity = this;
         bookmarksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -92,25 +103,19 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
             }
         });
 
-        // registerForContextMenu(bookmarksListView);
-
+        // `MultiChoiceModeListener` handles long clicks.
         bookmarksListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                String numberSelectedString;
-                long[] selectedItemsLongArray = bookmarksListView.getCheckedItemIds();
-
-                numberSelectedString = selectedItemsLongArray.length + " " + getString(R.string.selected);
-
-                mode.setSubtitle(numberSelectedString);
-            }
+            // `editBookmarkMenuItem` is used in `onCreateActionMode()` and `onItemCheckedStateChanged`.
+            MenuItem editBookmarkMenuItem;
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                // Inflate the menu for the contextual app bar.
+                // Inflate the menu for the contextual app bar and set the title.
                 getMenuInflater().inflate(R.menu.bookmarks_context_menu, menu);
-
                 mode.setTitle(R.string.bookmarks);
+
+                // Get a handle for `R.id.edit_bookmark`.
+                editBookmarkMenuItem = menu.findItem(R.id.edit_bookmark);
 
                 return true;
             }
@@ -121,24 +126,51 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
             }
 
             @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                // Get an array of the selected bookmarks.
+                long[] selectedBookmarksLongArray = bookmarksListView.getCheckedItemIds();
+
+                // Calculate the number of selected bookmarks.
+                int numberOfSelectedBookmarks = selectedBookmarksLongArray.length;
+
+                // List the number of selected bookmarks in the subtitle.
+                mode.setSubtitle(numberOfSelectedBookmarks + " " + getString(R.string.selected));
+
+                // Show the `Edit` option only if 1 bookmark is selected.
+                if (numberOfSelectedBookmarks == 1) {
+                    editBookmarkMenuItem.setVisible(true);
+                } else {
+                    editBookmarkMenuItem.setVisible(false);
+                }
+            }
+
+            @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 int menuItemId = item.getItemId();
 
                 switch (menuItemId) {
+                    case R.id.edit_bookmark:
+                        // Show the `EditBookmark` `AlertDialog` and name the instance `@string/edit_bookmark`.
+                        DialogFragment editBookmarkDialog = new EditBookmark();
+                        editBookmarkDialog.show(getFragmentManager(), "@string/edit_bookmark");
+
+                        contextualActionMode = mode;
+                        break;
+
                     case R.id.delete_bookmark:
                         // Get an array of the selected rows.
-                        final long[] selectedItemsLongArray = bookmarksListView.getCheckedItemIds();
+                        final long[] selectedBookmarksLongArray = bookmarksListView.getCheckedItemIds();
 
                         String snackbarMessage;
 
                         // Determine how many items are in the array and prepare an appropriate Snackbar message.
-                        if (selectedItemsLongArray.length == 1) {
+                        if (selectedBookmarksLongArray.length == 1) {
                             snackbarMessage = getString(R.string.one_bookmark_deleted);
                         } else {
-                            snackbarMessage = selectedItemsLongArray.length + " " + getString(R.string.bookmarks_deleted);
+                            snackbarMessage = selectedBookmarksLongArray.length + " " + getString(R.string.bookmarks_deleted);
                         }
 
-                        updateBookmarksListViewExcept(selectedItemsLongArray);
+                        updateBookmarksListViewExcept(selectedBookmarksLongArray);
 
                         // Show a SnackBar.
                         Snackbar.make(findViewById(R.id.bookmarks_coordinatorlayout), snackbarMessage, Snackbar.LENGTH_LONG)
@@ -162,7 +194,7 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                                             // The Snackbar was dismissed without the "Undo" button being pushed.
                                             default:
                                                 // Delete each selected row.
-                                                for (long databaseIdLong : selectedItemsLongArray) {
+                                                for (long databaseIdLong : selectedBookmarksLongArray) {
                                                     // Convert `databaseIdLong` to an int.
                                                     int databaseIdInt = (int) databaseIdLong;
 
@@ -177,7 +209,9 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
 
                         // Close the contextual app bar.
                         mode.finish();
+                        break;
                 }
+                // Consume the click.
                 return true;
             }
 
@@ -193,68 +227,81 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
         createBookmarkFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Show the CreateBookmark AlertDialog and name the instance "@string/create_bookmark".
+                // Show the `CreateBookmark` `AlertDialog` and name the instance `@string/create_bookmark`.
                 DialogFragment createBookmarkDialog = new CreateBookmark();
                 createBookmarkDialog.show(getFragmentManager(), "@string/create_bookmark");
             }
         });
     }
 
-    /*
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.bookmarks_context_menu, menu);
-    } */
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_bookmarks_options, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // Disable the delete icon.
-        deleteBookmarkMenuItem = menu.findItem(R.id.delete_bookmark);
-        deleteBookmarkMenuItem.setVisible(false);
-
-        // Run all the other default commands.
-        super.onPrepareOptionsMenu(menu);
-
-        // `return true` displays the menu;
-        return true;
-    }*/
-
     @Override
     public void onCreateBookmarkCancel(DialogFragment createBookmarkDialogFragment) {
-        // Do nothing because the user selected "Cancel".
+        // Do nothing because the user selected `Cancel`.
     }
 
     @Override
     public void onCreateBookmarkCreate(DialogFragment createBookmarkDialogFragment) {
-        // Get the EditTexts from the DialogFragment and extract the strings.
+        // Get the `EditText`s from the `createBookmarkDialogFragment` and extract the strings.
         EditText createBookmarkNameEditText = (EditText) createBookmarkDialogFragment.getDialog().findViewById(R.id.create_bookmark_name_edittext);
         String bookmarkNameString = createBookmarkNameEditText.getText().toString();
-        EditText createBookmarkURLEditText = (EditText) createBookmarkDialogFragment.getDialog().findViewById(R.id.create_bookmark_url_edittext);
-        String bookmarkURLString = createBookmarkURLEditText.getText().toString();
+        EditText createBookmarkUrlEditText = (EditText) createBookmarkDialogFragment.getDialog().findViewById(R.id.create_bookmark_url_edittext);
+        String bookmarkUrlString = createBookmarkUrlEditText.getText().toString();
 
-        // Convert the favoriteIcon Bitmap to a byte array.
+        // Convert the favoriteIcon Bitmap to a byte array.  `0` is for lossless compression (the only option for a PNG).
         ByteArrayOutputStream favoriteIconByteArrayOutputStream = new ByteArrayOutputStream();
         MainWebViewActivity.favoriteIcon.compress(Bitmap.CompressFormat.PNG, 0, favoriteIconByteArrayOutputStream);
         byte[] favoriteIconByteArray = favoriteIconByteArrayOutputStream.toByteArray();
 
         // Create the bookmark.
-        bookmarksDatabaseHandler.createBookmark(bookmarkNameString, bookmarkURLString, favoriteIconByteArray);
+        bookmarksDatabaseHandler.createBookmark(bookmarkNameString, bookmarkUrlString, favoriteIconByteArray);
 
         // Refresh the ListView.
         updateBookmarksListView();
     }
 
+    @Override
+    public void onEditBookmarkCancel(DialogFragment editBookmarkDialogFragment) {
+        // Do nothing because the user selected `Cancel`.
+    }
+
+    @Override
+    public void onEditBookmarkSave(DialogFragment editBookmarkDialogFragment) {
+        // Get the `EditText`s from the `editBookmarkDialogFragment` and extract the strings.
+        EditText editBookmarkNameEditText = (EditText) editBookmarkDialogFragment.getDialog().findViewById(R.id.edit_bookmark_name_edittext);
+        String bookmarkNameString = editBookmarkNameEditText.getText().toString();
+        EditText editBookmarkUrlEditText = (EditText) editBookmarkDialogFragment.getDialog().findViewById(R.id.edit_bookmark_url_edittext);
+        String bookmarkUrlString = editBookmarkUrlEditText.getText().toString();
+
+        CheckBox useNewFavoriteIconBitmap = (CheckBox) editBookmarkDialogFragment.getDialog().findViewById(R.id.edit_bookmark_use_new_favorite_icon_checkbox);
+        byte[] favoriteIconByteArray;
+
+        // Get a long array with the the databaseId of the selected bookmark and convert it to an `int`.
+        long[] selectedBookmarksLongArray = bookmarksListView.getCheckedItemIds();
+        int selectedBookmarkDatabaseId = (int) selectedBookmarksLongArray[0];
+
+        if (useNewFavoriteIconBitmap.isChecked()) {
+            ImageView newFavoriteIconImageView = (ImageView) editBookmarkDialogFragment.getDialog().findViewById(R.id.edit_bookmark_new_favorite_icon);
+            Drawable favoriteIconDrawable = newFavoriteIconImageView.getDrawable();
+            Bitmap favoriteIconBitmap = ((BitmapDrawable) favoriteIconDrawable).getBitmap();
+            ByteArrayOutputStream favoriteIconByteArrayOutputStream = new ByteArrayOutputStream();
+            favoriteIconBitmap.compress(Bitmap.CompressFormat.PNG, 0, favoriteIconByteArrayOutputStream);
+            favoriteIconByteArray = favoriteIconByteArrayOutputStream.toByteArray();
+            bookmarksDatabaseHandler.updateBookmark(selectedBookmarkDatabaseId, bookmarkNameString, bookmarkUrlString, favoriteIconByteArray);
+
+        } else {
+            // Update the bookmark.
+            bookmarksDatabaseHandler.updateBookmark(selectedBookmarkDatabaseId, bookmarkNameString, bookmarkUrlString);
+        }
+
+        contextualActionMode.finish();
+
+        // Refresh the `ListView`.
+        updateBookmarksListView();
+    }
+
     private void updateBookmarksListView() {
         // Get a Cursor with the current contents of the bookmarks database.
-        final Cursor bookmarksCursor = bookmarksDatabaseHandler.getBookmarksCursor();
+        final Cursor bookmarksCursor = bookmarksDatabaseHandler.getAllBookmarksCursor();
 
         // Setup bookmarksCursorAdapter with `this` context.  The `false` disables autoRequery.
         CursorAdapter bookmarksCursorAdapter = new CursorAdapter(this, bookmarksCursor, false) {
@@ -266,10 +313,10 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-                // Get the favorite icon byte array from the cursor.
-                byte[] favoriteIconByteArray = cursor.getBlob(cursor.getColumnIndex(BookmarksDatabaseHandler.FAVORITEICON));
+                // Get the favorite icon byte array from the `Cursor`.
+                byte[] favoriteIconByteArray = cursor.getBlob(cursor.getColumnIndex(BookmarksDatabaseHandler.FAVORITE_ICON));
 
-                // Convert the byte array to a Bitmap beginning at the first byte and ending at the last.
+                // Convert the byte array to a `Bitmap` beginning at the first byte and ending at the last.
                 Bitmap favoriteIconBitmap = BitmapFactory.decodeByteArray(favoriteIconByteArray, 0, favoriteIconByteArray.length);
 
                 // Display the bitmap in `bookmarkFavoriteIcon`.
@@ -304,7 +351,7 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
                 // Get the favorite icon byte array from the cursor.
-                byte[] favoriteIconByteArray = cursor.getBlob(cursor.getColumnIndex(BookmarksDatabaseHandler.FAVORITEICON));
+                byte[] favoriteIconByteArray = cursor.getBlob(cursor.getColumnIndex(BookmarksDatabaseHandler.FAVORITE_ICON));
 
                 // Convert the byte array to a Bitmap beginning at the first byte and ending at the last.
                 Bitmap favoriteIconBitmap = BitmapFactory.decodeByteArray(favoriteIconByteArray, 0, favoriteIconByteArray.length);
