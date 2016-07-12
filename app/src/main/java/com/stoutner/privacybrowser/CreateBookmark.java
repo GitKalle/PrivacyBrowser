@@ -62,7 +62,7 @@ public class CreateBookmark extends DialogFragment {
         Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), MainWebViewActivity.favoriteIcon);
 
         // Use `AlertDialog.Builder` to create the `AlertDialog`.  The style formats the color of the button text.
-        AlertDialog.Builder createBookmarkDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.PrivacyBrowser_AlertDialog);
+        AlertDialog.Builder createBookmarkDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.LightAlertDialog);
         createBookmarkDialogBuilder.setTitle(R.string.create_bookmark);
         createBookmarkDialogBuilder.setIcon(favoriteIconDrawable);
         // The parent view is `null` because it will be assigned by `AlertDialog`.

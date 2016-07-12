@@ -64,7 +64,7 @@ public class CreateHomeScreenShortcut extends DialogFragment {
         LayoutInflater customDialogInflater = getActivity().getLayoutInflater();
 
         // Use AlertDialog.Builder to create the AlertDialog.  The style formats the color of the button text.
-        AlertDialog.Builder createHomeScreenShorcutDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.PrivacyBrowser_AlertDialog);
+        AlertDialog.Builder createHomeScreenShorcutDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.LightAlertDialog);
         createHomeScreenShorcutDialogBuilder.setTitle(R.string.create_shortcut);
         createHomeScreenShorcutDialogBuilder.setIcon(favoriteIconDrawable);
         // The parent view is "null" because it will be assigned by AlertDialog.

@@ -108,14 +108,18 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
             // `editBookmarkMenuItem` is used in `onCreateActionMode()` and `onItemCheckedStateChanged`.
             MenuItem editBookmarkMenuItem;
 
+            // `selectAllBookmarks` is used in `onCreateActionMode()` and `onItemCheckedStateChanges`.
+            MenuItem selectAllBookmarks;
+
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 // Inflate the menu for the contextual app bar and set the title.
                 getMenuInflater().inflate(R.menu.bookmarks_context_menu, menu);
                 mode.setTitle(R.string.bookmarks);
 
-                // Get a handle for `R.id.edit_bookmark`.
+                // Get a handle for `R.id.edit_bookmark` and `R.id.select_all_bookmarks`.
                 editBookmarkMenuItem = menu.findItem(R.id.edit_bookmark);
+                selectAllBookmarks = menu.findItem(R.id.context_menu_select_all_bookmarks);
 
                 return true;
             }
@@ -137,10 +141,17 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                 mode.setSubtitle(numberOfSelectedBookmarks + " " + getString(R.string.selected));
 
                 // Show the `Edit` option only if 1 bookmark is selected.
-                if (numberOfSelectedBookmarks == 1) {
+                if (numberOfSelectedBookmarks < 2) {
                     editBookmarkMenuItem.setVisible(true);
                 } else {
                     editBookmarkMenuItem.setVisible(false);
+                }
+
+                // Do not show `Select All` if all the bookmarks are already checked.
+                if (bookmarksListView.getCheckedItemIds().length == bookmarksListView.getCount()) {
+                    selectAllBookmarks.setVisible(false);
+                } else {
+                    selectAllBookmarks.setVisible(true);
                 }
             }
 
@@ -210,6 +221,14 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                         // Close the contextual app bar.
                         mode.finish();
                         break;
+
+                    case R.id.context_menu_select_all_bookmarks:
+                        int numberOfBookmarks = bookmarksListView.getCount();
+
+                        for (int i = 0; i < numberOfBookmarks; i++) {
+                            bookmarksListView.setItemChecked(i, true);
+                        }
+                        break;
                 }
                 // Consume the click.
                 return true;
@@ -232,6 +251,41 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                 createBookmarkDialog.show(getFragmentManager(), "@string/create_bookmark");
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Inflate the menu.
+        getMenuInflater().inflate(R.menu.bookmarks_options_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        int menuItemId = menuItem.getItemId();
+
+        switch (menuItemId) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                break;
+
+            case R.id.options_menu_select_all_bookmarks:
+                int numberOfBookmarks = bookmarksListView.getCount();
+
+                for (int i = 0; i < numberOfBookmarks; i++) {
+                    bookmarksListView.setItemChecked(i, true);
+                }
+                break;
+        }
+        return true;
     }
 
     @Override

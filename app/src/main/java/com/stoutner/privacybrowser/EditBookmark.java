@@ -77,7 +77,7 @@ public class EditBookmark extends DialogFragment {
         Drawable favoriteIconDrawable = new BitmapDrawable(getResources(), favoriteIconBitmap);
 
         // Use `AlertDialog.Builder` to create the `AlertDialog`.  The style formats the color of the button text.
-        AlertDialog.Builder editBookmarkDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.PrivacyBrowser_AlertDialog);
+        AlertDialog.Builder editBookmarkDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.LightAlertDialog);
         editBookmarkDialogBuilder.setTitle(R.string.edit_bookmark);
         editBookmarkDialogBuilder.setIcon(favoriteIconDrawable);
         // The parent view is `null` because it will be assigned by `AlertDialog`.

@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="@color/blue"
-            android:theme="@style/PrivacyBrowser.AppBarOverlay" >
+            android:theme="@style/AppBarOverlay" >
 
             <!-- android:theme="@style/PrivacyBrowser.DarkAppBar" makes the text and icons in the AppBar white. -->
             <android.support.v7.widget.Toolbar
@@ -49,8 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/blue"
-                android:theme="@style/PrivacyBrowser.DarkAppBar"
-                app:popupTheme="@style/PrivacyBrowser.PopupOverlay" />
+                android:theme="@style/DarkAppBar"
+                app:popupTheme="@style/LightPopupOverlay" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/guide_tablayout"

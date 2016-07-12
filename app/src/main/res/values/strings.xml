@@ -82,6 +82,7 @@
     <string name="selected">Selected</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="select_all">Select All</string>
     <string name="one_bookmark_deleted">1 Bookmark Deleted</string>
     <string name="bookmarks_deleted">Bookmarks Deleted</string>
     <string name="undo">Undo</string>

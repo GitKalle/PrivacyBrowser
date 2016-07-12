@@ -39,7 +39,7 @@
             android:id="@+id/bookmarks_appbarlayout"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:theme="@style/PrivacyBrowser.AppBarOverlay" >
+            android:theme="@style/AppBarOverlay" >
 
             <!-- android:theme="@style/PrivacyBrowser.DarkAppBar" makes the text and icons in the AppBar white. -->
             <android.support.v7.widget.Toolbar
@@ -47,8 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:background="@color/blue"
-                android:theme="@style/PrivacyBrowser.DarkAppBar"
-                app:popupTheme="@style/PrivacyBrowser.PopupOverlay" />
+                android:theme="@style/DarkAppBar"
+                app:popupTheme="@style/LightPopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
         <!-- android:choiceMode="multipleChoiceModal" allows the contextual action menu to select more than one item at a time.

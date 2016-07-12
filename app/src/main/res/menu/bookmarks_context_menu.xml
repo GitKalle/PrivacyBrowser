@@ -35,4 +35,11 @@
         android:orderInCategory="20"
         android:icon="@drawable/delete"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/context_menu_select_all_bookmarks"
+        android:title="@string/select_all"
+        android:orderInCategory="30"
+        android:icon="@drawable/select_all"
+        app:showAsAction="ifRoom" />
 </menu>

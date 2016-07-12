@@ -49,7 +49,6 @@
         <activity
             android:name=".MainWebViewActivity"
             android:label="@string/privacy_browser"
-            android:theme="@style/PrivacyBrowser.MainWebView"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
             android:persistableMode="persistNever" >
@@ -86,7 +85,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/privacy_browser_settings"
-            android:theme="@style/PrivacyBrowser.Settings"
+            android:theme="@style/Settings"
             android:parentActivityName=".MainWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:persistableMode="persistNever" >
