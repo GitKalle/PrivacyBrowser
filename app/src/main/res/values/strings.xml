@@ -80,6 +80,8 @@
 
     <!-- Bookmarks Contextual App Bar. -->
     <string name="selected">Selected</string>
+    <string name="move_up">Move Up</string>
+    <string name="move_down">Move down</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="select_all">Select All</string>

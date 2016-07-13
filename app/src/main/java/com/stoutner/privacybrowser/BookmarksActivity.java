@@ -35,6 +35,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,6 +62,9 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
 
     // `contextualActionMode` is used in `onCreate()` and `onEditBookmarkSave()`.
     private ActionMode contextualActionMode;
+
+    // `selectedBookmarkPosition` is used in `onCreate()` and `onEditBookarkSave()`.
+    private int selectedBookmarkPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,11 +109,17 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
 
         // `MultiChoiceModeListener` handles long clicks.
         bookmarksListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            // `moveBookmarkUpMenuItem` is used in `onCreateActionMode()` and `onItemCheckedStateChanged`.
+            MenuItem moveBookmarkUpMenuItem;
+
+            // `moveBookmarkDownMenuItem` is used in `onCreateActionMode()` and `onItemCheckedStateChanged`.
+            MenuItem moveBookmarkDownMenuItem;
+
             // `editBookmarkMenuItem` is used in `onCreateActionMode()` and `onItemCheckedStateChanged`.
             MenuItem editBookmarkMenuItem;
 
             // `selectAllBookmarks` is used in `onCreateActionMode()` and `onItemCheckedStateChanges`.
-            MenuItem selectAllBookmarks;
+            MenuItem selectAllBookmarksMenuItem;
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -117,9 +127,11 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                 getMenuInflater().inflate(R.menu.bookmarks_context_menu, menu);
                 mode.setTitle(R.string.bookmarks);
 
-                // Get a handle for `R.id.edit_bookmark` and `R.id.select_all_bookmarks`.
+                // Get a handle for MenuItems we need to selectively disable.
+                moveBookmarkUpMenuItem = menu.findItem(R.id.move_bookmark_up);
+                moveBookmarkDownMenuItem = menu.findItem(R.id.move_bookmark_down);
                 editBookmarkMenuItem = menu.findItem(R.id.edit_bookmark);
-                selectAllBookmarks = menu.findItem(R.id.context_menu_select_all_bookmarks);
+                selectAllBookmarksMenuItem = menu.findItem(R.id.context_menu_select_all_bookmarks);
 
                 return true;
             }
@@ -140,18 +152,46 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                 // List the number of selected bookmarks in the subtitle.
                 mode.setSubtitle(numberOfSelectedBookmarks + " " + getString(R.string.selected));
 
-                // Show the `Edit` option only if 1 bookmark is selected.
-                if (numberOfSelectedBookmarks < 2) {
+                if (numberOfSelectedBookmarks == 1) {
+                    // Show the `Move Up`, `Move Down`, and  `Edit` option only if 1 bookmark is selected.
+                    moveBookmarkUpMenuItem.setVisible(true);
+                    moveBookmarkDownMenuItem.setVisible(true);
                     editBookmarkMenuItem.setVisible(true);
-                } else {
+
+                    // Get the database IDs for the bookmarks.
+                    int selectedBookmarkDatabaseId = (int) selectedBookmarksLongArray[0];
+                    int firstBookmarkDatabaseId = (int) bookmarksListView.getItemIdAtPosition(0);
+                    // bookmarksListView is 0 indexed.
+                    int lastBookmarkDatabaseId = (int) bookmarksListView.getItemIdAtPosition(bookmarksListView.getCount() - 1);
+
+                    // Disable `moveBookmarkUpMenuItem` if the selected bookmark is at the top of the ListView.
+                    if (selectedBookmarkDatabaseId == firstBookmarkDatabaseId) {
+                        moveBookmarkUpMenuItem.setEnabled(false);
+                        moveBookmarkUpMenuItem.setIcon(R.drawable.move_bookmark_up_disabled);
+                    } else {  // Otherwise enable `moveBookmarkUpMenuItem`.
+                        moveBookmarkUpMenuItem.setEnabled(true);
+                        moveBookmarkUpMenuItem.setIcon(R.drawable.move_bookmark_up_enabled);
+                    }
+
+                    // Disable `moveBookmarkDownMenuItem` if the selected bookmark is at the bottom of the ListView.
+                    if (selectedBookmarkDatabaseId == lastBookmarkDatabaseId) {
+                        moveBookmarkDownMenuItem.setEnabled(false);
+                        moveBookmarkDownMenuItem.setIcon(R.drawable.move_bookmark_down_disabled);
+                    } else {  // Otherwise enable `moveBookmarkDownMenuItem`.
+                        moveBookmarkDownMenuItem.setEnabled(true);
+                        moveBookmarkDownMenuItem.setIcon(R.drawable.move_bookmark_down_enabled);
+                    }
+                } else {  // Hide the MenuItems because more than one bookmark is selected.
+                    moveBookmarkUpMenuItem.setVisible(false);
+                    moveBookmarkDownMenuItem.setVisible(false);
                     editBookmarkMenuItem.setVisible(false);
                 }
 
                 // Do not show `Select All` if all the bookmarks are already checked.
                 if (bookmarksListView.getCheckedItemIds().length == bookmarksListView.getCount()) {
-                    selectAllBookmarks.setVisible(false);
+                    selectAllBookmarksMenuItem.setVisible(false);
                 } else {
-                    selectAllBookmarks.setVisible(true);
+                    selectAllBookmarksMenuItem.setVisible(true);
                 }
             }
 
@@ -159,13 +199,101 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 int menuItemId = item.getItemId();
 
+                // `numberOfBookmarks` is used in `R.id.move_bookmark_up_enabled`, `R.id.move_bookmark_down_enabled`, and `R.id.context_menu_select_all_bookmarks`.
+                int numberOfBookmarks;
+
+                // `selectedBookmarkLongArray` is used in `R.id.move_bookmark_up` and `R.id.move_bookmark_down`.
+                long[]selectedBookmarkLongArray;
+                // `selectedBookmarkDatabaseId` is used in `R.id.move_bookmark_up` and `R.id.move_bookmark_down`.
+                int selectedBookmarkDatabaseId;
+                // `selectedBookmarkNewPosition` is used in `R.id.move_bookmark_up` and `R.id.move_bookmark_down`.
+                int selectedBookmarkNewPosition;
+
                 switch (menuItemId) {
+                    case R.id.move_bookmark_up:
+                        // Get the selected bookmark database ID.
+                        selectedBookmarkLongArray = bookmarksListView.getCheckedItemIds();
+                        selectedBookmarkDatabaseId = (int) selectedBookmarkLongArray[0];
+
+                        // Initialize `selectedBookmarkNewPosition`.
+                        selectedBookmarkNewPosition = 0;
+
+                        for (int i = 0; i < bookmarksListView.getCount(); i++) {
+                            int databaseId = (int) bookmarksListView.getItemIdAtPosition(i);
+                            int nextBookmarkDatabaseId = (int) bookmarksListView.getItemIdAtPosition(i + 1);
+
+                            if (databaseId == selectedBookmarkDatabaseId || nextBookmarkDatabaseId == selectedBookmarkDatabaseId) {
+                                if (databaseId == selectedBookmarkDatabaseId) {
+                                    // Move the selected bookmark up one and store the new bookmark position.
+                                    bookmarksDatabaseHandler.updateBookmarkDisplayOrder(databaseId, i - 1);
+                                    selectedBookmarkNewPosition = i - 1;
+                                } else {  // Move the bookmark above the selected bookmark down one.
+                                    bookmarksDatabaseHandler.updateBookmarkDisplayOrder(databaseId, i + 1);
+                                }
+                            } else {
+                                // Reset the rest of the bookmarks' DISPLAY_ORDER to match the position in the ListView.
+                                // This isn't necessary, but it clears out any stray values that might have crept into the database.
+                                bookmarksDatabaseHandler.updateBookmarkDisplayOrder(databaseId, i);
+                            }
+                        }
+
+                        // Refresh the ListView.
+                        updateBookmarksListView();
+
+                        // Select the previously selected bookmark in the new location.
+                        bookmarksListView.setItemChecked(selectedBookmarkNewPosition, true);
+
+                        bookmarksListView.setSelection(selectedBookmarkNewPosition - 5);
+
+                        break;
+
+                    case R.id.move_bookmark_down:
+                        // Get the selected bookmark database ID.
+                        selectedBookmarkLongArray = bookmarksListView.getCheckedItemIds();
+                        selectedBookmarkDatabaseId = (int) selectedBookmarkLongArray[0];
+
+                        // Initialize `selectedBookmarkNewPosition`.
+                        selectedBookmarkNewPosition = 0;
+
+                        for (int i = 0; i <bookmarksListView.getCount(); i++) {
+                            int databaseId = (int) bookmarksListView.getItemIdAtPosition(i);
+                            int previousBookmarkDatabaseId = (int) bookmarksListView.getItemIdAtPosition(i - 1);
+
+                            if (databaseId == selectedBookmarkDatabaseId || previousBookmarkDatabaseId == selectedBookmarkDatabaseId) {
+                                if (databaseId == selectedBookmarkDatabaseId) {
+                                    // Move the selected bookmark down one and store the new bookmark position.
+                                    bookmarksDatabaseHandler.updateBookmarkDisplayOrder(databaseId, i + 1);
+                                    selectedBookmarkNewPosition = i + 1;
+                                } else {  // Move the bookmark below the selected bookmark up one.
+                                    bookmarksDatabaseHandler.updateBookmarkDisplayOrder(databaseId, i - 1);
+                                }
+                            } else {
+                                // Reset the rest of the bookmark' DISPLAY_ORDER to match the position in the ListView.
+                                // This isn't necessary, but it clears out any stray values that might have crept into the database.
+                                bookmarksDatabaseHandler.updateBookmarkDisplayOrder(databaseId, i);
+                            }
+                        }
+
+                        // Refresh the ListView.
+                        updateBookmarksListView();
+
+                        // Select the previously selected bookmark in the new location.
+                        bookmarksListView.setItemChecked(selectedBookmarkNewPosition, true);
+
+                        bookmarksListView.setSelection(selectedBookmarkNewPosition - 5);
+                        break;
+
                     case R.id.edit_bookmark:
+                        // Get a handle for `selectedBookmarkPosition` so we can scroll to it after refreshing the ListView.
+                        SparseBooleanArray bookmarkPositionSparseBooleanArray = bookmarksListView.getCheckedItemPositions();
+                        selectedBookmarkPosition = bookmarkPositionSparseBooleanArray.keyAt(0);
+
+                        // Get a handle for `contextualActionMode` so we can close it when `editBookmarkDialog` is finished.
+                        contextualActionMode = mode;
+
                         // Show the `EditBookmark` `AlertDialog` and name the instance `@string/edit_bookmark`.
                         DialogFragment editBookmarkDialog = new EditBookmark();
                         editBookmarkDialog.show(getFragmentManager(), "@string/edit_bookmark");
-
-                        contextualActionMode = mode;
                         break;
 
                     case R.id.delete_bookmark:
@@ -223,7 +351,7 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                         break;
 
                     case R.id.context_menu_select_all_bookmarks:
-                        int numberOfBookmarks = bookmarksListView.getCount();
+                        numberOfBookmarks = bookmarksListView.getCount();
 
                         for (int i = 0; i < numberOfBookmarks; i++) {
                             bookmarksListView.setItemChecked(i, true);
@@ -306,11 +434,15 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
         MainWebViewActivity.favoriteIcon.compress(Bitmap.CompressFormat.PNG, 0, favoriteIconByteArrayOutputStream);
         byte[] favoriteIconByteArray = favoriteIconByteArrayOutputStream.toByteArray();
 
-        // Create the bookmark.
-        bookmarksDatabaseHandler.createBookmark(bookmarkNameString, bookmarkUrlString, favoriteIconByteArray);
+        // Display the new bookmark below the current items in the (0 indexed) list.
+        int newBookmarkDisplayOrder = bookmarksListView.getCount();
 
-        // Refresh the ListView.
+        // Create the bookmark.
+        bookmarksDatabaseHandler.createBookmark(bookmarkNameString, bookmarkUrlString, newBookmarkDisplayOrder, favoriteIconByteArray);
+
+        // Refresh the ListView.  `setSelection` scrolls to the bottom of the list.
         updateBookmarksListView();
+        bookmarksListView.setSelection(bookmarksListView.getCount());
     }
 
     @Override
@@ -334,23 +466,28 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
         int selectedBookmarkDatabaseId = (int) selectedBookmarksLongArray[0];
 
         if (useNewFavoriteIconBitmap.isChecked()) {
+            // Get the new favorite icon from the Dialog and convert it into a Bitmap.
             ImageView newFavoriteIconImageView = (ImageView) editBookmarkDialogFragment.getDialog().findViewById(R.id.edit_bookmark_new_favorite_icon);
             Drawable favoriteIconDrawable = newFavoriteIconImageView.getDrawable();
             Bitmap favoriteIconBitmap = ((BitmapDrawable) favoriteIconDrawable).getBitmap();
+
+            // Convert the new `favoriteIconBitmap` into a Byte Array.
             ByteArrayOutputStream favoriteIconByteArrayOutputStream = new ByteArrayOutputStream();
             favoriteIconBitmap.compress(Bitmap.CompressFormat.PNG, 0, favoriteIconByteArrayOutputStream);
             favoriteIconByteArray = favoriteIconByteArrayOutputStream.toByteArray();
-            bookmarksDatabaseHandler.updateBookmark(selectedBookmarkDatabaseId, bookmarkNameString, bookmarkUrlString, favoriteIconByteArray);
 
-        } else {
-            // Update the bookmark.
+            //  Update the bookmark and the favorite icon.
+            bookmarksDatabaseHandler.updateBookmark(selectedBookmarkDatabaseId, bookmarkNameString, bookmarkUrlString, favoriteIconByteArray);
+        } else {  // Update the bookmark without changing the favorite icon.
             bookmarksDatabaseHandler.updateBookmark(selectedBookmarkDatabaseId, bookmarkNameString, bookmarkUrlString);
         }
 
+        // Close the contextual action mode.
         contextualActionMode.finish();
 
-        // Refresh the `ListView`.
+        // Refresh the `ListView`.  `setSelection` scrolls to that position.
         updateBookmarksListView();
+        bookmarksListView.setSelection(selectedBookmarkPosition);
     }
 
     private void updateBookmarksListView() {

@@ -62,10 +62,11 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         // Code for upgrading the database will be added here when the schema version > 1.
     }
 
-    public void createBookmark(String bookmarkName, String bookmarkURL, byte[] favoriteIcon) {
+    public void createBookmark(String bookmarkName, String bookmarkURL, int displayOrder, byte[] favoriteIcon) {
         ContentValues bookmarkContentValues = new ContentValues();
 
         // ID is created automatically.
+        bookmarkContentValues.put(DISPLAY_ORDER, displayOrder);
         bookmarkContentValues.put(BOOKMARK_NAME, bookmarkName);
         bookmarkContentValues.put(BOOKMARK_URL, bookmarkURL);
         bookmarkContentValues.put(PARENT_FOLDER, "");
@@ -86,7 +87,7 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         // Get a readable database handle.
         SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
 
-        // Prepare the SQL statement to get the cursor for `databaseId`.
+        // Prepare the SQL statement to get the cursor for `databaseId`
         final String GET_ONE_BOOKMARK = "Select * FROM " + BOOKMARKS_TABLE +
                 " WHERE " + _ID + " = " + databaseId;
 
@@ -113,7 +114,7 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
 
         // Prepare the SQL statement to select all items except those with the specified IDs.
         final String GET_All_BOOKMARKS_EXCEPT_SPECIFIED = "Select * FROM " + BOOKMARKS_TABLE +
-                " WHERE " + _ID + " NOT IN (" + doNotGetIdsString + ")";
+                " WHERE " + _ID + " NOT IN (" + doNotGetIdsString + ") ORDER BY " + DISPLAY_ORDER + " ASC";
 
         // Return the results as a `Cursor`.  The second argument is `null` because there are no selectionArgs.
         // We can't close the `Cursor` because we need to use it in the parent activity.
@@ -125,7 +126,7 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
 
         // Get everything in the BOOKMARKS_TABLE.
-        final String GET_ALL_BOOKMARKS = "Select * FROM " + BOOKMARKS_TABLE;
+        final String GET_ALL_BOOKMARKS = "Select * FROM " + BOOKMARKS_TABLE + " ORDER BY " + DISPLAY_ORDER + " ASC";
 
         // Return the results as a Cursor.  The second argument is `null` because there are no selectionArgs.
         // We can't close the Cursor because we need to use it in the parent activity.
@@ -180,6 +181,22 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         bookmarkContentValues.put(BOOKMARK_NAME, bookmarkName);
         bookmarkContentValues.put(BOOKMARK_URL, bookmarkUrl);
         bookmarkContentValues.put(FAVORITE_ICON, favoriteIcon);
+
+        // Get a writable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();
+
+        // Update the database.  The last argument is `null` because there are no `whereArgs`.
+        bookmarksDatabase.update(BOOKMARKS_TABLE, bookmarkContentValues, _ID + " = " + databaseId, null);
+
+        // Close the database handle.
+        bookmarksDatabase.close();
+    }
+
+    public void updateBookmarkDisplayOrder(int databaseId, int displayOrder) {
+        // Store the updated values in `bookmarkContentValues`.
+        ContentValues bookmarkContentValues = new ContentValues();
+
+        bookmarkContentValues.put(DISPLAY_ORDER, displayOrder);
 
         // Get a writable database handle.
         SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();

@@ -1,0 +1,14 @@
+<!-- move_bookmark_down_enabled.xmlbled.xml comes from the Android Material icon set, where it is called ic_vertical_align_bottom.
+  It is released under the CC-BY license <https://creativecommons.org/licenses/by/4.0/>. -->
+
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:width="24dp"
+    android:viewportHeight="24.0"
+    android:viewportWidth="24.0" >
+
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M16,13h-3V3h-2v10H8l4,4 4,-4zM4,19v2h16v-2H4z"/>
+</vector>
