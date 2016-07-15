@@ -22,8 +22,10 @@ package com.stoutner.privacybrowser;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 
 public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
     private static final int SCHEMA_VERSION = 1;
@@ -62,21 +64,41 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         // Code for upgrading the database will be added here when the schema version > 1.
     }
 
-    public void createBookmark(String bookmarkName, String bookmarkURL, int displayOrder, byte[] favoriteIcon) {
+    public void createBookmark(String bookmarkName, String bookmarkURL, int displayOrder, String parentFolder, byte[] favoriteIcon) {
         ContentValues bookmarkContentValues = new ContentValues();
 
         // ID is created automatically.
         bookmarkContentValues.put(DISPLAY_ORDER, displayOrder);
         bookmarkContentValues.put(BOOKMARK_NAME, bookmarkName);
         bookmarkContentValues.put(BOOKMARK_URL, bookmarkURL);
-        bookmarkContentValues.put(PARENT_FOLDER, "");
+        bookmarkContentValues.put(PARENT_FOLDER, parentFolder);
         bookmarkContentValues.put(IS_FOLDER, false);
         bookmarkContentValues.put(FAVORITE_ICON, favoriteIcon);
 
         // Get a writable database handle.
         SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();
 
-        // The second argument is "null", which makes it so that completely null rows cannot be created.  Not a problem in our case.
+        // The second argument is `null`, which makes it so that completely null rows cannot be created.  Not a problem in our case.
+        bookmarksDatabase.insert(BOOKMARKS_TABLE, null, bookmarkContentValues);
+
+        // Close the database handle.
+        bookmarksDatabase.close();
+    }
+
+    public void createFolder(String folderName, int displayOrder, String parentFolder, byte[] favoriteIcon) {
+        ContentValues bookmarkContentValues = new ContentValues();
+
+        // ID is created automatically.
+        bookmarkContentValues.put(DISPLAY_ORDER, displayOrder);
+        bookmarkContentValues.put(BOOKMARK_NAME, folderName);
+        bookmarkContentValues.put(PARENT_FOLDER, parentFolder);
+        bookmarkContentValues.put(IS_FOLDER, true);
+        bookmarkContentValues.put(FAVORITE_ICON, favoriteIcon);
+
+        // Get a writable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();
+
+        // The second argument is `null`, which makes it so that completely null rows cannot be created.  Not a problem in our case.
         bookmarksDatabase.insert(BOOKMARKS_TABLE, null, bookmarkContentValues);
 
         // Close the database handle.
@@ -87,16 +109,85 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         // Get a readable database handle.
         SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
 
-        // Prepare the SQL statement to get the cursor for `databaseId`
+        // Prepare the SQL statement to get the `Cursor` for `databaseId`
         final String GET_ONE_BOOKMARK = "Select * FROM " + BOOKMARKS_TABLE +
                 " WHERE " + _ID + " = " + databaseId;
 
-        // Return the results as a `Cursor`.  The second argument is `null` because there are no selectionArgs.
+        // Return the results as a `Cursor`.  The second argument is `null` because there are no `selectionArgs`.
         // We can't close the `Cursor` because we need to use it in the parent activity.
         return bookmarksDatabase.rawQuery(GET_ONE_BOOKMARK, null);
     }
 
-    public Cursor getBookmarksCursorExcept(long[] exceptIdLongArray) {
+    public Cursor getFolderCursor(String folderName) {
+        // Get a readable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
+
+        // SQL escape `folderName`.
+        folderName = DatabaseUtils.sqlEscapeString(folderName);
+
+        // Prepare the SQL statement to get the `Cursor` for the folder.
+        final String GET_FOLDER = "Select * FROM " + BOOKMARKS_TABLE +
+                " WHERE " + BOOKMARK_NAME + " = " + folderName +
+                " AND " + IS_FOLDER + " = " + 1;
+
+        // Return the results as a `Cursor`.  The second argument is `null` because there are no `selectionArgs`.
+        // We can't close the `Cursor` because we need to use it in the parent activity.
+        return bookmarksDatabase.rawQuery(GET_FOLDER, null);
+    }
+
+    public String getParentFolder(String currentFolder) {
+        // Get a readable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
+
+        // SQL escape `currentFolder`.
+        currentFolder = DatabaseUtils.sqlEscapeString(currentFolder);
+
+        // Prepare the SQL statement to get the parent folder.
+        final String GET_PARENT_FOLDER = "Select * FROM " + BOOKMARKS_TABLE +
+                " WHERE " + IS_FOLDER + " = " + 1 + " AND " + BOOKMARK_NAME + " = " + currentFolder;
+
+        // The second argument is `null` because there are no `selectionArgs`.
+        Cursor bookmarkCursor = bookmarksDatabase.rawQuery(GET_PARENT_FOLDER, null);
+        bookmarkCursor.moveToFirst();
+
+        // Store the name of the parent folder.
+        String parentFolder = bookmarkCursor.getString(bookmarkCursor.getColumnIndex(PARENT_FOLDER));
+
+        // Close the `Cursor`.
+        bookmarkCursor.close();
+
+        return parentFolder;
+    }
+
+    public Cursor getAllBookmarksCursor() {
+        // Get a readable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
+
+        // Get everything in the BOOKMARKS_TABLE.
+        final String GET_ALL_BOOKMARKS = "Select * FROM " + BOOKMARKS_TABLE;
+
+        // Return the results as a Cursor.  The second argument is `null` because there are no selectionArgs.
+        // We can't close the Cursor because we need to use it in the parent activity.
+        return bookmarksDatabase.rawQuery(GET_ALL_BOOKMARKS, null);
+    }
+
+    public Cursor getAllBookmarksCursorByDisplayOrder(String folderName) {
+        // Get a readable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
+
+        // SQL escape `folderName`.
+        folderName = DatabaseUtils.sqlEscapeString(folderName);
+
+        // Get everything in the BOOKMARKS_TABLE.
+        final String GET_ALL_BOOKMARKS = "Select * FROM " + BOOKMARKS_TABLE +
+                " WHERE " + PARENT_FOLDER + " = " + folderName + " ORDER BY " + DISPLAY_ORDER + " ASC";
+
+        // Return the results as a Cursor.  The second argument is `null` because there are no selectionArgs.
+        // We can't close the Cursor because we need to use it in the parent activity.
+        return bookmarksDatabase.rawQuery(GET_ALL_BOOKMARKS, null);
+    }
+
+    public Cursor getBookmarksCursorExcept(long[] exceptIdLongArray, String folderName) {
         // Get a readable database handle.
         SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
 
@@ -112,49 +203,16 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
             }
         }
 
+        // SQL escape `folderName`.
+        folderName = DatabaseUtils.sqlEscapeString(folderName);
+
         // Prepare the SQL statement to select all items except those with the specified IDs.
         final String GET_All_BOOKMARKS_EXCEPT_SPECIFIED = "Select * FROM " + BOOKMARKS_TABLE +
-                " WHERE " + _ID + " NOT IN (" + doNotGetIdsString + ") ORDER BY " + DISPLAY_ORDER + " ASC";
+                " WHERE " + PARENT_FOLDER + " = " + folderName + " AND " + _ID + " NOT IN (" + doNotGetIdsString + ") ORDER BY " + DISPLAY_ORDER + " ASC";
 
         // Return the results as a `Cursor`.  The second argument is `null` because there are no selectionArgs.
         // We can't close the `Cursor` because we need to use it in the parent activity.
         return bookmarksDatabase.rawQuery(GET_All_BOOKMARKS_EXCEPT_SPECIFIED, null);
-    }
-
-    public Cursor getAllBookmarksCursor() {
-        // Get a readable database handle.
-        SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
-
-        // Get everything in the BOOKMARKS_TABLE.
-        final String GET_ALL_BOOKMARKS = "Select * FROM " + BOOKMARKS_TABLE + " ORDER BY " + DISPLAY_ORDER + " ASC";
-
-        // Return the results as a Cursor.  The second argument is `null` because there are no selectionArgs.
-        // We can't close the Cursor because we need to use it in the parent activity.
-        return bookmarksDatabase.rawQuery(GET_ALL_BOOKMARKS, null);
-    }
-
-    public String getBookmarkURL(int databaseId) {
-        // Get a readable database handle.
-        SQLiteDatabase bookmarksDatabase = this.getReadableDatabase();
-
-        // Prepare the SQL statement to get the row for the selected databaseId.
-        final String GET_BOOKMARK_URL = "Select * FROM " + BOOKMARKS_TABLE +
-                " WHERE " + _ID + " = " + databaseId;
-
-        // Save the results as Cursor and move it to the first (only) row.  The second argument is "null" because there are no selectionArgs.
-        Cursor bookmarksCursor = bookmarksDatabase.rawQuery(GET_BOOKMARK_URL, null);
-        bookmarksCursor.moveToFirst();
-
-        // Get the int that identifies the "BOOKMARK_URL" column and save the string as bookmarkURL.
-        int urlColumnInt = bookmarksCursor.getColumnIndex(BOOKMARK_URL);
-        String bookmarkURLString = bookmarksCursor.getString(urlColumnInt);
-
-        // Close the Cursor and the database handle.
-        bookmarksCursor.close();
-        bookmarksDatabase.close();
-
-        // Return the bookmarkURLString.
-        return bookmarkURLString;
     }
 
     public void updateBookmark(int databaseId, String bookmarkName, String bookmarkUrl) {
@@ -167,7 +225,7 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         // Get a writable database handle.
         SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();
 
-        // Update the database.  The last argument is `null` because there are no `whereArgs`.
+        // Update the bookmark.  The last argument is `null` because there are no `whereArgs`.
         bookmarksDatabase.update(BOOKMARKS_TABLE, bookmarkContentValues, _ID + " = " + databaseId, null);
 
         // Close the database handle.
@@ -185,8 +243,65 @@ public class BookmarksDatabaseHandler extends SQLiteOpenHelper {
         // Get a writable database handle.
         SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();
 
-        // Update the database.  The last argument is `null` because there are no `whereArgs`.
+        // Update the bookmark.  The last argument is `null` because there are no `whereArgs`.
         bookmarksDatabase.update(BOOKMARKS_TABLE, bookmarkContentValues, _ID + " = " + databaseId, null);
+
+        // Close the database handle.
+        bookmarksDatabase.close();
+    }
+
+    public void updateFolder(int databaseId, String oldFolderName, String newFolderName) {
+        // Get a writable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();
+
+        // Update the folder first.  Store the updated values in `folderContentValues`.
+        ContentValues folderContentValues = new ContentValues();
+
+        folderContentValues.put(BOOKMARK_NAME, newFolderName);
+
+        // Run the update on the folder.  The last argument is `null` because there are no `whereArgs`.
+        bookmarksDatabase.update(BOOKMARKS_TABLE, folderContentValues, _ID + " = " + databaseId, null);
+
+
+        // Update the bookmarks inside the folder with the new parent folder name.
+        ContentValues bookmarkContentValues = new ContentValues();
+
+        bookmarkContentValues.put(PARENT_FOLDER, newFolderName);
+
+        // SQL escape `oldFolderName`.
+        oldFolderName = DatabaseUtils.sqlEscapeString(oldFolderName);
+
+        // Run the update on the bookmarks.  The last argument is `null` because there are no `whereArgs`.
+        bookmarksDatabase.update(BOOKMARKS_TABLE, bookmarkContentValues, PARENT_FOLDER + " = " + oldFolderName, null);
+
+        // Close the database handle.
+        bookmarksDatabase.close();
+    }
+
+    public void updateFolder(int databaseId, String oldFolderName, String newFolderName, byte[] folderIcon) {
+        // Get a writable database handle.
+        SQLiteDatabase bookmarksDatabase = this.getWritableDatabase();
+
+        // Update the folder first.  Store the updated values in `folderContentValues`.
+        ContentValues folderContentValues = new ContentValues();
+
+        folderContentValues.put(BOOKMARK_NAME, newFolderName);
+        folderContentValues.put(FAVORITE_ICON, folderIcon);
+
+        // Run the update on the folder.  The last argument is `null` because there are no `whereArgs`.
+        bookmarksDatabase.update(BOOKMARKS_TABLE, folderContentValues, _ID + " = " + databaseId, null);
+
+
+        // Update the bookmarks inside the folder with the new parent folder name.
+        ContentValues bookmarkContentValues = new ContentValues();
+
+        bookmarkContentValues.put(PARENT_FOLDER, newFolderName);
+
+        // SQL escape `oldFolderName`.
+        oldFolderName = DatabaseUtils.sqlEscapeString(oldFolderName);
+
+        // Run the update on the bookmarks.  The last argument is `null` because there are no `whereArgs`.
+        bookmarksDatabase.update(BOOKMARKS_TABLE, bookmarkContentValues, PARENT_FOLDER + " = " + oldFolderName, null);
 
         // Close the database handle.
         bookmarksDatabase.close();

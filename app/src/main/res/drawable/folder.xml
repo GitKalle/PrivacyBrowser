@@ -1,4 +1,4 @@
-<!-- move_bookmark_up_enabled.xml comes from the Android Material icon set, where it is called ic_vertical_align_top.
+<!-- folder.xml comes from the Android Material icon set, where it is called ic_folder.
   It is released under the CC-BY license <https://creativecommons.org/licenses/by/4.0/>. -->
 
 <vector
@@ -9,6 +9,6 @@
     android:viewportWidth="24.0" >
 
     <path
-        android:fillColor="#FFFFFFFF"
-        android:pathData="M8,11h3v10h2V11h3l-4,-4 -4,4zM4,3v2h16V3H4z"/>
+        android:fillColor="#FF9E9E9E"
+        android:pathData="M10,4H4c-1.1,0 -1.99,0.9 -1.99,2L2,18c0,1.1 0.9,2 2,2h16c1.1,0 2,-0.9 2,-2V8c0,-1.1 -0.9,-2 -2,-2h-8l-2,-2z"/>
 </vector>

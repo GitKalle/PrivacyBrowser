@@ -18,25 +18,29 @@
   You should have received a copy of the GNU General Public License
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
-<RelativeLayout
-    android:id="@+id/create_home_screen_shortcut_dialog_relativelayout"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent" >
+    android:layout_width="match_parent"
+    android:orientation="vertical" >
 
-    <!-- `android:imeOptions="actionGo"` sets the keyboard to have a "go" key instead of a "new line" key.
-        `android:inputType="textUri"` disables spell check in the EditText.
-        `android:singleLine="true"` is not needed in a Dialog.
-        We can't use `android:imeOptions=flagNoExtractUi"` because it disables tapping to select in landscape orientation on small devices.-->
-    <EditText
-        android:id="@+id/shortcut_name_edittext"
+    <android.support.design.widget.TextInputLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="16dp"
-        android:hint="@string/shortcut_name"
-        android:imeOptions="actionGo"
-        android:inputType="textUri" />
-</RelativeLayout>
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp" >
+
+        <!-- `android:imeOptions="actionGo"` sets the keyboard to have a "go" key instead of a "new line" key.
+            `android:inputType="textUri"` disables spell check in the EditText.
+            We can't use `android:imeOptions=flagNoExtractUi"` because it disables tapping to select in landscape orientation on small devices.-->
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/shortcut_name_edittext"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:hint="@string/shortcut_name"
+            android:imeOptions="actionGo"
+            android:inputType="textUri" />
+    </android.support.design.widget.TextInputLayout>
+</LinearLayout>

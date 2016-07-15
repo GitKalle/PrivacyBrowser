@@ -26,8 +26,6 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 // If we don't use `android.support.v7.app.AlertDialog` instead of `android.app.AlertDialog` then the dialog will be covered by the keyboard.
 import android.support.v7.app.AlertDialog;
@@ -37,25 +35,25 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-public class EditBookmark extends DialogFragment {
+public class EditBookmarkFolder extends DialogFragment {
     // The public interface is used to send information back to the parent activity.
-    public interface EditBookmarkListener {
-        void onCancelEditBookmark(DialogFragment dialogFragment);
+    public interface EditBookmarkFolderListener {
+        void onCancelEditBookmarkFolder(DialogFragment dialogFragment);
 
-        void onSaveEditBookmark(DialogFragment dialogFragment);
+        void onSaveEditBookmarkFolder(DialogFragment dialogFragment);
     }
 
-    // `editBookmarkListener` is used in `onAttach()` and `onCreateDialog()`
-    private EditBookmarkListener editBookmarkListener;
+    // `editFolderListener` is used in `onAttach()` and `onCreateDialog`.
+    private EditBookmarkFolderListener editBookmarkFolderListener;
 
     public void onAttach(Activity parentActivity) {
         super.onAttach(parentActivity);
 
-        // Get a handle for `EditBookmarkListener` from `parentActivity`.
+        // Get a handle for `EditFolderListener` from `parentActivity`.
         try {
-            editBookmarkListener = (EditBookmarkListener) parentActivity;
+            editBookmarkFolderListener = (EditBookmarkFolderListener) parentActivity;
         } catch(ClassCastException exception) {
-            throw new ClassCastException(parentActivity.toString() + " must implement EditBookmarkListener.");
+            throw new ClassCastException(parentActivity.toString() + " must implement EditBookmarkFolderListener.");
         }
     }
 
@@ -71,16 +69,16 @@ public class EditBookmark extends DialogFragment {
 
         // Use `AlertDialog.Builder` to create the `AlertDialog`.  The style formats the color of the button text.
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.LightAlertDialog);
-        dialogBuilder.setTitle(R.string.edit_bookmark);
+        dialogBuilder.setTitle(R.string.edit_folder);
         // The parent view is `null` because it will be assigned by `AlertDialog`.
-        dialogBuilder.setView(getActivity().getLayoutInflater().inflate(R.layout.edit_bookmark_dialog, null));
+        dialogBuilder.setView(getActivity().getLayoutInflater().inflate(R.layout.edit_bookmark_folder_dialog, null));
 
         // Set an `onClick()` listener for the negative button.
         dialogBuilder.setNegativeButton(R.string.cancel, new Dialog.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Return the `DialogFragment` to the parent activity on cancel.
-                editBookmarkListener.onCancelEditBookmark(EditBookmark.this);
+                editBookmarkFolderListener.onCancelEditBookmarkFolder(EditBookmarkFolder.this);
             }
         });
 
@@ -89,7 +87,7 @@ public class EditBookmark extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Return the `DialogFragment` to the parent activity on save.
-                editBookmarkListener.onSaveEditBookmark(EditBookmark.this);
+                editBookmarkFolderListener.onSaveEditBookmarkFolder(EditBookmarkFolder.this);
             }
         });
 
@@ -107,55 +105,33 @@ public class EditBookmark extends DialogFragment {
         byte[] currentIconByteArray = bookmarkCursor.getBlob(bookmarkCursor.getColumnIndex(BookmarksDatabaseHandler.FAVORITE_ICON));
         // Convert the byte array to a `Bitmap` beginning at the first byte and ending at the last.
         Bitmap currentIconBitmap = BitmapFactory.decodeByteArray(currentIconByteArray, 0, currentIconByteArray.length);
-        // Display `currentIconBitmap` in `edit_bookmark_current_icon`.
-        ImageView currentIconImageView = (ImageView) alertDialog.findViewById(R.id.edit_bookmark_current_icon);
-        assert currentIconImageView != null;  // Remove the warning below that `currentIconImageView` might be null;
+        // Display `currentIconBitmap` in `edit_folder_current_icon`.
+        ImageView currentIconImageView = (ImageView) alertDialog.findViewById(R.id.edit_folder_current_icon);
+        assert currentIconImageView != null;  // Remove the warning below that `currentIconImageView` might be null.
         currentIconImageView.setImageBitmap(currentIconBitmap);
 
-        // Get a `Bitmap` of the favorite icon from `MainWebViewActivity` and display it in `edit_bookmark_web_page_favorite_icon`.
-        ImageView newFavoriteIconImageView = (ImageView) alertDialog.findViewById(R.id.edit_bookmark_web_page_favorite_icon);
-        assert newFavoriteIconImageView != null;  // Remove the warning below that `newFavoriteIcon` might be null.
-        newFavoriteIconImageView.setImageBitmap(MainWebViewActivity.favoriteIcon);
+        // Get a `Bitmap` of the favorite icon from `MainWebViewActivity` and display it in `edit_folder_web_page_favorite_icon`.
+        ImageView webPageFavoriteIcon = (ImageView) alertDialog.findViewById(R.id.edit_folder_web_page_favorite_icon);
+        assert webPageFavoriteIcon != null;  // Remove the warning below that `webPageFavoriteIcon` might be null.
+        webPageFavoriteIcon.setImageBitmap(MainWebViewActivity.favoriteIcon);
 
-        // Load the text for `edit_bookmark_name_edittext`.
-        EditText bookmarkNameEditText = (EditText) alertDialog.findViewById(R.id.edit_bookmark_name_edittext);
-        assert bookmarkNameEditText != null;  // Remove the warning below that `bookmarkNameEditText` might be null.
-        bookmarkNameEditText.setText(bookmarkCursor.getString(bookmarkCursor.getColumnIndex(BookmarksDatabaseHandler.BOOKMARK_NAME)));
+        // Load the text for `edit_folder_name_edittext`.
+        EditText folderNameEditText = (EditText) alertDialog.findViewById(R.id.edit_folder_name_edittext);
+        assert folderNameEditText != null;  // Remove the warning below that `bookmarkNameEditText` might be null.
+        folderNameEditText.setText(bookmarkCursor.getString(bookmarkCursor.getColumnIndex(BookmarksDatabaseHandler.BOOKMARK_NAME)));
 
         // Allow the `enter` key on the keyboard to save the bookmark from `edit_bookmark_name_edittext`.
-        bookmarkNameEditText.setOnKeyListener(new View.OnKeyListener() {
+        folderNameEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down on the "enter" button, select the PositiveButton `Save`.
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Trigger `editBookmarkListener` and return the DialogFragment to the parent activity.
-                    editBookmarkListener.onSaveEditBookmark(EditBookmark.this);
-                    // Manually dismiss `alertDialog`.
-                    alertDialog.dismiss();
-                    // Consume the event.
-                    return true;
-                } else {  // If any other key was pressed, do not consume the event.
-                    return false;
-                }
-            }
-        });
-
-        // Load the text for `edit_bookmark_url_edittext`.
-        EditText bookmarkUrlEditText = (EditText) alertDialog.findViewById(R.id.edit_bookmark_url_edittext);
-        assert bookmarkUrlEditText != null;// Remove the warning below that `bookmarkUrlEditText` might be null.
-        bookmarkUrlEditText.setText(bookmarkCursor.getString(bookmarkCursor.getColumnIndex(BookmarksDatabaseHandler.BOOKMARK_URL)));
-
-        // Allow the "enter" key on the keyboard to save the bookmark from `edit_bookmark_url_edittext`.
-        bookmarkUrlEditText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down on the `enter` button, select the PositiveButton `Save`.
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Trigger `editBookmarkListener` and return the DialogFragment to the parent activity.
-                    editBookmarkListener.onSaveEditBookmark(EditBookmark.this);
+                    editBookmarkFolderListener.onSaveEditBookmarkFolder(EditBookmarkFolder.this);
                     // Manually dismiss the `AlertDialog`.
                     alertDialog.dismiss();
                     // Consume the event.
                     return true;
-                } else { // If any other key was pressed, do not consume the event.
+                } else {  // If any other key was pressed, do not consume the event.
                     return false;
                 }
             }

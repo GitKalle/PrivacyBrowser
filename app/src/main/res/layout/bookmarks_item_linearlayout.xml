@@ -21,11 +21,11 @@
 <LinearLayout
     android:id="@+id/bookmarks_item_linearlayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:background="@drawable/bookmarks_list_selector"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@drawable/bookmarks_list_selector" >
 
     <ImageView
         android:id="@+id/bookmark_favorite_icon"

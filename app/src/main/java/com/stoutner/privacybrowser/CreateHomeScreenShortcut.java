@@ -37,9 +37,9 @@ import android.widget.EditText;
 public class CreateHomeScreenShortcut extends DialogFragment {
     // The public interface is used to send information back to the parent activity.
     public interface CreateHomeScreenSchortcutListener {
-        void onCreateHomeScreenShortcutCancel(DialogFragment dialogFragment);
+        void onCancelCreateHomeScreenShortcut(DialogFragment dialogFragment);
 
-        void onCreateHomeScreenShortcutCreate(DialogFragment dialogFragment);
+        void onCreateHomeScreenShortcut(DialogFragment dialogFragment);
     }
 
     //createHomeScreenShortcutListener is used in onAttach and and onCreateDialog.
@@ -64,50 +64,50 @@ public class CreateHomeScreenShortcut extends DialogFragment {
         LayoutInflater customDialogInflater = getActivity().getLayoutInflater();
 
         // Use AlertDialog.Builder to create the AlertDialog.  The style formats the color of the button text.
-        AlertDialog.Builder createHomeScreenShorcutDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.LightAlertDialog);
-        createHomeScreenShorcutDialogBuilder.setTitle(R.string.create_shortcut);
-        createHomeScreenShorcutDialogBuilder.setIcon(favoriteIconDrawable);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.LightAlertDialog);
+        dialogBuilder.setTitle(R.string.create_shortcut);
+        dialogBuilder.setIcon(favoriteIconDrawable);
         // The parent view is "null" because it will be assigned by AlertDialog.
-        createHomeScreenShorcutDialogBuilder.setView(customDialogInflater.inflate(R.layout.create_home_screen_shortcut_dialog, null));
+        dialogBuilder.setView(customDialogInflater.inflate(R.layout.create_home_screen_shortcut_dialog, null));
 
         // Set an onClick listener on the negative button.
-        createHomeScreenShorcutDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                createHomeScreenShortcutListener.onCreateHomeScreenShortcutCancel(CreateHomeScreenShortcut.this);
+                createHomeScreenShortcutListener.onCancelCreateHomeScreenShortcut(CreateHomeScreenShortcut.this);
             }
         });
 
         // Set an onClick listener on the positive button.
-        createHomeScreenShorcutDialogBuilder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                createHomeScreenShortcutListener.onCreateHomeScreenShortcutCreate(CreateHomeScreenShortcut.this);
+                createHomeScreenShortcutListener.onCreateHomeScreenShortcut(CreateHomeScreenShortcut.this);
             }
         });
 
 
         // Create an AlertDialog from the AlertDialogBuilder.
-        final AlertDialog createHomeScreenShortcutAlertDialog = createHomeScreenShorcutDialogBuilder.create();
+        final AlertDialog alertDialog = dialogBuilder.create();
 
         // Show the keyboard when the Dialog is displayed on the screen.
-        createHomeScreenShortcutAlertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         // We need to show the AlertDialog before we can call setOnKeyListener() below.
-        createHomeScreenShortcutAlertDialog.show();
+        alertDialog.show();
 
         // Allow the "enter" key on the keyboard to create the shortcut.
-        EditText shortcutNameEditText = (EditText) createHomeScreenShortcutAlertDialog.findViewById(R.id.shortcut_name_edittext);
+        EditText shortcutNameEditText = (EditText) alertDialog.findViewById(R.id.shortcut_name_edittext);
         assert shortcutNameEditText != null;  // Remove the warning below that shortcutNameEditText might be null.
         shortcutNameEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down on the "enter" button, select the PositiveButton "Create".
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Trigger the create listener.
-                    createHomeScreenShortcutListener.onCreateHomeScreenShortcutCreate(CreateHomeScreenShortcut.this);
+                    createHomeScreenShortcutListener.onCreateHomeScreenShortcut(CreateHomeScreenShortcut.this);
 
-                    // Manually dismiss the AlertDialog.
-                    createHomeScreenShortcutAlertDialog.dismiss();
+                    // Manually dismiss `alertDialog`.
+                    alertDialog.dismiss();
 
                     // Consume the event.
                     return true;
@@ -118,6 +118,6 @@ public class CreateHomeScreenShortcut extends DialogFragment {
         });
 
         // onCreateDialog requires the return of an AlertDialog.
-        return createHomeScreenShortcutAlertDialog;
+        return alertDialog;
     }
 }

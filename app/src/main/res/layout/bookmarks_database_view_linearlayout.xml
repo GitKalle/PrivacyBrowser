@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright 2016 Soren Stoutner <soren@stoutner.com>.
+
+  This file is part of Privacy Browser <https://www.stoutner.com/privacy-browser>.
+
+  Privacy Browser is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Privacy Browser is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<LinearLayout
+    android:id="@+id/bookmarks_database_view_item_linearlayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical" >
+
+    <!-- First row. -->
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/bookmarks_database_view_database_id"
+            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="end"
+            android:textColor="@color/grey"
+            android:textSize="22sp" />
+
+        <ImageView
+            android:id="@+id/bookmarks_database_view_favorite_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id='@+id/bookmarks_database_view_bookmark_name'
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <!-- Second row. -->
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/bookmarks_database_view_display_order"
+            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="end"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <ImageView
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/folder"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/bookmarks_database_view_parent_folder"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="italic"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <!-- Third row. -->
+    <TextView
+        android:id="@+id/bookmarks_database_view_bookmark_url"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:singleLine="true" />
+</LinearLayout>

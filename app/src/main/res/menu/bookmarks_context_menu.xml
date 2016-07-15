@@ -37,23 +37,30 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/move_to_folder"
+        android:title="@string/move_to_folder"
+        android:orderInCategory="30"
+        android:icon="@drawable/move_to_folder"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/edit_bookmark"
         android:title="@string/edit"
-        android:orderInCategory="30"
+        android:orderInCategory="40"
         android:icon="@drawable/edit"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/delete_bookmark"
         android:title="@string/delete"
-        android:orderInCategory="40"
+        android:orderInCategory="50"
         android:icon="@drawable/delete"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/context_menu_select_all_bookmarks"
         android:title="@string/select_all"
-        android:orderInCategory="50"
+        android:orderInCategory="60"
         android:icon="@drawable/select_all"
         app:showAsAction="ifRoom" />
 </menu>

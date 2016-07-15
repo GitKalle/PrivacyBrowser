@@ -31,11 +31,10 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="6dp"
         android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp">
+        android:layout_marginEnd="4dp" >
 
         <!-- `android:imeOptions="actionGo"` sets the keyboard to have a "go" key instead of a "new line" key.
-            `android:inputType="textUri"` disables spell check in the EditText.
-            `android:singleLine="true"` is not needed in a Dialog.-->
+            `android:inputType="textUri"` disables spell check in the EditText. -->
         <android.support.design.widget.TextInputEditText
             android:id="@+id/create_bookmark_name_edittext"
             android:layout_height="wrap_content"
@@ -55,8 +54,7 @@
         android:layout_marginEnd="4dp" >
 
         <!-- `android:imeOptions="actionGo"` sets the keyboard to have a "go" key instead of a "new line" key.
-            `android:inputType="textUri"` disables spell check in the EditText.
-            `android:singleLine="true"` is not needed in a Dialog.-->
+            `android:inputType="textUri"` disables spell check in the EditText.-->
         <EditText
             android:id="@+id/create_bookmark_url_edittext"
             android:layout_height="wrap_content"

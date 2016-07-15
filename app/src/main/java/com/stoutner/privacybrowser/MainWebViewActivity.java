@@ -65,7 +65,7 @@ import java.net.URLEncoder;
 
 // We need to use AppCompatActivity from android.support.v7.app.AppCompatActivity to have access to the SupportActionBar until the minimum API is >= 21.
 public class MainWebViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CreateHomeScreenShortcut.CreateHomeScreenSchortcutListener {
-    // `favoriteIcon` is public static so it can be accessed from `CreateHomeScreenShortcut`, `BookmarksActivity`, and `EditBookmark`.
+    // `favoriteIcon` is public static so it can be accessed from `CreateHomeScreenShortcut`, `BookmarksActivity`, `CreateBookmark`, `CreateBookmarkFolder`, and `EditBookmark`.
     // It is also used in `onCreate()` and `onCreateHomeScreenShortcutCreate()`.
     public static Bitmap favoriteIcon;
 
@@ -629,7 +629,7 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
             case R.id.addToHomescreen:
                 // Show the CreateHomeScreenShortcut AlertDialog and name this instance "@string/create_shortcut".
                 DialogFragment createHomeScreenShortcutDialogFragment = new CreateHomeScreenShortcut();
-                createHomeScreenShortcutDialogFragment.show(getFragmentManager(), "@string/create_shortcut");
+                createHomeScreenShortcutDialogFragment.show(getFragmentManager(), getResources().getString(R.string.create_shortcut));
 
                 //Everything else will be handled by CreateHomeScreenShortcut and the associated listeners below.
                 return true;
@@ -684,19 +684,19 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
                 break;
 
             case R.id.settings:
-                // Launch SettingsActivity.
+                // Launch `SettingsActivity`.
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
 
             case R.id.guide:
-                // Launch GuideActivity.
+                // Launch `GuideActivity`.
                 Intent guideIntent = new Intent(this, GuideActivity.class);
                 startActivity(guideIntent);
                 break;
 
             case R.id.about:
-                // Launch AboutActivity.
+                // Launch `AboutActivity`.
                 Intent aboutIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutIntent);
                 break;
@@ -765,12 +765,12 @@ public class MainWebViewActivity extends AppCompatActivity implements Navigation
     }
 
     @Override
-    public void onCreateHomeScreenShortcutCancel(DialogFragment dialogFragment) {
+    public void onCancelCreateHomeScreenShortcut(DialogFragment dialogFragment) {
         // Do nothing because the user selected "Cancel".
     }
 
     @Override
-    public void onCreateHomeScreenShortcutCreate(DialogFragment dialogFragment) {
+    public void onCreateHomeScreenShortcut(DialogFragment dialogFragment) {
         // Get shortcutNameEditText from the alert dialog.
         EditText shortcutNameEditText = (EditText) dialogFragment.getDialog().findViewById(R.id.shortcut_name_edittext);
 
