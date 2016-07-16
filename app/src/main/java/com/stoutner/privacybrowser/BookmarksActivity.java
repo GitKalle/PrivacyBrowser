@@ -713,6 +713,9 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
             String cannot_rename_folder = getResources().getString(R.string.cannot_rename_folder) + " \"" + newFolderNameString + "\"";
             Snackbar.make(findViewById(R.id.bookmarks_coordinatorlayout), cannot_rename_folder, Snackbar.LENGTH_INDEFINITE).show();
         }
+
+        // Close the contextual action mode.
+        contextualActionMode.finish();
     }
 
     @Override
