@@ -18,17 +18,13 @@
   You should have received a copy of the GNU General Public License
   along with Privacy Browser.  If not, see <http://www.gnu.org/licenses/>. -->
 
-<!-- These color resources are hardcoded for vector drawables.  Once the minimum API is >= 22 we can remove the hardcoded colors and reference these entries. -->
-<resources>
-    <color name="black">#FF000000</color>
-    <color name="blue">#FF1976D2</color>
-    <color name="dark_blue">#FF0D47A1</color>
-    <color name="blue_grey">#FF607D8B</color>
-    <color name="grey">#FF9E9E9E</color>
-    <color name="green">#FF64DD17</color>
-    <color name="light_blue">#FFBBDEFB</color>
-    <color name="medium_light_blue">#FF42A5F5</color>
-    <color name="red">#FFD50000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="yellow">#FFFFD600</color>
-</resources>
+<!-- `android:dividerHeight` must be specified with `android:divider` or the height will be `0dp`.
+    In our case we want the height to be `0dp`. -->
+<ListView
+    android:id="@+id/move_to_folder_listview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:choiceMode="singleChoice"
+    android:divider="@color/white"
+    android:dividerHeight="0dp" />

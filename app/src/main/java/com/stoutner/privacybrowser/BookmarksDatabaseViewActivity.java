@@ -77,7 +77,7 @@ public class BookmarksDatabaseViewActivity extends AppCompatActivity {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
                 // Inflate the individual item layout.  `false` does not attach it to the root.
-                return getLayoutInflater().inflate(R.layout.bookmarks_database_view_linearlayout, parent, false);
+                return getLayoutInflater().inflate(R.layout.bookmarks_database_view_item_linearlayout, parent, false);
             }
 
             @Override
@@ -116,12 +116,15 @@ public class BookmarksDatabaseViewActivity extends AppCompatActivity {
 
                 // Get the parent folder from the `Cursor` and display it in `bookmarkParentFolder`.
                 String bookmarkParentFolder = cursor.getString(cursor.getColumnIndex(BookmarksDatabaseHandler.PARENT_FOLDER));
+                ImageView parentFolderImageView = (ImageView) view.findViewById(R.id.bookmarks_database_view_parent_folder_icon);
                 TextView bookmarkParentFolderTextView = (TextView) view.findViewById(R.id.bookmarks_database_view_parent_folder);
                 // Make the folder name gray if it is the home folder.
                 if (bookmarkParentFolder.isEmpty()) {
+                    parentFolderImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.folder_grey));
                     bookmarkParentFolderTextView.setText(R.string.home_folder);
                     bookmarkParentFolderTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
                 } else {
+                    parentFolderImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.folder_dark_blue));
                     bookmarkParentFolderTextView.setText(bookmarkParentFolder);
                     bookmarkParentFolderTextView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
                 }

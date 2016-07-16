@@ -24,7 +24,6 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -35,7 +34,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,7 +45,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -58,17 +56,18 @@ import java.io.ByteArrayOutputStream;
 
 public class BookmarksActivity extends AppCompatActivity implements CreateBookmark.CreateBookmarkListener,
         CreateBookmarkFolder.CreateBookmarkFolderListener, EditBookmark.EditBookmarkListener,
-        EditBookmarkFolder.EditBookmarkFolderListener {
-    // `bookmarksDatabaseHandler` is public static so it can be accessed from EditBookmark.  It is also used in `onCreate()`,
+        EditBookmarkFolder.EditBookmarkFolderListener, MoveToFolder.MoveToFolderListener {
+    // `bookmarksDatabaseHandler` is public static so it can be accessed from `EditBookmark` and `MoveToFolder`.  It is also used in `onCreate()`,
     // `onCreateBookmarkCreate()`, `updateBookmarksListView()`, and `updateBookmarksListViewExcept()`.
     public static BookmarksDatabaseHandler bookmarksDatabaseHandler;
 
-    // `bookmarksListView` is public static so it can be accessed from EditBookmark.
+    // `bookmarksListView` is public static so it can be accessed from `EditBookmark`.
     // It is also used in `onCreate()`, `updateBookmarksListView()`, and `updateBookmarksListViewExcept()`.
     public static ListView bookmarksListView;
 
-    // `currentFolder` is used in `onCreate`, `onOptionsItemSelected()`, `onCreateBookmarkCreate`, `onCreateBookmarkFolderCreate`, and `onEditBookmarkSave`.
-    private String currentFolder;
+    // `currentFolder` is public static so it can be accessed from `MoveToFolder`.
+    // It is used in `onCreate`, `onOptionsItemSelected()`, `onCreateBookmarkCreate`, `onCreateBookmarkFolderCreate`, and `onEditBookmarkSave`.
+    public static String currentFolder;
 
     // `contextualActionMode` is used in `onCreate()` and `onEditBookmarkSave()`.
     private ActionMode contextualActionMode;
@@ -179,6 +178,9 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                 editBookmarkMenuItem = menu.findItem(R.id.edit_bookmark);
                 selectAllBookmarksMenuItem = menu.findItem(R.id.context_menu_select_all_bookmarks);
 
+                // Get a handle for `contextualActionMode` so we can close it programatically.
+                contextualActionMode = mode;
+
                 return true;
             }
 
@@ -194,6 +196,11 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
 
                 // Calculate the number of selected bookmarks.
                 int numberOfSelectedBookmarks = selectedBookmarksLongArray.length;
+
+                // Sometimes Android forgets to close the contextual app bar when all the items are deselected.
+                if (numberOfSelectedBookmarks == 0) {
+                    mode.finish();
+                }
 
                 // List the number of selected bookmarks in the subtitle.
                 mode.setSubtitle(numberOfSelectedBookmarks + " " + getString(R.string.selected));
@@ -331,13 +338,20 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                         bookmarksListView.setSelection(selectedBookmarkNewPosition - 5);
                         break;
 
-                    case R.id.edit_bookmark:
-                        // Get a handle for `contextualActionMode` so we can close it when `editBookmarkDialog` is finished.
-                        contextualActionMode = mode;
+                    case R.id.move_to_folder:
+                        // Show the `MoveToFolder` `AlertDialog` and name the instance `@string/move_to_folder
+                        DialogFragment moveToFolderDialog = new MoveToFolder();
+                        moveToFolderDialog.show(getFragmentManager(), getResources().getString(R.string.move_to_folder));
+                        break;
 
+                    case R.id.edit_bookmark:
                         // Get a handle for `selectedBookmarkPosition` so we can scroll to it after refreshing the ListView.
                         bookmarkPositionSparseBooleanArray = bookmarksListView.getCheckedItemPositions();
-                        selectedBookmarkPosition = bookmarkPositionSparseBooleanArray.keyAt(0);
+                        for (int i = 0; i < bookmarkPositionSparseBooleanArray.size(); i++) {
+                            // Find the bookmark that is selected and save the position to `selectedBookmarkPosition`.
+                            if (bookmarkPositionSparseBooleanArray.valueAt(i))
+                                selectedBookmarkPosition = bookmarkPositionSparseBooleanArray.keyAt(i);
+                        }
 
                         // Move to the selected database ID and find out if it is a folder.
                         bookmarksCursor.moveToPosition(selectedBookmarkPosition);
@@ -363,12 +377,16 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
 
                         // Get a handle for `selectedBookmarkPosition` so we can scroll to it after refreshing the ListView.
                         bookmarkPositionSparseBooleanArray = bookmarksListView.getCheckedItemPositions();
-                        selectedBookmarkPosition = bookmarkPositionSparseBooleanArray.keyAt(0);
+                        for (int i = 0; i < bookmarkPositionSparseBooleanArray.size(); i++) {
+                            // Find the bookmark that is selected and save the position to `selectedBookmarkPosition`.
+                            if (bookmarkPositionSparseBooleanArray.valueAt(i))
+                                selectedBookmarkPosition = bookmarkPositionSparseBooleanArray.keyAt(i);
+                        }
 
                         updateBookmarksListViewExcept(selectedBookmarksLongArray, currentFolder);
 
                         // Scroll to where the deleted bookmark was located.
-                        bookmarksListView.setSelection(selectedBookmarkPosition);
+                        bookmarksListView.setSelection(selectedBookmarkPosition - 5);
 
                         String snackbarMessage;
 
@@ -396,6 +414,9 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                                                 // Refresh the ListView to show the rows again.
                                                 updateBookmarksListView(currentFolder);
 
+                                                // Scroll to where the deleted bookmark was located.
+                                                bookmarksListView.setSelection(selectedBookmarkPosition - 5);
+
                                                 break;
 
                                             // The Snackbar was dismissed without the "Undo" button being pushed.
@@ -405,7 +426,11 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
                                                     // Convert `databaseIdLong` to an int.
                                                     int databaseIdInt = (int) databaseIdLong;
 
-                                                    // Delete the database row.
+                                                    if (bookmarksDatabaseHandler.isFolder(databaseIdInt)) {
+                                                        deleteBookmarkFolderContents(databaseIdInt);
+                                                    }
+
+                                                    // Delete `databaseIdInt`.
                                                     bookmarksDatabaseHandler.deleteBookmark(databaseIdInt);
                                                 }
                                                 break;
@@ -644,7 +669,7 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
         int existingFoldersWithNewName = bookmarkFolderCursor.getCount();
         bookmarkFolderCursor.close();
         if ( ((existingFoldersWithNewName == 0) || newFolderNameString.equals(oldFolderNameString)) && !newFolderNameString.isEmpty()) {
-            // Get a long array with the the databaseId of the selected folder and convert it to an `int`.
+            // Get a long array with the the database ID of the selected folder and convert it to an `int`.
             long[] selectedFolderLongArray = bookmarksListView.getCheckedItemIds();
             int selectedFolderDatabaseId = (int) selectedFolderLongArray[0];
 
@@ -690,11 +715,57 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
         }
     }
 
+    @Override
+    public void onCancelMoveToFolder(DialogFragment dialogFragment) {
+        // Do nothing because the user selected `Cancel`.
+    }
+
+    @Override
+    public void onMoveToFolder(DialogFragment dialogFragment) {
+        // Get the new folder database id.
+        ListView folderListView = (ListView) dialogFragment.getDialog().findViewById(R.id.move_to_folder_listview);
+        long[] newFolderLongArray = folderListView.getCheckedItemIds();
+
+        if (newFolderLongArray.length == 0) {  // No new folder was selected.
+            Snackbar.make(findViewById(R.id.bookmarks_coordinatorlayout), getString(R.string.cannot_move_bookmarks), Snackbar.LENGTH_LONG).show();
+        } else {  // Move the selected bookmarks.
+            // Get the new folder database ID.
+            int newFolderDatabaseId = (int) newFolderLongArray[0];
+
+            // Instantiate `newFolderName`.
+            String newFolderName;
+
+            if (newFolderDatabaseId == 0) {
+                // The new folder is the home folder, represented as `""` in the database.
+                newFolderName = "";
+            } else {
+                // Get the new folder name from the database.
+                newFolderName = bookmarksDatabaseHandler.getFolderName(newFolderDatabaseId);
+            }
+
+            // Get a long array with the the database ID of the selected bookmarks.
+            long[] selectedBookmarksLongArray = bookmarksListView.getCheckedItemIds();
+            for (long databaseIdLong : selectedBookmarksLongArray) {
+                // Get `databaseIdInt` for each selected bookmark.
+                int databaseIdInt = (int) databaseIdLong;
+
+                // Move the selected bookmark to the new folder.
+                bookmarksDatabaseHandler.moveToFolder(databaseIdInt, newFolderName);
+            }
+
+            // Refresh the `ListView`.
+            updateBookmarksListView(currentFolder);
+
+            // Close the contextual app bar.
+            contextualActionMode.finish();
+        }
+    }
+
     private void updateBookmarksListView(String folderName) {
         // Get a `Cursor` with the current contents of the bookmarks database.
         bookmarksCursor = bookmarksDatabaseHandler.getAllBookmarksCursorByDisplayOrder(folderName);
 
-        // Setup `bookmarksCursorAdapter` with `this` context.  The `false` disables autoRequery.
+        // Setup `bookmarksCursorAdapter` with `this` context.  `false` disables autoRequery.
         CursorAdapter bookmarksCursorAdapter = new CursorAdapter(this, bookmarksCursor, false) {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -745,7 +816,7 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
         // Get a `Cursor` with the current contents of the bookmarks database except for the specified database IDs.
         bookmarksCursor = bookmarksDatabaseHandler.getBookmarksCursorExcept(exceptIdLongArray, folderName);
 
-        // Setup `bookmarksCursorAdapter` with `this` context.  The `false` disables autoRequery.
+        // Setup `bookmarksCursorAdapter` with `this` context.  `false` disables autoRequery.
         CursorAdapter bookmarksCursorAdapter = new CursorAdapter(this, bookmarksCursor, false) {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -783,5 +854,28 @@ public class BookmarksActivity extends AppCompatActivity implements CreateBookma
 
         // Update the ListView.
         bookmarksListView.setAdapter(bookmarksCursorAdapter);
+    }
+
+    private void deleteBookmarkFolderContents(int databaseId) {
+        // Get the name of the folder.
+        String folderName = bookmarksDatabaseHandler.getFolderName(databaseId);
+
+        // Get the contents of the folder.
+        Cursor folderCursor = bookmarksDatabaseHandler.getAllBookmarksCursorByDisplayOrder(folderName);
+
+        for (int i = 0; i < folderCursor.getCount(); i++) {
+            // Move `folderCursor` to the current row.
+            folderCursor.moveToPosition(i);
+
+            // Get the database ID of the item.
+            int itemDatabaseId = folderCursor.getInt(folderCursor.getColumnIndex(BookmarksDatabaseHandler._ID));
+
+            // If this is a folder, delete the contents first.
+            if (bookmarksDatabaseHandler.isFolder(itemDatabaseId)) {
+                deleteBookmarkFolderContents(itemDatabaseId);
+            }
+
+            bookmarksDatabaseHandler.deleteBookmark(itemDatabaseId);
+        }
     }
 }

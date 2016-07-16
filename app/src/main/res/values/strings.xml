@@ -80,9 +80,11 @@
     <string name="folder_names_must_be_unique">Folder names must be unique</string>
     <string name="cannot_create_folder">Cannot create the folder because the name is not unique:</string>
     <string name="cannot_rename_folder">Cannot rename the folder because the new name is not unique:</string>
+    <string name="cannot_move_bookmarks">Cannot move the selected bookmarks because no new folder was selected.</string>
     <string name="edit_bookmark">Edit bookmark</string>
     <string name="edit_folder">Edit folder</string>
     <string name="move_to_folder">Move to Folder</string>
+    <string name="move">Move</string>
     <string name="save">Save</string>
     <string name="bookmark_name">Bookmark name</string>
     <string name="bookmark_url">Bookmark URL</string>
@@ -101,7 +103,7 @@
 
     <!-- Bookmarks Database View. -->
     <string name="bookmarks_database_view">Bookmarks Database View</string>
-    <string name="home_folder">Home folder</string>
+    <string name="home_folder">Home Folder</string>
 
     <!-- Guide. -->
     <string name="privacy_browser_guide">Privacy Browser Guide</string>
